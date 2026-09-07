@@ -1,0 +1,21 @@
+{
+  "name": "@statebeats/player",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@statebeats/core": "0.2.0",
+    "@statebeats/sdk": "0.2.0",
+    "@statebeats/content": "0.2.0",
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "vite": "8.2.2",
+    "@types/three": "0.183.1"
+  }
+}

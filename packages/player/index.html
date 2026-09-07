@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080d17" />
+    <title>StateBeats — your rhythm, your world</title>
+    <meta
+      name="description"
+      content="An open spatial rhythm engine. Play in standalone VR, build sequences, or drive the same simulation headlessly."
+    />
+  </head>
+  <body>
+    <div id="stage" aria-label="Spatial rhythm playfield"></div>
+    <header class="masthead">
+      <a class="brand" href="./"
+        ><span class="brand-mark">◎</span> StateBeats <small>SPATIAL RHYTHM ENGINE</small></a
+      >
+      <div class="connection">
+        <span class="status-dot"></span><span id="engine-status">Starting engine</span
+        ><button id="sound" class="quiet" aria-label="Toggle audio">Sound on</button>
+      </div>
+    </header>
+    <main id="lobby">
+      <section class="intro">
+        <div class="eyebrow">OPEN ENGINE · LIMITLESS DIRECTIONS</div>
+        <h1>Find your<br /><em>orbit.</em></h1>
+        <p>
+          Follow the pulse. Reach into sound.<br />A full circle of rhythm, built for your hands.
+        </p>
+        <div class="hand-key">
+          <span><i class="left-hand"></i>Left hand</span
+          ><span><i class="right-hand"></i>Right hand</span
+          ><span><i class="both-hand"></i>Together</span>
+        </div>
+        <div class="vr-actions">
+          <button id="enter-vr" class="primary" disabled>Checking VR support…</button
+          ><span id="vr-note">Standalone Quest 3 · no PC required to play</span>
+        </div>
+      </section>
+      <section class="library" aria-label="Sequence library">
+        <div class="library-heading">
+          <span>CHOOSE YOUR FREQUENCY</span><span>YOUR WORLD AWAITS</span>
+        </div>
+        <div id="maps"></div>
+        <div class="launch-row">
+          <button id="play" class="primary">Play on desktop <span>↗</span></button
+          ><button id="watch" class="secondary">Watch a bot</button>
+        </div>
+        <p class="library-note" id="selected-description"></p>
+        <details id="import-panel">
+          <summary>Your music &amp; community maps</summary>
+          <label
+            >Song tempo (BPM)<input id="song-bpm" type="number" min="40" max="240" value="120"
+          /></label>
+          <label
+            >Pattern density<select id="song-difficulty">
+              <option value="gentle">Gentle</option>
+              <option value="flow">Flow</option>
+              <option value="busy">Busy</option>
+            </select></label
+          >
+          <label><input id="song-turning" type="checkbox" checked />Turn around with the sun</label>
+          <label
+            >Build from a song, or load a map's matching soundtrack<input
+              id="song-file"
+              type="file"
+              accept="audio/*"
+          /></label>
+          <label
+            >Open a StateBeats map<input id="map-file" type="file" accept=".json,application/json"
+          /></label>
+          <button id="save-map" class="secondary">Save selected map</button>
+          <p id="import-status" role="status">
+            Files stay on this device. Set the song's tempo for a matching beat grid; generated maps
+            can be edited and shared separately from audio.
+          </p>
+        </details>
+      </section>
+    </main>
+    <section id="hud" hidden aria-label="Session status">
+      <div class="hud-title">
+        <span id="map-label">First orbit</span><small id="mode-label">DESKTOP SESSION</small>
+      </div>
+      <div class="score-stat"><strong id="score">0</strong><small>SCORE</small></div>
+      <div class="score-stat"><strong id="combo">0</strong><small>COMBO</small></div>
+      <button id="pause" class="secondary">Pause</button>
+      <div class="timeline"><i id="progress"></i></div>
+    </section>
+    <div id="judgement" aria-live="polite"></div>
+    <div id="direction-cue" hidden></div>
+    <div id="captions" hidden aria-label="Upcoming interactions"></div>
+    <section id="pause-panel" class="dialog" hidden>
+      <div class="eyebrow">TAKE A BREATH</div>
+      <h2 id="pause-title">Paused.</h2>
+      <p id="pause-description">The sequence and its soundtrack are paused together.</p>
+      <div class="dialog-actions">
+        <button id="resume" class="primary">Resume</button
+        ><button id="restart" class="secondary">Restart</button
+        ><button id="home" class="quiet">Choose a sequence</button>
+      </div>
+    </section>
+    <section id="results" class="dialog" hidden>
+      <div class="eyebrow">ORBIT COMPLETE</div>
+      <h2>Your frequency.</h2>
+      <div id="result-stats"></div>
+      <p id="result-detail"></p>
+      <div class="dialog-actions">
+        <button id="again" class="primary">Play again</button
+        ><button id="export-replay" class="secondary">Save replay</button
+        ><button id="results-home" class="quiet">Choose a sequence</button>
+      </div>
+    </section>
+    <footer id="footer">
+      <div><span class="footer-number">360°</span> Your space. Your rhythm.</div>
+      <button id="help" class="quiet">How to play <span>?</span></button
+      ><button id="settings" class="quiet">Settings</button
+      ><a href="./guide.html">Engine & SDK ↗</a>
+      <a href="./text.html">Play through text</a>
+    </footer>
+    <section id="help-panel" class="dialog wide" hidden>
+      <div class="eyebrow">A FEW NOTES BEFORE YOU BEGIN</div>
+      <h2>Reach on the beat.</h2>
+      <div class="instructions">
+        <p>
+          <b>In VR</b>Touch the cyan notes with your left hand, coral with your right, and white
+          with either. Gold needs both hands; rings need a sustained touch. Avoid red volumes with
+          hands and head.
+        </p>
+        <p>
+          <b>Turn with the sequence</b>Light trails and directional sound announce where the next
+          note is. The small compass cue points toward notes behind you. Use grip/squeeze to open
+          the menu in VR, then point and trigger to choose.
+        </p>
+        <p>
+          <b>On desktop</b>Move the mouse to aim. Left click reaches with your left hand, right
+          click with your right; hold to stay. Each hand retains its own aim. Q/E turns your view.
+          Both clicks together touch gold notes. Hold C to duck beneath birds. Escape pauses.
+        </p>
+        <p>
+          <b>Audio cues</b>Cyan: low glass tone. Coral: high bell. Gold: a chord. A rear target has
+          a double knock, a front target one; pitch also rises with height. A repeating pulse counts
+          down to the hit. Red buzz means avoidance.
+        </p>
+      </div>
+      <button id="close-help" class="primary">Got it</button>
+    </section>
+    <section id="settings-panel" class="dialog" hidden>
+      <div class="eyebrow">YOUR PRACTICE SPACE</div>
+      <h2>Make it yours.</h2>
+      <label
+        >Playback speed
+        <select id="speed">
+          <option value="0.5">Half speed</option>
+          <option value="1" selected>Normal</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+          <option value="4">4× · bot / testing</option>
+        </select></label
+      ><label
+        >Audio output offset
+        <input id="audio-offset" type="range" min="-100" max="100" step="5" value="0" /><output
+          id="offset-value"
+          >0 ms</output
+        ></label
+      ><label><input id="swap-hands" type="checkbox" />Swap desktop mouse buttons</label
+      ><label><input id="audio-only" type="checkbox" />Audio practice · hide targets</label
+      ><label><input id="music-enabled" type="checkbox" checked />Music</label
+      ><label><input id="cues-enabled" type="checkbox" checked />Spatial interaction sounds</label
+      ><label
+        ><input id="captions-enabled" type="checkbox" checked />Text cues for location, hand and
+        timing</label
+      ><label><input id="reduced-motion" type="checkbox" />Reduce decorative motion</label
+      ><label><input id="high-contrast" type="checkbox" />Higher target contrast</label
+      ><label><input id="performance" type="checkbox" />Show performance counters</label>
+      <p>Timing offsets adjust sound presentation. They never change authoritative scores.</p>
+      <button id="close-settings" class="primary">Done</button>
+    </section>
+    <div id="perf" hidden></div>
+    <div id="error" role="alert" hidden></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

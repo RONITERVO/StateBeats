@@ -1,0 +1,41 @@
+{
+  "name": "statebeats",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "build:lib": "tsc -b packages/core packages/sdk packages/content packages/cli packages/mcp packages/adapters-node",
+    "build": "npm run build:lib && npm run build --workspace @statebeats/player",
+    "typecheck": "npm run build:lib && tsc -p packages/player/tsconfig.json --noEmit",
+    "test": "vitest run",
+    "pretest": "npm run build:lib",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "lint": "node scripts/check-boundaries.mjs && prettier --check packages tests scripts *.json *.ts",
+    "format": "prettier --write packages tests scripts *.json *.ts",
+    "dev": "npm run build:lib && npm run dev --workspace @statebeats/player",
+    "play": "node scripts/serve-player.mjs",
+    "demo": "npm run build:lib && node packages/cli/dist/index.js demo",
+    "mcp": "node packages/mcp/dist/index.js",
+    "benchmark": "node scripts/benchmark.mjs",
+    "content:export": "node scripts/export-content.mjs",
+    "notices": "node scripts/notices.mjs",
+    "release:local": "node scripts/release.mjs && node scripts/package-smoke.mjs",
+    "test:source": "node scripts/source-smoke.mjs",
+    "check": "npm run typecheck && npm run test && npm run lint && npm run build"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "4.1.11",
+    "fast-check": "4.9.0",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.10.1",
+    "prettier": "3.6.2"
+  }
+}

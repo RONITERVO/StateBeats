@@ -1,0 +1,31 @@
+{
+  "name": "@statebeats/cli",
+  "version": "0.2.0",
+  "description": "Headless StateBeats command line",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "bin": {
+    "statebeats": "dist/index.js"
+  },
+  "dependencies": {
+    "@statebeats/core": "0.2.0",
+    "@statebeats/sdk": "0.2.0",
+    "@statebeats/content": "0.2.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RONITERVO/StateBeats.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/RONITERVO/StateBeats/tree/main/packages/cli#readme",
+  "bugs": {
+    "url": "https://github.com/RONITERVO/StateBeats/issues"
+  }
+}

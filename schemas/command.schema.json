@@ -1,0 +1,732 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "type": {
+          "type": "string",
+          "const": "actor.add"
+        },
+        "actor": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[\\w./:-]{1,100}$"
+            },
+            "effectors": {
+              "minItems": 1,
+              "maxItems": 16,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[\\w./:-]{1,100}$"
+                  },
+                  "semantic": {
+                    "type": "string",
+                    "pattern": "^[\\w./:-]{1,100}$"
+                  },
+                  "radius": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 2
+                  },
+                  "position": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      },
+                      {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      },
+                      {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "id",
+                  "semantic",
+                  "radius"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "id",
+            "effectors"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "tick",
+        "type",
+        "actor"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "type": {
+          "type": "string",
+          "const": "actor.remove"
+        },
+        "actorId": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        }
+      },
+      "required": [
+        "id",
+        "tick",
+        "type",
+        "actorId"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "type": {
+          "type": "string",
+          "const": "pose"
+        },
+        "actorId": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "effectorId": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "position": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "orientation": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "tracked": {
+          "type": "boolean"
+        },
+        "active": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "tick",
+        "type",
+        "actorId",
+        "effectorId",
+        "position"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "type": {
+          "type": "string",
+          "const": "calibrate"
+        },
+        "actorId": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "position": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            },
+            {
+              "type": "number",
+              "minimum": -10000,
+              "maximum": 10000
+            }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "orientation": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "id",
+        "tick",
+        "type",
+        "actorId",
+        "position",
+        "orientation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "type": {
+          "type": "string",
+          "const": "director.spawn"
+        },
+        "entity": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[\\w./:-]{1,100}$"
+            },
+            "policy": {
+              "type": "string",
+              "pattern": "^[\\w./:-]{1,100}$"
+            },
+            "config": {
+              "$ref": "#/$defs/__schema0"
+            },
+            "kind": {
+              "type": "string",
+              "enum": [
+                "strike",
+                "hold",
+                "hazard"
+              ]
+            },
+            "hitTick": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "spawnTick": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "endTick": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "position": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "number",
+                  "minimum": -10000,
+                  "maximum": 10000
+                },
+                {
+                  "type": "number",
+                  "minimum": -10000,
+                  "maximum": 10000
+                },
+                {
+                  "type": "number",
+                  "minimum": -10000,
+                  "maximum": 10000
+                }
+              ],
+              "items": false,
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "shape": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "sphere"
+                    },
+                    "radius": {
+                      "type": "number",
+                      "exclusiveMinimum": 0,
+                      "maximum": 100
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "radius"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "box"
+                    },
+                    "half": {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        }
+                      ],
+                      "items": false,
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "rotation": {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "items": false,
+                      "minItems": 4,
+                      "maxItems": 4
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "half"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "capsule"
+                    },
+                    "a": {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        }
+                      ],
+                      "items": false,
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "b": {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        },
+                        {
+                          "type": "number",
+                          "minimum": -10000,
+                          "maximum": 10000
+                        }
+                      ],
+                      "items": false,
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "radius": {
+                      "type": "number",
+                      "exclusiveMinimum": 0,
+                      "maximum": 100
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "a",
+                    "b",
+                    "radius"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "motion": {
+              "maxItems": 256,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "tick": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2147483647
+                  },
+                  "position": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      },
+                      {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      },
+                      {
+                        "type": "number",
+                        "minimum": -10000,
+                        "maximum": 10000
+                      }
+                    ],
+                    "items": false,
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "tick",
+                  "position"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "anchor": {
+              "type": "string",
+              "pattern": "^[\\w./:-]{1,100}$"
+            },
+            "slots": {
+              "minItems": 1,
+              "maxItems": 4,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "semantic": {
+                    "type": "string",
+                    "pattern": "^[\\w./:-]{1,100}$"
+                  },
+                  "actorId": {
+                    "type": "string",
+                    "pattern": "^[\\w./:-]{1,100}$"
+                  },
+                  "effectorId": {
+                    "type": "string",
+                    "pattern": "^[\\w./:-]{1,100}$"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "distinctActors": {
+              "type": "boolean"
+            },
+            "sameActor": {
+              "type": "boolean"
+            },
+            "window": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1200
+                },
+                {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1200
+                }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "minSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000
+            },
+            "direction": {
+              "type": "object",
+              "properties": {
+                "vector": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    },
+                    {
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    },
+                    {
+                      "type": "number",
+                      "minimum": -10000,
+                      "maximum": 10000
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 3,
+                  "maxItems": 3
+                },
+                "cosine": {
+                  "type": "number",
+                  "minimum": -1,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "vector",
+                "cosine"
+              ],
+              "additionalProperties": false
+            },
+            "linkTicks": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1200
+            },
+            "holdTicks": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 14400
+            },
+            "breakTicks": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1200
+            },
+            "group": {
+              "type": "string",
+              "pattern": "^[\\w./:-]{1,100}$"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          },
+          "required": [
+            "id",
+            "policy",
+            "config",
+            "kind",
+            "hitTick",
+            "spawnTick",
+            "endTick",
+            "position",
+            "shape",
+            "motion",
+            "slots",
+            "distinctActors",
+            "sameActor",
+            "window",
+            "minSpeed",
+            "linkTicks",
+            "holdTicks",
+            "breakTicks",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "tick",
+        "type",
+        "entity"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema0"
+          }
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/__schema0"
+          }
+        }
+      ]
+    }
+  }
+}

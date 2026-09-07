@@ -1,0 +1,1044 @@
+{
+  "version": 1,
+  "id": "tutorial",
+  "title": "First orbit",
+  "description": "A guided minute: each hand, approaching notes, paired touches, holds, avoidance and a gentle full turn.",
+  "seed": 1,
+  "tickRate": 120,
+  "offsetSeconds": 0,
+  "durationBeats": 112,
+  "tempo": [
+    {
+      "beat": 0,
+      "bpm": 112,
+      "meter": [
+        4,
+        4
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "id": "tutorial-0",
+      "beat": 4,
+      "preset": "left",
+      "position": {
+        "azimuth": -18,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-1",
+      "beat": 8,
+      "preset": "right",
+      "position": {
+        "azimuth": 18,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-2",
+      "beat": 12,
+      "preset": "left",
+      "position": {
+        "azimuth": -18,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 10,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 12,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 12.5,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-3",
+      "beat": 16,
+      "preset": "right",
+      "position": {
+        "azimuth": 18,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 14,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 16,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 16.5,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-4",
+      "beat": 20,
+      "preset": "left",
+      "position": {
+        "azimuth": -18,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-5",
+      "beat": 24,
+      "preset": "right",
+      "position": {
+        "azimuth": 18,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-6",
+      "beat": 28,
+      "preset": "combined",
+      "position": {
+        "azimuth": 0,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [
+        {
+          "beat": 26,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 28,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 28.5,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-7",
+      "beat": 32,
+      "preset": "right",
+      "position": {
+        "azimuth": 18,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 30,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 32,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 32.5,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-8",
+      "beat": 36,
+      "preset": "left",
+      "position": {
+        "azimuth": -18,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-9",
+      "beat": 40,
+      "preset": "right",
+      "position": {
+        "azimuth": 18,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-10",
+      "beat": 44,
+      "preset": "hold",
+      "position": {
+        "azimuth": 45,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 42,
+          "position": {
+            "azimuth": 45,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 44,
+          "position": {
+            "azimuth": 45,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 44.5,
+          "position": {
+            "azimuth": 45,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 600,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-11",
+      "beat": 48,
+      "preset": "right",
+      "position": {
+        "azimuth": 63,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 46,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 48,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 48.5,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-12",
+      "beat": 52,
+      "preset": "left",
+      "position": {
+        "azimuth": 72,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-13",
+      "beat": 56,
+      "preset": "right",
+      "position": {
+        "azimuth": 108,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-14",
+      "beat": 60,
+      "preset": "left",
+      "position": {
+        "azimuth": 117,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 58,
+          "position": {
+            "azimuth": 117,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 60,
+          "position": {
+            "azimuth": 117,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 60.5,
+          "position": {
+            "azimuth": 117,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-15",
+      "beat": 64,
+      "preset": "right",
+      "position": {
+        "azimuth": 153,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 62,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 64,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 64.5,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-16",
+      "beat": 68,
+      "preset": "combined",
+      "position": {
+        "azimuth": 180,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-17",
+      "beat": 72,
+      "preset": "right",
+      "position": {
+        "azimuth": 198,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-18",
+      "beat": 76,
+      "preset": "left",
+      "position": {
+        "azimuth": 207,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 74,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 76,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 76.5,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-19",
+      "beat": 80,
+      "preset": "right",
+      "position": {
+        "azimuth": 243,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 78,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 80,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 80.5,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-20",
+      "beat": 84,
+      "preset": "hold",
+      "position": {
+        "azimuth": 270,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 600,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-21",
+      "beat": 88,
+      "preset": "right",
+      "position": {
+        "azimuth": 288,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-22",
+      "beat": 92,
+      "preset": "left",
+      "position": {
+        "azimuth": 297,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 90,
+          "position": {
+            "azimuth": 297,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 92,
+          "position": {
+            "azimuth": 297,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 92.5,
+          "position": {
+            "azimuth": 297,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-23",
+      "beat": 96,
+      "preset": "right",
+      "position": {
+        "azimuth": 333,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 94,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 96,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 96.5,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "tutorial-hazard",
+      "beat": 104,
+      "preset": "hazard",
+      "position": [
+        0,
+        1.55,
+        -0.15
+      ],
+      "shape": {
+        "kind": "box",
+        "half": [
+          0.2,
+          0.32,
+          0.2
+        ]
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 200,
+      "lateMs": 200,
+      "leadMs": 2500,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    }
+  ],
+  "groups": [],
+  "profile": {
+    "hazardPenalty": 25,
+    "hazardIntervalMs": 100
+  }
+}

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StateBeats — text player</title>
+    <style>
+      :root {
+        color-scheme: dark light;
+        font:
+          18px/1.6 system-ui,
+          sans-serif;
+      }
+      body {
+        max-width: 960px;
+        margin: auto;
+        padding: 24px;
+        background: #0c1421;
+        color: #edf4ff;
+      }
+      a {
+        color: #9ff2df;
+      }
+      h1 {
+        margin-bottom: 8px;
+      }
+      h2 {
+        margin-top: 30px;
+      }
+      p {
+        max-width: 76ch;
+      }
+      button,
+      select,
+      input {
+        font: inherit;
+        padding: 8px 12px;
+        margin: 4px;
+      }
+      button {
+        cursor: pointer;
+        background: #243c50;
+        color: #fff;
+        border: 1px solid #98b8c8;
+        border-radius: 6px;
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: default;
+      }
+      input[type='number'] {
+        width: 100px;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid #ffe19c;
+        outline-offset: 4px;
+      }
+      fieldset,
+      article {
+        border: 1px solid #597080;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 18px 0;
+      }
+      fieldset {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      legend {
+        padding: 0 8px;
+      }
+      label {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+      }
+      #status {
+        min-height: 2em;
+        color: #c1ffed;
+      }
+      #error {
+        color: #ffbdab;
+      }
+      #transcript {
+        max-height: 260px;
+        overflow-y: auto;
+      }
+      pre {
+        overflow: auto;
+        max-height: 320px;
+        font-size: 14px;
+      }
+      .muted {
+        color: #c0ccdc;
+      }
+      .skip {
+        position: absolute;
+        left: -9999px;
+      }
+      .skip:focus {
+        position: static;
+      }
+      @media (prefers-contrast: more) {
+        body {
+          background: #000;
+          color: #fff;
+        }
+        article,
+        fieldset,
+        button {
+          border-color: #fff;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#game">Skip to play controls</a>
+    <nav><a href="./">Open visual / VR player</a> · <a href="./guide.html">Engine guide</a></nav>
+    <h1>StateBeats, through text.</h1>
+    <p>
+      A spatial rhythm game at your own pace. Time stays still while you read or think. Choose a
+      target and a hand, then reach on its beat. Timing assistance is part of this manual practice
+      mode; your choices still use the same interaction rules and replay system.
+    </p>
+    <fieldset>
+      <legend>Sequence</legend>
+      <label>Map<select id="map"></select></label><button id="start">Start / restart</button>
+      <label>Open map JSON<input id="file" type="file" accept=".json,application/json" /></label>
+    </fieldset>
+    <main id="game">
+      <h2 id="title">Loading engine</h2>
+      <p id="scene"></p>
+      <p id="score"></p>
+      <fieldset>
+        <legend>Advance time</legend>
+        <button id="next">Advance to next cue</button>
+        <button id="quarter">Advance ¼ second</button>
+        <label>Ticks<input id="ticks" type="number" min="0" max="10000" value="1" /></label
+        ><button id="advance">Advance ticks</button>
+      </fieldset>
+      <p class="muted">
+        Locations use a clock face: 12 is in front, 3 right, 6 behind and 9 left. A target can be
+        above or below you. Hold targets need continued contact; obstacles must be avoided.
+      </p>
+      <p id="status" role="status" aria-live="polite" aria-atomic="true"></p>
+      <p id="error" role="alert"></p>
+      <h2>Visible targets</h2>
+      <p id="empty">Advance to the first cue.</p>
+      <div id="targets"></div>
+      <details>
+        <summary>Direct spatial controls</summary>
+        <p>
+          Move an effector to a position in metres. +X is right, +Y is up, −Z is forward. Movement
+          takes effect on the next tick. Use these controls for arbitrary maps, custom requirements,
+          or deliberate wrong-hand tests.
+        </p>
+        <fieldset>
+          <legend>Pose</legend>
+          <label
+            >Effector<select id="effector">
+              <option value="left">Left hand</option>
+              <option value="right">Right hand</option>
+              <option value="head">Head</option>
+            </select></label
+          >
+          <label>X<input id="x" type="number" step="0.05" value="0" /></label>
+          <label>Y<input id="y" type="number" step="0.05" value="1.4" /></label>
+          <label>Z<input id="z" type="number" step="0.05" value="-0.8" /></label>
+          <button id="pose">Move now</button><button id="release">Release hands</button
+          ><button id="duck">Duck</button><button id="stand">Stand</button>
+        </fieldset>
+      </details>
+      <h2>Outcomes</h2>
+      <ol id="transcript" aria-label="Recent outcomes"></ol>
+      <button id="replay">Save replay</button><button id="save-map">Save map</button>
+      <details>
+        <summary>Current JSON observation</summary>
+        <pre id="json"></pre>
+      </details>
+    </main>
+    <script type="module" src="/src/text-player.ts"></script>
+  </body>
+</html>

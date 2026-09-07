@@ -1,0 +1,14 @@
+node_modules/
+artifacts/
+playwright-report/
+dist/
+*.tsbuildinfo
+coverage/
+test-results/
+playwright-report/
+work/
+.env*
+!.env.example
+*.tgz
+.DS_Store
+certs/

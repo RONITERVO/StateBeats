@@ -1,0 +1,1203 @@
+{
+  "version": 1,
+  "id": "duet",
+  "title": "Shared frequency",
+  "description": "Cooperate with a local partner actor. The reference player supplies a visible bot partner.",
+  "seed": 1,
+  "tickRate": 120,
+  "offsetSeconds": 0,
+  "durationBeats": 112,
+  "tempo": [
+    {
+      "beat": 0,
+      "bpm": 108,
+      "meter": [
+        4,
+        4
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "id": "duet-0",
+      "beat": 4,
+      "preset": "shared",
+      "position": {
+        "azimuth": 0,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-1",
+      "beat": 8,
+      "preset": "shared",
+      "position": {
+        "azimuth": 0,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 6,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 8,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 8.5,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-2",
+      "beat": 12,
+      "preset": "shared",
+      "position": {
+        "azimuth": 0,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-3",
+      "beat": 16,
+      "preset": "shared",
+      "position": {
+        "azimuth": 0,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 14,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 16,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 16.5,
+          "position": {
+            "azimuth": 0,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-4",
+      "beat": 20,
+      "preset": "shared",
+      "position": {
+        "azimuth": 60,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-5",
+      "beat": 24,
+      "preset": "shared",
+      "position": {
+        "azimuth": 60,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 22,
+          "position": {
+            "azimuth": 60,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 24,
+          "position": {
+            "azimuth": 60,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 24.5,
+          "position": {
+            "azimuth": 60,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-6",
+      "beat": 28,
+      "preset": "shared",
+      "position": {
+        "azimuth": 60,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-7",
+      "beat": 32,
+      "preset": "shared",
+      "position": {
+        "azimuth": 60,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 30,
+          "position": {
+            "azimuth": 60,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 32,
+          "position": {
+            "azimuth": 60,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 32.5,
+          "position": {
+            "azimuth": 60,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-8",
+      "beat": 36,
+      "preset": "shared",
+      "position": {
+        "azimuth": 120,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-9",
+      "beat": 40,
+      "preset": "shared",
+      "position": {
+        "azimuth": 120,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 38,
+          "position": {
+            "azimuth": 120,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 40,
+          "position": {
+            "azimuth": 120,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 40.5,
+          "position": {
+            "azimuth": 120,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-10",
+      "beat": 44,
+      "preset": "shared",
+      "position": {
+        "azimuth": 120,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-11",
+      "beat": 48,
+      "preset": "shared",
+      "position": {
+        "azimuth": 120,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 46,
+          "position": {
+            "azimuth": 120,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 48,
+          "position": {
+            "azimuth": 120,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 48.5,
+          "position": {
+            "azimuth": 120,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-12",
+      "beat": 52,
+      "preset": "shared",
+      "position": {
+        "azimuth": 180,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-13",
+      "beat": 56,
+      "preset": "shared",
+      "position": {
+        "azimuth": 180,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 54,
+          "position": {
+            "azimuth": 180,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 56,
+          "position": {
+            "azimuth": 180,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 56.5,
+          "position": {
+            "azimuth": 180,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-14",
+      "beat": 60,
+      "preset": "shared",
+      "position": {
+        "azimuth": 180,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-15",
+      "beat": 64,
+      "preset": "shared",
+      "position": {
+        "azimuth": 180,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 62,
+          "position": {
+            "azimuth": 180,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 64,
+          "position": {
+            "azimuth": 180,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 64.5,
+          "position": {
+            "azimuth": 180,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-16",
+      "beat": 68,
+      "preset": "shared",
+      "position": {
+        "azimuth": 240,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-17",
+      "beat": 72,
+      "preset": "shared",
+      "position": {
+        "azimuth": 240,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 70,
+          "position": {
+            "azimuth": 240,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 72,
+          "position": {
+            "azimuth": 240,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 72.5,
+          "position": {
+            "azimuth": 240,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-18",
+      "beat": 76,
+      "preset": "shared",
+      "position": {
+        "azimuth": 240,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-19",
+      "beat": 80,
+      "preset": "shared",
+      "position": {
+        "azimuth": 240,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 78,
+          "position": {
+            "azimuth": 240,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 80,
+          "position": {
+            "azimuth": 240,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 80.5,
+          "position": {
+            "azimuth": 240,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-20",
+      "beat": 84,
+      "preset": "shared",
+      "position": {
+        "azimuth": 300,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-21",
+      "beat": 88,
+      "preset": "shared",
+      "position": {
+        "azimuth": 300,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 86,
+          "position": {
+            "azimuth": 300,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 88,
+          "position": {
+            "azimuth": 300,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 88.5,
+          "position": {
+            "azimuth": 300,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-22",
+      "beat": 92,
+      "preset": "shared",
+      "position": {
+        "azimuth": 300,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "duet-23",
+      "beat": 96,
+      "preset": "shared",
+      "position": {
+        "azimuth": 300,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 94,
+          "position": {
+            "azimuth": 300,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 96,
+          "position": {
+            "azimuth": 300,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 96.5,
+          "position": {
+            "azimuth": 300,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "slots": [
+        {
+          "actorId": "player"
+        },
+        {
+          "actorId": "partner"
+        }
+      ],
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 150,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    }
+  ],
+  "groups": [],
+  "profile": {
+    "hazardPenalty": 25,
+    "hazardIntervalMs": 100
+  }
+}

@@ -1,0 +1,11 @@
+[
+  {"op":"session.create","sessionId":"lesson","requestId":"create-lesson","args":{"map":{"version":1,"id":"one","title":"One beat","durationBeats":4,"tempo":[{"beat":0,"bpm":120}],"notes":[{"id":"left","preset":"left","beat":2,"position":[0,1.4,-0.8],"earlyMs":0,"lateMs":0}]},"actors":[]}},
+  {"op":"actor.register","sessionId":"lesson","requestId":"register-player","args":{"tick":1,"actor":{"id":"player","effectors":[{"id":"left","semantic":"left","radius":0.07}]}}},
+  {"op":"pose.trajectory","sessionId":"lesson","requestId":"reach","args":{"actorId":"player","effectorId":"left","startTick":110,"endTick":120,"from":[0,1.4,0],"to":[0,1.4,-0.8]}},
+  {"op":"clock.advance","sessionId":"lesson","requestId":"step-to-contact","args":{"ticks":120}},
+  {"op":"observe","sessionId":"lesson"},
+  {"op":"events.since","sessionId":"lesson","args":{"since":0}},
+  {"op":"snapshot.save","sessionId":"lesson"},
+  {"op":"clock.advance","sessionId":"lesson","requestId":"finish","args":{"ticks":120}},
+  {"op":"replay.export","sessionId":"lesson"}
+]

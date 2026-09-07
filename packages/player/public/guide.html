@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>StateBeats · engine guide</title>
+    <style>
+      body {
+        margin: 0;
+        background: #080d17;
+        color: #e9f1fb;
+        font:
+          17px/1.65 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 760px;
+        margin: auto;
+        padding: 60px 24px;
+      }
+      a {
+        color: #72f4df;
+      }
+      h1 {
+        font-size: 48px;
+        line-height: 1.1;
+      }
+      h2 {
+        margin-top: 44px;
+        font-size: 25px;
+      }
+      p {
+        color: #aebdce;
+      }
+      pre {
+        background: #122238;
+        padding: 22px;
+        overflow: auto;
+        border-radius: 8px;
+      }
+      small {
+        color: #72f4df;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a href="./">← Back to player</a>
+      <h1>An engine for any player.</h1>
+      <p>
+        StateBeats is a spatial rhythm simulation with explicit time. A person, bot or
+        language-model agent submits the same pose commands. Graphics and sound describe the result;
+        the engine decides it.
+      </p>
+      <h2>Play</h2>
+      <p>
+        Desktop: aim with the mouse, left button for the left hand, right for the right. Each hand
+        stays where you pressed while held. Space places both hands at your aim. Q/E turn; Escape
+        pauses. C ducks beneath passing birds.
+      </p>
+      <p>
+        Quest: open the HTTPS build in Quest Browser, enter immersive VR, point and pull the trigger
+        to choose a sequence. Grip opens the menu. Touch notes with the indicated hands, hold
+        sustained notes and avoid red volumes. The standalone hardware playtest is pending.
+      </p>
+      <h2>Hear the space</h2>
+      <p>
+        Cyan/left cues are lower; coral/right cues are higher. Together makes a chord. Holds sound
+        longer, hazards sound low and rough. Height shifts pitch. A rear note adds a second knock.
+        Timing rings and repeated sound cues lead into the beat.
+      </p>
+      <h2>Choose your perception</h2>
+      <p>
+        Settings independently control music, cues, captions, contrast and reduced motion, and
+        remember your choices on this device. Hand glyphs, timing rings and captions also support
+        muted play. <a href="./text.html">The text player</a> uses explicit steps and keyboard
+        controls, without graphics or audio. Its assisted timing sends ordinary engine commands.
+      </p>
+      <h2>Follow the sun</h2>
+      <p>
+        Chasing the sun has a traveling sun and trail, approaching stars, paired touches, stationary
+        holds and passing birds across a full turn. A sky full of stars presents that journey in
+        space. Both share the same gameplay rules and replay format.
+      </p>
+      <p>
+        Open Your music &amp; community maps to select a local song, enter its BPM and generate a
+        chart. Export the JSON to keep its notes, scene paths and music features. Audio remains on
+        your device; choose the matching file again when loading a saved chart. Imported files are
+        limited to 40 MB and ten minutes; supported formats depend on browser decoding.
+      </p>
+      <h2>Build on it</h2>
+      <p>
+        The source includes a dependency-free core, SDK, map builder, versioned replays, CLI and
+        real MCP server. Actor, perception, clock, storage, interaction, scoring and arbitration
+        adapters are replaceable.
+      </p>
+      <pre>
+npm ci
+npm run build
+npm run demo
+node examples/headless.mjs</pre
+      >
+      <p>
+        See README.md and docs/SDK.md in the source release for the full contracts. docs/TOOLS.md
+        has a complete agent loop. Original maps and generated audio are CC0; engine code is MIT.
+      </p>
+      <small>0.2.0 · release candidate · no cloud service required</small>
+    </main>
+  </body>
+</html>

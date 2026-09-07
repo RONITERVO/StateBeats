@@ -1,0 +1,4354 @@
+{
+  "version": 1,
+  "id": "showcase",
+  "title": "Around the pulse",
+  "description": "A full 360-degree rhythm journey with moving and anchored notes, changing tempo and meter.",
+  "seed": 1,
+  "tickRate": 120,
+  "offsetSeconds": 0,
+  "durationBeats": 288,
+  "tempo": [
+    {
+      "beat": 0,
+      "bpm": 112,
+      "meter": [
+        4,
+        4
+      ]
+    },
+    {
+      "beat": 96,
+      "bpm": 128,
+      "meter": [
+        3,
+        4
+      ]
+    },
+    {
+      "beat": 192,
+      "bpm": 104,
+      "meter": [
+        4,
+        4
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "id": "orbit-0",
+      "beat": 4,
+      "preset": "left",
+      "position": {
+        "azimuth": -18,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-1",
+      "beat": 7,
+      "preset": "right",
+      "position": {
+        "azimuth": 18,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 5,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 7,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 7.5,
+          "position": {
+            "azimuth": 18,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-2",
+      "beat": 10,
+      "preset": "left",
+      "position": {
+        "azimuth": -18,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 8,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 10,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 10.5,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-3",
+      "beat": 13,
+      "preset": "right",
+      "position": {
+        "azimuth": 18,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-4",
+      "beat": 16,
+      "preset": "left",
+      "position": {
+        "azimuth": -18,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 14,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 16,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 16.5,
+          "position": {
+            "azimuth": -18,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-5",
+      "beat": 19,
+      "preset": "right",
+      "position": {
+        "azimuth": 63,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 17,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 19,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 19.5,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-6",
+      "beat": 22,
+      "preset": "left",
+      "position": {
+        "azimuth": 27,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-7",
+      "beat": 25,
+      "preset": "right",
+      "position": {
+        "azimuth": 63,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 23,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 25,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 25.5,
+          "position": {
+            "azimuth": 63,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-8",
+      "beat": 28,
+      "preset": "left",
+      "position": {
+        "azimuth": 27,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 26,
+          "position": {
+            "azimuth": 27,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 28,
+          "position": {
+            "azimuth": 27,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 28.5,
+          "position": {
+            "azimuth": 27,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-9",
+      "beat": 31,
+      "preset": "hold",
+      "position": {
+        "azimuth": 45,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 700,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-10",
+      "beat": 34,
+      "preset": "left",
+      "position": {
+        "azimuth": 72,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 32,
+          "position": {
+            "azimuth": 72,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 34,
+          "position": {
+            "azimuth": 72,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 34.5,
+          "position": {
+            "azimuth": 72,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-11",
+      "beat": 37,
+      "preset": "right",
+      "position": {
+        "azimuth": 108,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 35,
+          "position": {
+            "azimuth": 108,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 37,
+          "position": {
+            "azimuth": 108,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 37.5,
+          "position": {
+            "azimuth": 108,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-12",
+      "beat": 40,
+      "preset": "combined",
+      "position": {
+        "azimuth": 90,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-13",
+      "beat": 43,
+      "preset": "right",
+      "position": {
+        "azimuth": 108,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 41,
+          "position": {
+            "azimuth": 108,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 43,
+          "position": {
+            "azimuth": 108,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 43.5,
+          "position": {
+            "azimuth": 108,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-14",
+      "beat": 46,
+      "preset": "left",
+      "position": {
+        "azimuth": 72,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 44,
+          "position": {
+            "azimuth": 72,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 46,
+          "position": {
+            "azimuth": 72,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 46.5,
+          "position": {
+            "azimuth": 72,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-15",
+      "beat": 49,
+      "preset": "right",
+      "position": {
+        "azimuth": 153,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-16",
+      "beat": 52,
+      "preset": "left",
+      "position": {
+        "azimuth": 117,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 50,
+          "position": {
+            "azimuth": 117,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 52,
+          "position": {
+            "azimuth": 117,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 52.5,
+          "position": {
+            "azimuth": 117,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-17",
+      "beat": 55,
+      "preset": "right",
+      "position": {
+        "azimuth": 153,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 53,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 55,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 55.5,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-18",
+      "beat": 58,
+      "preset": "left",
+      "position": {
+        "azimuth": 117,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "wall-18",
+      "beat": 59,
+      "preset": "hazard",
+      "position": {
+        "azimuth": 135,
+        "elevation": 0,
+        "radius": 0.15,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "box",
+        "half": [
+          0.2,
+          0.35,
+          0.18
+        ]
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 200,
+      "lateMs": 200,
+      "leadMs": 2000,
+      "linkMs": 100,
+      "durationBeats": 1,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-19",
+      "beat": 61,
+      "preset": "right",
+      "position": {
+        "azimuth": 153,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 59,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 61,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 61.5,
+          "position": {
+            "azimuth": 153,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-20",
+      "beat": 64,
+      "preset": "left",
+      "position": {
+        "azimuth": 162,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 62,
+          "position": {
+            "azimuth": 162,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 64,
+          "position": {
+            "azimuth": 162,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 64.5,
+          "position": {
+            "azimuth": 162,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-21",
+      "beat": 67,
+      "preset": "right",
+      "position": {
+        "azimuth": 198,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-22",
+      "beat": 70,
+      "preset": "left",
+      "position": {
+        "azimuth": 162,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 68,
+          "position": {
+            "azimuth": 162,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 70,
+          "position": {
+            "azimuth": 162,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 70.5,
+          "position": {
+            "azimuth": 162,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-23",
+      "beat": 73,
+      "preset": "right",
+      "position": {
+        "azimuth": 198,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 71,
+          "position": {
+            "azimuth": 198,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 73,
+          "position": {
+            "azimuth": 198,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 73.5,
+          "position": {
+            "azimuth": 198,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-24",
+      "beat": 76,
+      "preset": "hold",
+      "position": {
+        "azimuth": 180,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 700,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-25",
+      "beat": 79,
+      "preset": "right",
+      "position": {
+        "azimuth": 243,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 77,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 79,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 79.5,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-26",
+      "beat": 82,
+      "preset": "left",
+      "position": {
+        "azimuth": 207,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 80,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 82,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 82.5,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-27",
+      "beat": 85,
+      "preset": "combined",
+      "position": {
+        "azimuth": 225,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-28",
+      "beat": 88,
+      "preset": "left",
+      "position": {
+        "azimuth": 207,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 86,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 88,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 88.5,
+          "position": {
+            "azimuth": 207,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-29",
+      "beat": 91,
+      "preset": "right",
+      "position": {
+        "azimuth": 243,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 89,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 91,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 91.5,
+          "position": {
+            "azimuth": 243,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-30",
+      "beat": 94,
+      "preset": "left",
+      "position": {
+        "azimuth": 252,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-31",
+      "beat": 97,
+      "preset": "right",
+      "position": {
+        "azimuth": 288,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 95,
+          "position": {
+            "azimuth": 288,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 97,
+          "position": {
+            "azimuth": 288,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 97.5,
+          "position": {
+            "azimuth": 288,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-32",
+      "beat": 100,
+      "preset": "left",
+      "position": {
+        "azimuth": 252,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 98,
+          "position": {
+            "azimuth": 252,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 100,
+          "position": {
+            "azimuth": 252,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 100.5,
+          "position": {
+            "azimuth": 252,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-33",
+      "beat": 103,
+      "preset": "right",
+      "position": {
+        "azimuth": 288,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-34",
+      "beat": 106,
+      "preset": "left",
+      "position": {
+        "azimuth": 252,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 104,
+          "position": {
+            "azimuth": 252,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 106,
+          "position": {
+            "azimuth": 252,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 106.5,
+          "position": {
+            "azimuth": 252,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-35",
+      "beat": 109,
+      "preset": "right",
+      "position": {
+        "azimuth": 333,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 107,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 109,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 109.5,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-36",
+      "beat": 112,
+      "preset": "left",
+      "position": {
+        "azimuth": 297,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-37",
+      "beat": 115,
+      "preset": "right",
+      "position": {
+        "azimuth": 333,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 113,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 115,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 115.5,
+          "position": {
+            "azimuth": 333,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-38",
+      "beat": 118,
+      "preset": "left",
+      "position": {
+        "azimuth": 297,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 116,
+          "position": {
+            "azimuth": 297,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 118,
+          "position": {
+            "azimuth": 297,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 118.5,
+          "position": {
+            "azimuth": 297,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "wall-38",
+      "beat": 119,
+      "preset": "hazard",
+      "position": {
+        "azimuth": 315,
+        "elevation": 0,
+        "radius": 0.15,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "box",
+        "half": [
+          0.2,
+          0.35,
+          0.18
+        ]
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 200,
+      "lateMs": 200,
+      "leadMs": 2000,
+      "linkMs": 100,
+      "durationBeats": 1,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-39",
+      "beat": 121,
+      "preset": "hold",
+      "position": {
+        "azimuth": 315,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 700,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-40",
+      "beat": 124,
+      "preset": "left",
+      "position": {
+        "azimuth": 342,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 122,
+          "position": {
+            "azimuth": 342,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 124,
+          "position": {
+            "azimuth": 342,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 124.5,
+          "position": {
+            "azimuth": 342,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-41",
+      "beat": 127,
+      "preset": "right",
+      "position": {
+        "azimuth": 378,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 125,
+          "position": {
+            "azimuth": 378,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 127,
+          "position": {
+            "azimuth": 378,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 127.5,
+          "position": {
+            "azimuth": 378,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-42",
+      "beat": 130,
+      "preset": "combined",
+      "position": {
+        "azimuth": 360,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-43",
+      "beat": 133,
+      "preset": "right",
+      "position": {
+        "azimuth": 378,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 131,
+          "position": {
+            "azimuth": 378,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 133,
+          "position": {
+            "azimuth": 378,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 133.5,
+          "position": {
+            "azimuth": 378,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-44",
+      "beat": 136,
+      "preset": "left",
+      "position": {
+        "azimuth": 342,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 134,
+          "position": {
+            "azimuth": 342,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 136,
+          "position": {
+            "azimuth": 342,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 136.5,
+          "position": {
+            "azimuth": 342,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-45",
+      "beat": 139,
+      "preset": "right",
+      "position": {
+        "azimuth": 423,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-46",
+      "beat": 142,
+      "preset": "left",
+      "position": {
+        "azimuth": 387,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 140,
+          "position": {
+            "azimuth": 387,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 142,
+          "position": {
+            "azimuth": 387,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 142.5,
+          "position": {
+            "azimuth": 387,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-47",
+      "beat": 145,
+      "preset": "right",
+      "position": {
+        "azimuth": 423,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 143,
+          "position": {
+            "azimuth": 423,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 145,
+          "position": {
+            "azimuth": 423,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 145.5,
+          "position": {
+            "azimuth": 423,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-48",
+      "beat": 148,
+      "preset": "left",
+      "position": {
+        "azimuth": 387,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-49",
+      "beat": 151,
+      "preset": "right",
+      "position": {
+        "azimuth": 423,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 149,
+          "position": {
+            "azimuth": 423,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 151,
+          "position": {
+            "azimuth": 423,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 151.5,
+          "position": {
+            "azimuth": 423,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-50",
+      "beat": 154,
+      "preset": "left",
+      "position": {
+        "azimuth": 432,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 152,
+          "position": {
+            "azimuth": 432,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 154,
+          "position": {
+            "azimuth": 432,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 154.5,
+          "position": {
+            "azimuth": 432,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-51",
+      "beat": 157,
+      "preset": "right",
+      "position": {
+        "azimuth": 468,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-52",
+      "beat": 160,
+      "preset": "left",
+      "position": {
+        "azimuth": 432,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 158,
+          "position": {
+            "azimuth": 432,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 160,
+          "position": {
+            "azimuth": 432,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 160.5,
+          "position": {
+            "azimuth": 432,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-53",
+      "beat": 163,
+      "preset": "right",
+      "position": {
+        "azimuth": 468,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 161,
+          "position": {
+            "azimuth": 468,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 163,
+          "position": {
+            "azimuth": 468,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 163.5,
+          "position": {
+            "azimuth": 468,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-54",
+      "beat": 166,
+      "preset": "hold",
+      "position": {
+        "azimuth": 450,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 700,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-55",
+      "beat": 169,
+      "preset": "right",
+      "position": {
+        "azimuth": 513,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 167,
+          "position": {
+            "azimuth": 513,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 169,
+          "position": {
+            "azimuth": 513,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 169.5,
+          "position": {
+            "azimuth": 513,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-56",
+      "beat": 172,
+      "preset": "left",
+      "position": {
+        "azimuth": 477,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 170,
+          "position": {
+            "azimuth": 477,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 172,
+          "position": {
+            "azimuth": 477,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 172.5,
+          "position": {
+            "azimuth": 477,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-57",
+      "beat": 175,
+      "preset": "combined",
+      "position": {
+        "azimuth": 495,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-58",
+      "beat": 178,
+      "preset": "left",
+      "position": {
+        "azimuth": 477,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 176,
+          "position": {
+            "azimuth": 477,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 178,
+          "position": {
+            "azimuth": 477,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 178.5,
+          "position": {
+            "azimuth": 477,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "wall-58",
+      "beat": 179,
+      "preset": "hazard",
+      "position": {
+        "azimuth": 495,
+        "elevation": 0,
+        "radius": 0.15,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "box",
+        "half": [
+          0.2,
+          0.35,
+          0.18
+        ]
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 200,
+      "lateMs": 200,
+      "leadMs": 2000,
+      "linkMs": 100,
+      "durationBeats": 1,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-59",
+      "beat": 181,
+      "preset": "right",
+      "position": {
+        "azimuth": 513,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 179,
+          "position": {
+            "azimuth": 513,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 181,
+          "position": {
+            "azimuth": 513,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 181.5,
+          "position": {
+            "azimuth": 513,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-60",
+      "beat": 184,
+      "preset": "left",
+      "position": {
+        "azimuth": 522,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-61",
+      "beat": 187,
+      "preset": "right",
+      "position": {
+        "azimuth": 558,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 185,
+          "position": {
+            "azimuth": 558,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 187,
+          "position": {
+            "azimuth": 558,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 187.5,
+          "position": {
+            "azimuth": 558,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-62",
+      "beat": 190,
+      "preset": "left",
+      "position": {
+        "azimuth": 522,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 188,
+          "position": {
+            "azimuth": 522,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 190,
+          "position": {
+            "azimuth": 522,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 190.5,
+          "position": {
+            "azimuth": 522,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-63",
+      "beat": 193,
+      "preset": "right",
+      "position": {
+        "azimuth": 558,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-64",
+      "beat": 196,
+      "preset": "left",
+      "position": {
+        "azimuth": 522,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 194,
+          "position": {
+            "azimuth": 522,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 196,
+          "position": {
+            "azimuth": 522,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 196.5,
+          "position": {
+            "azimuth": 522,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-65",
+      "beat": 199,
+      "preset": "right",
+      "position": {
+        "azimuth": 603,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 197,
+          "position": {
+            "azimuth": 603,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 199,
+          "position": {
+            "azimuth": 603,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 199.5,
+          "position": {
+            "azimuth": 603,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-66",
+      "beat": 202,
+      "preset": "left",
+      "position": {
+        "azimuth": 567,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-67",
+      "beat": 205,
+      "preset": "right",
+      "position": {
+        "azimuth": 603,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 203,
+          "position": {
+            "azimuth": 603,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 205,
+          "position": {
+            "azimuth": 603,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 205.5,
+          "position": {
+            "azimuth": 603,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-68",
+      "beat": 208,
+      "preset": "left",
+      "position": {
+        "azimuth": 567,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 206,
+          "position": {
+            "azimuth": 567,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 208,
+          "position": {
+            "azimuth": 567,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 208.5,
+          "position": {
+            "azimuth": 567,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-69",
+      "beat": 211,
+      "preset": "hold",
+      "position": {
+        "azimuth": 585,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 700,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-70",
+      "beat": 214,
+      "preset": "left",
+      "position": {
+        "azimuth": 612,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 212,
+          "position": {
+            "azimuth": 612,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 214,
+          "position": {
+            "azimuth": 612,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 214.5,
+          "position": {
+            "azimuth": 612,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-71",
+      "beat": 217,
+      "preset": "right",
+      "position": {
+        "azimuth": 648,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 215,
+          "position": {
+            "azimuth": 648,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 217,
+          "position": {
+            "azimuth": 648,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 217.5,
+          "position": {
+            "azimuth": 648,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-72",
+      "beat": 220,
+      "preset": "combined",
+      "position": {
+        "azimuth": 630,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-73",
+      "beat": 223,
+      "preset": "right",
+      "position": {
+        "azimuth": 648,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 221,
+          "position": {
+            "azimuth": 648,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 223,
+          "position": {
+            "azimuth": 648,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 223.5,
+          "position": {
+            "azimuth": 648,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-74",
+      "beat": 226,
+      "preset": "left",
+      "position": {
+        "azimuth": 612,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 224,
+          "position": {
+            "azimuth": 612,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 226,
+          "position": {
+            "azimuth": 612,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 226.5,
+          "position": {
+            "azimuth": 612,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-75",
+      "beat": 229,
+      "preset": "right",
+      "position": {
+        "azimuth": 693,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-76",
+      "beat": 232,
+      "preset": "left",
+      "position": {
+        "azimuth": 657,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 230,
+          "position": {
+            "azimuth": 657,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 232,
+          "position": {
+            "azimuth": 657,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 232.5,
+          "position": {
+            "azimuth": 657,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-77",
+      "beat": 235,
+      "preset": "right",
+      "position": {
+        "azimuth": 693,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 233,
+          "position": {
+            "azimuth": 693,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 235,
+          "position": {
+            "azimuth": 693,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 235.5,
+          "position": {
+            "azimuth": 693,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-78",
+      "beat": 238,
+      "preset": "left",
+      "position": {
+        "azimuth": 657,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "wall-78",
+      "beat": 239,
+      "preset": "hazard",
+      "position": {
+        "azimuth": 675,
+        "elevation": 0,
+        "radius": 0.15,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "box",
+        "half": [
+          0.2,
+          0.35,
+          0.18
+        ]
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 200,
+      "lateMs": 200,
+      "leadMs": 2000,
+      "linkMs": 100,
+      "durationBeats": 1,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-79",
+      "beat": 241,
+      "preset": "right",
+      "position": {
+        "azimuth": 693,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 239,
+          "position": {
+            "azimuth": 693,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 241,
+          "position": {
+            "azimuth": 693,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 241.5,
+          "position": {
+            "azimuth": 693,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-80",
+      "beat": 244,
+      "preset": "left",
+      "position": {
+        "azimuth": 702,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 242,
+          "position": {
+            "azimuth": 702,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 244,
+          "position": {
+            "azimuth": 702,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 244.5,
+          "position": {
+            "azimuth": 702,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-81",
+      "beat": 247,
+      "preset": "right",
+      "position": {
+        "azimuth": 738,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-82",
+      "beat": 250,
+      "preset": "left",
+      "position": {
+        "azimuth": 702,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 248,
+          "position": {
+            "azimuth": 702,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 250,
+          "position": {
+            "azimuth": 702,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 250.5,
+          "position": {
+            "azimuth": 702,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-83",
+      "beat": 253,
+      "preset": "right",
+      "position": {
+        "azimuth": 738,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 251,
+          "position": {
+            "azimuth": 738,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 253,
+          "position": {
+            "azimuth": 738,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 253.5,
+          "position": {
+            "azimuth": 738,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-84",
+      "beat": 256,
+      "preset": "hold",
+      "position": {
+        "azimuth": 720,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "durationBeats": 2,
+      "holdMs": 700,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-85",
+      "beat": 259,
+      "preset": "right",
+      "position": {
+        "azimuth": 783,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 257,
+          "position": {
+            "azimuth": 783,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 259,
+          "position": {
+            "azimuth": 783,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 259.5,
+          "position": {
+            "azimuth": 783,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-86",
+      "beat": 262,
+      "preset": "left",
+      "position": {
+        "azimuth": 747,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 260,
+          "position": {
+            "azimuth": 747,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 262,
+          "position": {
+            "azimuth": 747,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 262.5,
+          "position": {
+            "azimuth": 747,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-87",
+      "beat": 265,
+      "preset": "combined",
+      "position": {
+        "azimuth": 765,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-88",
+      "beat": 268,
+      "preset": "left",
+      "position": {
+        "azimuth": 747,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 266,
+          "position": {
+            "azimuth": 747,
+            "elevation": -5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 268,
+          "position": {
+            "azimuth": 747,
+            "elevation": -5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 268.5,
+          "position": {
+            "azimuth": 747,
+            "elevation": -5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "orbit-89",
+      "beat": 271,
+      "preset": "right",
+      "position": {
+        "azimuth": 783,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [
+        {
+          "beat": 269,
+          "position": {
+            "azimuth": 783,
+            "elevation": 5,
+            "radius": 3,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 271,
+          "position": {
+            "azimuth": 783,
+            "elevation": 5,
+            "radius": 0.8,
+            "height": 1.4
+          }
+        },
+        {
+          "beat": 271.5,
+          "position": {
+            "azimuth": 783,
+            "elevation": 5,
+            "radius": 0.65,
+            "height": 1.4
+          }
+        }
+      ],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0.1,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "linked-left",
+      "beat": 280,
+      "preset": "left",
+      "position": {
+        "azimuth": -25,
+        "elevation": -5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "group": "final-chord",
+      "value": 100
+    },
+    {
+      "id": "linked-right",
+      "beat": 280,
+      "preset": "right",
+      "position": {
+        "azimuth": 25,
+        "elevation": 5,
+        "radius": 0.8,
+        "height": 1.4
+      },
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.16
+      },
+      "motion": [],
+      "anchor": "player",
+      "earlyMs": 250,
+      "lateMs": 250,
+      "leadMs": 1000,
+      "linkMs": 100,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "group": "final-chord",
+      "value": 100
+    }
+  ],
+  "groups": [
+    {
+      "id": "final-chord",
+      "members": [
+        "linked-left",
+        "linked-right"
+      ],
+      "linkMs": 150,
+      "bonus": 200,
+      "distinctActors": false
+    }
+  ],
+  "profile": {
+    "hazardPenalty": 25,
+    "hazardIntervalMs": 100
+  }
+}

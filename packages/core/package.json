@@ -1,0 +1,30 @@
+{
+  "name": "@statebeats/core",
+  "version": "0.2.0",
+  "description": "Pure spatial rhythm state machine",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RONITERVO/StateBeats.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/RONITERVO/StateBeats/tree/main/packages/core#readme",
+  "bugs": {
+    "url": "https://github.com/RONITERVO/StateBeats/issues"
+  }
+}

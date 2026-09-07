@@ -1,0 +1,32 @@
+{
+  "name": "@statebeats/adapters-node",
+  "version": "0.2.0",
+  "description": "Filesystem map and replay stores for StateBeats",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@statebeats/sdk": "0.2.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RONITERVO/StateBeats.git",
+    "directory": "packages/adapters-node"
+  },
+  "homepage": "https://github.com/RONITERVO/StateBeats/tree/main/packages/adapters-node#readme",
+  "bugs": {
+    "url": "https://github.com/RONITERVO/StateBeats/issues"
+  }
+}

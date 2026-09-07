@@ -1,0 +1,8 @@
+node_modules
+**/dist
+**/*.tsbuildinfo
+artifacts
+playwright-report
+test-results
+schemas
+packages/content/maps

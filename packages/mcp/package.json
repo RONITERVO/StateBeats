@@ -1,0 +1,32 @@
+{
+  "name": "@statebeats/mcp",
+  "version": "0.2.0",
+  "description": "StateBeats MCP stdio server",
+  "type": "module",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "bin": {
+    "statebeats-mcp": "dist/index.js"
+  },
+  "dependencies": {
+    "@statebeats/sdk": "0.2.0",
+    "@statebeats/content": "0.2.0",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.5.4"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RONITERVO/StateBeats.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://github.com/RONITERVO/StateBeats/tree/main/packages/mcp#readme",
+  "bugs": {
+    "url": "https://github.com/RONITERVO/StateBeats/issues"
+  }
+}
