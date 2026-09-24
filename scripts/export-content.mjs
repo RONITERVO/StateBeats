@@ -13,7 +13,15 @@ for (const [name, schema] of Object.entries({
 }))
   await writeFile(
     `schemas/${name}.schema.json`,
-    JSON.stringify(z.toJSONSchema(schema, { unrepresentable: 'any' }), null, 2) + '\n',
+    JSON.stringify(
+      z.toJSONSchema(schema, {
+        unrepresentable: 'any',
+        // Map authors provide inputs; runtime defaults must remain optional in editors too.
+        io: name === 'map' ? 'input' : 'output',
+      }),
+      null,
+      2,
+    ) + '\n',
   );
 console.log(
   `Exported ${sampleMaps.length} maps and three versioned JSON Schema documents. Runtime validation also checks semantic invariants.`,

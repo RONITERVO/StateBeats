@@ -143,7 +143,7 @@ export function textPerception(
       const description = describeObservation(view, options);
       const key = JSON.stringify([
         Math.floor(view.tick / view.tickRate),
-        description.targets.map((target) => target.id),
+        description.targets.map((target) => [target.id, target.presentation?.readiness?.phase]),
         view.finished,
       ]);
       if (key === previous) return;

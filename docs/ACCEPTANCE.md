@@ -4,6 +4,25 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Readiness review fixes, 2026-09-25
+
+All four PR #5 findings were reproduced with failing tests. Text output now announces each
+readiness phase within a single second without repeating stable frames. Desktop assistance
+rejects hidden targets at its shared geometry entry point, covering spheres, boxes and
+capsules while retaining legacy behavior. Manual next-cue stepping includes preview,
+preparation and first eligibility, including the beginning of early strike windows.
+
+The published map JSON Schema now describes authoring input rather than normalized output.
+An independent JSON Schema validator accepts empty/partial readiness settings and every
+bundled map, and rejects malformed readiness values consistently with runtime validation.
+The same generation fix also makes other runtime-defaulted map fields optional in editors.
+
+`npm run check` passed **145 tests in 22 files**, strict types, formatting, core boundaries
+and production build. All **nine targeted browser cases** passed: six manual-readiness cases
+across Chromium, Firefox and WebKit, plus three desktop input/worker/replay cases. Fresh
+installation and smoke checks passed for all six package archives. The earlier
+full feature checks are recorded below; no core scoring or trajectory code changed here.
+
 ## Staged note readiness, 2026-09-25
 
 Event Horizon's stationary holds opt into a shared readiness schedule: hidden until two

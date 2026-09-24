@@ -40,6 +40,10 @@ Each note may include an optional `presentation` object:
   or beats. An empty object defaults to two beats of preview and one beat of preparation.
   Omit the object to preserve the earlier lifecycle without this extra policy.
 
+`schemas/map.schema.json` describes authoring inputs, including omitted defaults such as
+`readiness: {}` or an object with only `preview` or `prepare`. Runtime parsing fills the
+defaults; compilation also checks semantic constraints that JSON Schema cannot express.
+
 Existing maps need no migration: holds default to a 350 ms leading window and 180 ms
 trail; other targets default to no guide. Default appearance and release times are
 160 ms and 240 ms. An explicitly supplied presentation object defaults to a window,
@@ -123,6 +127,11 @@ The semantic description omits readiness-hidden targets and distinguishes upcomi
 preparing and actionable instructions. Reference audio cues and desktop direction/camera
 selection respect the same hidden interval. Raw observations retain authoritative entities
 for tooling; use their presentation cues when implementing a perception adapter.
+Desktop pointer assistance also ignores readiness-hidden targets. The text output sink emits
+readiness phase changes even within the same second while suppressing repeated stable frames.
+The manual text player's next-cue action stops at preview, preparation and first eligible
+contact, as well as ordinary spawn/hit ticks; short preparation and early hit windows are
+not skipped.
 
 ### Compatibility and information policy
 
