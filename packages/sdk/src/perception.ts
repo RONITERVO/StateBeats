@@ -57,9 +57,9 @@ export function describeObservation(
     throw new EngineError('VALIDATION', 'Describe between 1 and 128 targets');
   const origin = parsed(vecSchema, options.position ?? [0, 1.4, 0]);
   const orientation = quaternion(parsed(quatSchema, options.orientation ?? [0, 0, 0, 1]));
-  const entities = [...view.entities].sort(
-    (a, b) => a.hitTick - b.hitTick || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
-  );
+  const entities = view.entities
+    .filter((e) => e.presentation?.readiness?.phase !== 'hidden')
+    .sort((a, b) => a.hitTick - b.hitTick || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   const targets = entities.slice(0, limit).map((entity) => {
     const position = [
       ...(entity.kind === 'hold' && view.tick >= entity.hitTick
@@ -81,6 +81,13 @@ export function describeObservation(
     const holdSeconds = entity.kind === 'hold' ? entity.holdTicks / view.tickRate : 0;
     const needs = requirement(entity);
     const when = secondsUntil > 0 ? `in ${secondsUntil.toFixed(2)} seconds` : 'now';
+    const verb = action === 'avoid' ? 'Avoid' : action === 'hold' ? 'Hold' : 'Reach';
+    const instruction =
+      entity.presentation?.readiness?.phase === 'waiting'
+        ? `Upcoming ${action}`
+        : entity.presentation?.readiness?.phase === 'preparing'
+          ? `Prepare to ${action}`
+          : verb;
     return {
       id: entity.id,
       label,
@@ -96,7 +103,7 @@ export function describeObservation(
       secondsUntil,
       holdSeconds,
       ...(entity.presentation ? { presentation: entity.presentation } : {}),
-      text: `${action === 'avoid' ? 'Avoid' : action === 'hold' ? 'Hold' : 'Reach'} ${label}; ${needs}; ${distanceMetres < 0.1 ? 'at your position' : `${clockPosition} o'clock ${height}`}; ${distanceMetres.toFixed(2)} metres; ${when}${holdSeconds ? `; hold ${holdSeconds.toFixed(2)} seconds` : ''}.`,
+      text: `${instruction} ${label}; ${needs}; ${distanceMetres < 0.1 ? 'at your position' : `${clockPosition} o'clock ${height}`}; ${distanceMetres.toFixed(2)} metres; ${when}${holdSeconds ? `; hold ${holdSeconds.toFixed(2)} seconds` : ''}.`,
     } satisfies TargetCue;
   });
   const score = view.scores
@@ -136,7 +143,7 @@ export function textPerception(
       const description = describeObservation(view, options);
       const key = JSON.stringify([
         Math.floor(view.tick / view.tickRate),
-        description.targets.map((target) => target.id),
+        description.targets.map((target) => [target.id, target.presentation?.readiness?.phase]),
         view.finished,
       ]);
       if (key === previous) return;

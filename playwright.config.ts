@@ -21,15 +21,15 @@ export default defineConfig({
     },
     {
       name: 'firefox',
-      testMatch: ['**/conformance.spec.ts', '**/audio.spec.ts'],
+      testMatch: ['**/conformance.spec.ts', '**/audio.spec.ts', '**/manual-cues.spec.ts'],
       use: { ...devices['Desktop Firefox'] },
     },
     {
       name: 'webkit',
       testMatch:
         process.platform === 'win32'
-          ? ['**/conformance.spec.ts']
-          : ['**/conformance.spec.ts', '**/audio.spec.ts'],
+          ? ['**/conformance.spec.ts', '**/manual-cues.spec.ts']
+          : ['**/conformance.spec.ts', '**/audio.spec.ts', '**/manual-cues.spec.ts'],
       use: { ...devices['Desktop Safari'] },
     },
   ],

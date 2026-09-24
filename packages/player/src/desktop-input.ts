@@ -7,6 +7,8 @@ export function assistedTargetPoint(
   entity: Observation['entities'][number],
   tick: number,
 ): THREE.Vector3 | null {
+  // Authoritative existence does not grant assistance before the map's reveal time.
+  if (entity.presentation?.readiness?.phase === 'hidden') return null;
   const target = new THREE.Vector3(
     ...(tick >= entity.hitTick ? entity.position : (entity.targetPosition ?? entity.position)),
   );

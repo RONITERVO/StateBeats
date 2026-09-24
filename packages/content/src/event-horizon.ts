@@ -251,6 +251,7 @@ export function eventHorizonMaster() {
         guide: 'window',
         ahead: { beats: 0.75 },
         behind: { beats: 0.5 },
+        ...(stationary ? { readiness: { preview: { beats: 2 }, prepare: { beats: 1 } } } : {}),
       },
       ...(stationary ? { emission: undefined, leadMs: 2400, motion } : { motion: motion.slice(1) }),
     });

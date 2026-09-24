@@ -14,6 +14,14 @@ export const notePresentationSchema = z
     guide: z.enum(['window', 'none', 'full']).default('window'),
     ahead: duration.default({ ms: 350 }),
     behind: duration.default({ ms: 180 }),
+    // Opt-in: omission preserves earlier maps and their presentation hashes.
+    readiness: z
+      .object({
+        preview: duration.default({ beats: 2 }),
+        prepare: duration.default({ beats: 1 }),
+      })
+      .strict()
+      .optional(),
   })
   .strict();
 export type NotePresentation = z.infer<typeof notePresentationSchema>;

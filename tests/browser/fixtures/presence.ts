@@ -53,9 +53,8 @@ export function exercisePresence(frames: Observation[]) {
         ring: ((group.getObjectByName('timing') as THREE.Mesh).material as THREE.Material).opacity,
         core: ((group.getObjectByName('core') as THREE.Mesh).material as THREE.Material).opacity,
         label: (group.getObjectByName('requirement') as THREE.Sprite).material.opacity,
-        particle: (
-          group.children.find((c) => c instanceof THREE.Points) as THREE.Points | undefined
-        )?.material,
+        particle: (group.getObjectByProperty('type', 'Points') as THREE.Points | undefined)
+          ?.material,
       }))
       .map(({ particle, ...values }) => ({
         ...values,

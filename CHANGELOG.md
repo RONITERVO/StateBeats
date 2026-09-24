@@ -2,6 +2,19 @@
 
 ## 0.3.0 — musical choreography (development release candidate)
 
+Adds optional map-authored readiness cues: hidden, waiting, preparing and eligible, timed
+from the first valid contact tick. Event Horizon's stationary holds now use a short hollow
+preview and brighten into solid targets during the last beat before contact. The reference
+player stages artwork, semantic cues and guides together; text and audio adapters share the
+reveal timing. Artists can own readiness expression independently of appearance/release
+effects. Maps that omit readiness retain their behavior and presentation identity; valid
+recordings, collision timing and scoring remain compatible.
+
+Readiness review fixes preserve short preparation announcements, keep desktop aim assistance
+from locating hidden targets, and stop manual next-cue stepping at preview, preparation and
+first eligible contact. The exported map JSON Schema now describes authoring inputs, so
+omitted runtime defaults validate consistently in editors.
+
 Adds versioned note presentation cues shared by graphical, text, audio and agent adapters:
 tick-derived appearance, arrival, contact and release phases; beat/millisecond reveal windows;
 and bounded trailing paths along authoritative movement. Target appearance adapters can own

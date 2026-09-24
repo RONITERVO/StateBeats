@@ -1103,11 +1103,19 @@ orbit.renderer.setAnimationLoop((time) => {
   if (playing && !orbit.renderer.xr.isPresenting) {
     if (autoplay && view) {
       const target = view.entities
-        .filter((e) => e.kind !== 'hazard' && e.endTick >= view!.tick)
+        .filter(
+          (e) =>
+            e.kind !== 'hazard' &&
+            e.endTick >= view!.tick &&
+            e.presentation?.readiness?.phase !== 'hidden',
+        )
         .sort((a, b) => a.hitTick - b.hitTick)[0];
       if (target) {
         const together = view.entities.filter(
-          (entity) => entity.kind !== 'hazard' && Math.abs(entity.hitTick - target.hitTick) <= 1,
+          (entity) =>
+            entity.kind !== 'hazard' &&
+            entity.presentation?.readiness?.phase !== 'hidden' &&
+            Math.abs(entity.hitTick - target.hitTick) <= 1,
         );
         const position = together.reduce(
           (sum, entity) => {
@@ -1198,7 +1206,7 @@ orbit.renderer.setAnimationLoop((time) => {
   }
   if (view && playing) {
     const next = view.entities
-      .filter((e) => e.endTick >= view!.tick)
+      .filter((e) => e.endTick >= view!.tick && e.presentation?.readiness?.phase !== 'hidden')
       .sort((a, b) => a.hitTick - b.hitTick)[0];
     let cue = '';
     if (next) {

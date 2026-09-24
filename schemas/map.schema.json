@@ -159,8 +159,7 @@
         },
         "required": [
           "beat",
-          "bpm",
-          "meter"
+          "bpm"
         ],
         "additionalProperties": false
       }
@@ -270,8 +269,7 @@
                 "required": [
                   "azimuth",
                   "elevation",
-                  "radius",
-                  "height"
+                  "radius"
                 ],
                 "additionalProperties": false
               }
@@ -517,8 +515,7 @@
                       "required": [
                         "azimuth",
                         "elevation",
-                        "radius",
-                        "height"
+                        "radius"
                       ],
                       "additionalProperties": false
                     }
@@ -647,17 +644,84 @@
                     "additionalProperties": false
                   }
                 ]
+              },
+              "readiness": {
+                "type": "object",
+                "properties": {
+                  "preview": {
+                    "default": {
+                      "beats": 2
+                    },
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "ms": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 5000
+                          }
+                        },
+                        "required": [
+                          "ms"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "beats": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 8
+                          }
+                        },
+                        "required": [
+                          "beats"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "prepare": {
+                    "default": {
+                      "beats": 1
+                    },
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "ms": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 5000
+                          }
+                        },
+                        "required": [
+                          "ms"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "beats": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 8
+                          }
+                        },
+                        "required": [
+                          "beats"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                },
+                "additionalProperties": false
               }
             },
-            "required": [
-              "version",
-              "presence",
-              "appearMs",
-              "releaseMs",
-              "guide",
-              "ahead",
-              "behind"
-            ],
             "additionalProperties": false
           },
           "label": {
@@ -869,20 +933,7 @@
         "required": [
           "id",
           "beat",
-          "preset",
-          "position",
-          "shape",
-          "motion",
-          "earlyMs",
-          "lateMs",
-          "leadMs",
-          "linkMs",
-          "holdMs",
-          "breakMs",
-          "minSpeed",
-          "policy",
-          "config",
-          "value"
+          "position"
         ],
         "additionalProperties": false
       }
@@ -976,8 +1027,7 @@
                     "required": [
                       "azimuth",
                       "elevation",
-                      "radius",
-                      "height"
+                      "radius"
                     ],
                     "additionalProperties": false
                   }
@@ -1072,8 +1122,7 @@
                           "required": [
                             "azimuth",
                             "elevation",
-                            "radius",
-                            "height"
+                            "radius"
                           ],
                           "additionalProperties": false
                         }
@@ -1156,11 +1205,7 @@
               "id",
               "appearance",
               "label",
-              "position",
-              "motion",
-              "scale",
-              "trailSeconds",
-              "react"
+              "position"
             ],
             "additionalProperties": false
           }
@@ -1169,8 +1214,7 @@
       "required": [
         "version",
         "theme",
-        "label",
-        "objects"
+        "label"
       ],
       "additionalProperties": false
     },
@@ -1415,10 +1459,6 @@
           "maximum": 1.75
         }
       },
-      "required": [
-        "height",
-        "roomScale"
-      ],
       "additionalProperties": false
     },
     "generation": {
@@ -1482,10 +1522,7 @@
         },
         "required": [
           "id",
-          "members",
-          "linkMs",
-          "bonus",
-          "distinctActors"
+          "members"
         ],
         "additionalProperties": false
       }
@@ -1510,10 +1547,6 @@
           "maximum": 5000
         }
       },
-      "required": [
-        "hazardPenalty",
-        "hazardIntervalMs"
-      ],
       "additionalProperties": false
     }
   },
@@ -1521,15 +1554,9 @@
     "version",
     "id",
     "title",
-    "description",
-    "seed",
-    "tickRate",
-    "offsetSeconds",
     "durationBeats",
     "tempo",
-    "notes",
-    "groups",
-    "profile"
+    "notes"
   ],
   "additionalProperties": false,
   "$defs": {

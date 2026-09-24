@@ -211,7 +211,15 @@ button('start', start);
 button('next', () => {
   const view = admin().observe();
   const candidates = [
-    ...view.entities.map((entity) => entity.hitTick),
+    ...view.entities.flatMap((entity) => {
+      const cue = entity.presentation;
+      return [
+        entity.hitTick,
+        ...(cue?.readiness
+          ? [cue.readiness.previewTick, cue.readiness.prepareTick, cue.readyTick]
+          : []),
+      ];
+    }),
     ...session!.program.entities.map((entity) => entity.spawnTick),
     session!.program.durationTicks,
   ].filter((tick) => tick > view.tick);

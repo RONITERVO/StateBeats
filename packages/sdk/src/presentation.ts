@@ -17,6 +17,13 @@ export interface TargetPresentation {
   visibility: number;
   spawnTick: number;
   readyTick: number;
+  /** Scheduled availability, never a claim that a hand has acquired the target. */
+  readiness?: {
+    phase: 'hidden' | 'waiting' | 'preparing' | 'ready' | 'resolved';
+    previewTick: number;
+    prepareTick: number;
+    progress: number;
+  };
   resolveTick?: number;
   outcome?: 'hit' | 'missed' | 'expired';
   guide: NotePresentation['guide'];
@@ -67,12 +74,46 @@ export function createNotePresenter(map: MapDefinition) {
       spec.kind === 'strike'
         ? Math.max(spec.spawnTick, spec.hitTick - spec.window[0])
         : spec.hitTick;
+    const previewTick = policy.readiness
+      ? Math.max(
+          spec.spawnTick,
+          Math.min(readyTick, windowTick(readyTick, policy.readiness.preview, -1)),
+        )
+      : spec.spawnTick;
+    const prepareTick = policy.readiness
+      ? Math.max(
+          previewTick,
+          Math.min(readyTick, windowTick(readyTick, policy.readiness.prepare, -1)),
+        )
+      : readyTick;
+    const readiness: TargetPresentation['readiness'] = policy.readiness
+      ? {
+          phase:
+            tick < previewTick
+              ? 'hidden'
+              : resolution
+                ? 'resolved'
+                : tick >= readyTick
+                  ? 'ready'
+                  : tick >= prepareTick
+                    ? 'preparing'
+                    : 'waiting',
+          previewTick,
+          prepareTick,
+          progress:
+            tick >= readyTick
+              ? 1
+              : readyTick === prepareTick
+                ? 0
+                : clamp((tick - prepareTick) / (readyTick - prepareTick)),
+        }
+      : undefined;
     // Emergence must finish before contact can count, even with zero lead time.
     const appearTicks =
       policy.presence === 'instant'
         ? 0
-        : Math.min(Math.round((policy.appearMs * map.tickRate) / 1000), readyTick - spec.spawnTick);
-    const appearanceProgress = appearTicks <= 0 ? 1 : clamp((tick - spec.spawnTick) / appearTicks);
+        : Math.min(Math.round((policy.appearMs * map.tickRate) / 1000), readyTick - previewTick);
+    const appearanceProgress = appearTicks <= 0 ? 1 : clamp((tick - previewTick) / appearTicks);
     const releaseDuration = releaseTicks(spec.id, spec.kind);
     const releaseProgress = resolution
       ? releaseDuration === 0
@@ -80,7 +121,7 @@ export function createNotePresenter(map: MapDefinition) {
         : clamp((tick - resolution.tick) / releaseDuration)
       : 0;
     const visibility =
-      tick < spec.spawnTick ? 0 : smooth(appearanceProgress) * (1 - smooth(releaseProgress));
+      tick < previewTick ? 0 : smooth(appearanceProgress) * (1 - smooth(releaseProgress));
     const origin = positionAt(spec, spec.spawnTick);
     const arrival = [
       spec.hitTick,
@@ -91,7 +132,7 @@ export function createNotePresenter(map: MapDefinition) {
       ? 'approach'
       : 'materialize';
     const phase =
-      tick < spec.spawnTick
+      tick < previewTick
         ? 'hidden'
         : resolution
           ? 'resolved'
@@ -114,7 +155,8 @@ export function createNotePresenter(map: MapDefinition) {
       policy.guide === 'full' ? spec.endTick : ahead,
     );
     const path: TargetPresentation['path'] = [];
-    if (visibility > 0 && policy.guide !== 'none' && end > start) {
+    const readinessStrength = smooth(readiness?.progress ?? 1);
+    if (visibility > 0 && readinessStrength > 0 && policy.guide !== 'none' && end > start) {
       // Keep every authored corner; add subdivisions only for smooth strength falloff.
       // <= 256 keys + 33 subdivisions + the exact head = 290 points.
       const ticks = new Set([start, end, Math.max(start, Math.min(end, head))]);
@@ -127,7 +169,11 @@ export function createNotePresenter(map: MapDefinition) {
             : t < head
               ? (t - behind) / Math.max(1, head - behind)
               : (ahead - t) / Math.max(1, ahead - head);
-        path.push({ tick: t, position: at(t), strength: visibility * smooth(clamp(weight)) });
+        path.push({
+          tick: t,
+          position: at(t),
+          strength: visibility * readinessStrength * smooth(clamp(weight)),
+        });
       }
     }
     return {
@@ -140,6 +186,7 @@ export function createNotePresenter(map: MapDefinition) {
       visibility,
       spawnTick: spec.spawnTick,
       readyTick,
+      ...(readiness ? { readiness } : {}),
       ...(resolution ? { resolveTick: resolution.tick, outcome: resolution.outcome } : {}),
       guide: policy.guide,
       path,
