@@ -220,6 +220,14 @@ export const mapSchema = z
     notes: z.array(noteSchema).max(10000),
     scene: sceneSchema.optional(),
     music: musicSchema.optional(),
+    generation: z
+      .object({
+        version: z.literal(1),
+        algorithm: idSchema,
+        settings: jsonSchema,
+      })
+      .strict()
+      .optional(),
     groups: z
       .array(
         z

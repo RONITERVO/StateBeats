@@ -1,5 +1,11 @@
 # CLI and MCP
 
+Musical authoring adds `music.compose` with `{ music, options }`, returning `{ map, report }`
+and storing the generated map. It requires an admin capability and supports request-ID retries.
+`choreography.inspect` accepts `{ map, options }` or `{ mapId, options }`, returns authored
+hand-path diagnostics, and never advances time. `music.generate` returns just the map.
+See [the choreography contract](CHOREOGRAPHY.md) for settings and adapter interfaces.
+
 Build once with `npm ci` and `npm run build:lib`. Run `node examples/headless.mjs` for the full
 asserted builder → pose → step → checkpoint → replay flow including a wrong-hand negative case.
 

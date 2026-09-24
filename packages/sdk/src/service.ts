@@ -13,6 +13,7 @@ import { EngineError, parsed, actorSchema, idSchema } from './schema.js';
 import type { MapDefinition, MapInput } from './schema.js';
 import type { SceneInput, MusicTimeline } from './schema.js';
 import { generateMusicMap } from './music.js';
+import { generateChoreography, inspectChoreography } from './choreography.js';
 import { describeObservation } from './perception.js';
 import { Session, standardActor } from './session.js';
 import type { Capability, Checkpoint, Replay } from './session.js';
@@ -59,6 +60,8 @@ export const operations = [
   'map.validate',
   'map.generate',
   'music.generate',
+  'music.compose',
+  'choreography.inspect',
   'map.edit',
   'map.compile',
   'actor.register',
@@ -116,6 +119,7 @@ export class EngineService {
         'snapshot.restore',
         'map.generate',
         'music.generate',
+        'music.compose',
         'map.import',
         'map.edit',
       ].includes(captured.op);
@@ -184,6 +188,20 @@ export class EngineService {
         await this.maps.put(map);
         return map;
       }
+      case 'music.compose': {
+        admin();
+        const result = generateChoreography(
+          a.music,
+          a.options as Parameters<typeof generateChoreography>[1],
+        );
+        await this.maps.put(result.map);
+        return result;
+      }
+      case 'choreography.inspect':
+        return inspectChoreography(
+          await findMap(),
+          a.options as Parameters<typeof inspectChoreography>[1],
+        );
       case 'map.import':
         admin();
         return this.addMap(a.map);

@@ -101,6 +101,8 @@ export interface Observation {
     kind: EntitySpec['kind'];
     position: number[];
     targetPosition?: Vec3;
+    /** Bounded world-space preview of the remaining authoritative hold path. */
+    contactPath?: { tick: number; position: Vec3 }[];
     label?: string;
     appearance?: string;
     orientation: [number, number, number, number];
@@ -457,6 +459,33 @@ export class Session {
           rotate(positionAt(e.spec, e.spec.hitTick), e.transform.orientation),
           e.transform.position,
         ),
+        ...(e.spec.kind === 'hold'
+          ? {
+              contactPath: (() => {
+                const start = Math.max(e.spec.hitTick, this.world.tick);
+                const end = Math.max(start, e.spec.hitTick + e.spec.holdTicks);
+                const ticks = [
+                  start,
+                  ...e.spec.motion.filter((k) => k.tick > start && k.tick < end).map((k) => k.tick),
+                  end,
+                ];
+                const stride = Math.max(1, Math.ceil(ticks.length / 62));
+                return ticks
+                  .filter(
+                    (tick, i) =>
+                      (i % stride === 0 || i === ticks.length - 1) &&
+                      (i === 0 || tick > ticks[i - 1]),
+                  )
+                  .map((tick) => ({
+                    tick,
+                    position: add(
+                      rotate(positionAt(e.spec, tick), e.transform.orientation),
+                      e.transform.position,
+                    ),
+                  }));
+              })(),
+            }
+          : {}),
         ...this.descriptions.get(e.spec.id),
         orientation: e.transform.orientation,
         shape: e.spec.shape,

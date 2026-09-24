@@ -1,6 +1,6 @@
 {
   "name": "@statebeats/core",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Pure spatial rhythm state machine",
   "type": "module",
   "license": "MIT",

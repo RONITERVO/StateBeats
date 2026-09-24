@@ -1,5 +1,10 @@
 # SDK and compatibility
 
+StateBeats 0.3 adds [musical choreography](CHOREOGRAPHY.md): replaceable phrase, rhythm and
+facing adapters, saved generation provenance, authoring diagnostics and held-path observations.
+The version-1 kernel recording contract is unchanged. Maps containing generation metadata need
+the 0.3 SDK or newer; previously saved maps and their presentation hashes remain valid.
+
 ## Domain contract
 
 `transition(previous, commands, program)` returns the next immutable mathematical state and ordered

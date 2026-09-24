@@ -54,13 +54,100 @@
             >Song tempo (BPM)<input id="song-bpm" type="number" min="40" max="240" value="120"
           /></label>
           <label
-            >Pattern density<select id="song-difficulty">
+            >Movement intensity<select id="song-difficulty">
               <option value="gentle">Gentle</option>
               <option value="flow">Flow</option>
               <option value="busy">Busy</option>
             </select></label
           >
-          <label><input id="song-turning" type="checkbox" checked />Turn around with the sun</label>
+          <label
+            >Turning<select id="song-turning">
+              <option value="forward">Face forward</option>
+              <option value="bounded">Turn within 120°</option>
+              <option value="full" selected>Full 360° journey</option>
+            </select></label
+          >
+          <details class="generation-options">
+            <summary>Shape your movement</summary>
+            <label
+              >First beat offset in the audio (seconds)<input
+                id="song-beat-offset"
+                type="number"
+                min="-10"
+                max="30"
+                step="0.01"
+                value="0"
+            /></label>
+            <p>
+              A positive value moves the beat grid later in your song. This differs from device
+              audio latency.
+            </p>
+            <label
+              >Note arrival<select id="song-style">
+                <option value="approach">Approaching</option>
+                <option value="stationary">Stationary</option>
+                <option value="mixed">Both styles</option>
+              </select></label
+            >
+            <label
+              >Rhythm<select id="song-rhythm">
+                <option value="hybrid">Flow with musical accents</option>
+                <option value="steady">Steady dance phrases</option>
+                <option value="accents">Detected accents only</option>
+              </select></label
+            >
+            <label
+              >Standing headset height (metres)<input
+                id="song-height"
+                type="number"
+                min="1"
+                max="2.3"
+                step="0.01"
+                value="1.65"
+            /></label>
+            <label
+              >Comfortable reach (metres)<input
+                id="song-reach"
+                type="number"
+                min="0.4"
+                max="1"
+                step="0.05"
+                value="0.7"
+            /></label>
+            <label
+              >Approach time (seconds)<input
+                id="song-lead"
+                type="number"
+                min="1"
+                max="8"
+                step="0.25"
+                value="2.5"
+            /></label>
+            <label
+              >Source distance (metres)<input
+                id="song-distance"
+                type="number"
+                min="2"
+                max="1000"
+                value="18"
+            /></label>
+            <label
+              >Variation seed<input id="song-seed" type="number" min="1" max="4294967295" value="1"
+            /></label>
+            <label
+              ><input id="song-rails" type="checkbox" checked />Held paths with independent hand
+              movements</label
+            >
+            <label
+              ><input id="song-pairs" type="checkbox" checked />Simultaneous left and right
+              notes</label
+            >
+            <label><input id="song-crossovers" type="checkbox" />Crossovers</label>
+            <label
+              ><input id="song-duck" type="checkbox" />Occasional ducking obstacles (standing
+              play)</label
+            >
+          </details>
           <label
             >Build from a song, or load a map's matching soundtrack<input
               id="song-file"
@@ -71,6 +158,11 @@
             >Open a StateBeats map<input id="map-file" type="file" accept=".json,application/json"
           /></label>
           <button id="save-map" class="secondary">Save selected map</button>
+          <button id="regenerate-map" class="secondary" disabled>
+            Rebuild with these settings
+          </button>
+          <button id="save-generation-report" class="quiet" disabled>Save generation report</button>
+          <p id="generation-summary" role="status"></p>
           <p id="import-status" role="status">
             Files stay on this device. Set the song's tempo for a matching beat grid; generated maps
             can be edited and shared separately from audio.
@@ -134,8 +226,9 @@
         </p>
         <p>
           <b>On desktop</b>Move the mouse to aim. Left click reaches with your left hand, right
-          click with your right; hold to stay. Each hand retains its own aim. Q/E turns your view.
-          Both clicks together touch gold notes. Hold C to duck beneath birds. Escape pauses.
+          click with your right. Drag the last pressed hand; the other retains its aim. The pointer
+          assists depth at nearby targets. Q/E turns, up/down arrows look vertically. Both clicks
+          together touch gold notes. Hold C to duck beneath birds. Escape pauses.
         </p>
         <p>
           <b>Audio cues</b>Cyan: low glass tone. Coral: high bell. Gold: a chord. A rear target has

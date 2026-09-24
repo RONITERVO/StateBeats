@@ -169,7 +169,10 @@ export class RhythmAudio {
     const delayAt = (tick: number) =>
       this.base!.time + (tick - this.base!.tick) / (view.tickRate * this.speed) - c.currentTime;
     if (this.song && this.musicEnabled && !this.songSource && this.gain) {
-      const offset = Math.max(0, (view.tick - this.song.startTick) / view.tickRate);
+      const offset = Math.max(
+        0,
+        (view.tick - this.song.startTick) / view.tickRate - (this.offsetMs * this.speed) / 1000,
+      );
       if (offset < this.song.buffer.duration) {
         const source = c.createBufferSource(),
           gain = c.createGain();
@@ -178,7 +181,10 @@ export class RhythmAudio {
         gain.gain.value = 0.45;
         source.connect(gain);
         gain.connect(this.gain);
-        source.start(c.currentTime + Math.max(0, delayAt(this.song.startTick)), offset);
+        source.start(
+          c.currentTime + Math.max(0, delayAt(this.song.startTick) + this.offsetMs / 1000),
+          offset,
+        );
         this.songSource = source;
         this.songGain = gain;
       }

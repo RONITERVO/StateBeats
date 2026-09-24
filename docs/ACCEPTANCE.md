@@ -1,10 +1,45 @@
 # Release acceptance evidence
 
-StateBeats 0.2.0 is a locally verified headless and desktop release candidate. The owner
+StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 foundation. The owner
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
-## Locally verified on Windows, 2026-09-08
+## Choreography verification on Windows, 2026-09-24
+
+Node 24.13.0 x64. Results below apply to the 0.3.0 choreography work; the older baseline
+and performance measurements remain separately dated below.
+
+| Evidence | Actual result |
+|---|---|
+| `npm run check` | Strict types, core boundaries, formatting and production build; 68 tests passed in 12 files |
+| Generation contracts | Seed reproducibility, input immutability, supplied beat offsets, time-based anticipation, silence rejection and malformed adapter rejection |
+| Movement checks | Property cases across seeds, tempos, tick rates and conservative reach/speed profiles; impossible hand reservations and out-of-reach paths detected |
+| Rail/turn separation | Both arrival styles, mixed placement and 500-metre sources; late rail completion cannot use the reserved turn interval |
+| Pose play | Generated holds and strikes played through ordinary commands with no misses; checkpoint previews restore and recordings verify |
+| Tool service | Composition and inspection use shared SDK operations; observer permissions and mutation retry semantics checked |
+| Browser suite | 15 passed: Chromium player/input/import/rebuild/export/preferences/text/audio/conformance; Firefox audio/conformance; WebKit conformance |
+| Cross-runtime replay | All seven original sequences, including Phrases in orbit, agree with Node through replay and checkpoint continuation |
+| Imported audio | Real WAV decode, cached-analysis rebuild and recipe/report export; positive and negative device offsets verified with rendered audio samples |
+| Reference player | New choreography finishes with zero missed notes in scripted play; real mouse poses hit a target at a different depth; remaining held paths render from observations |
+| Packaged install | All six 0.3.0 tarballs installed together in a fresh temporary directory; CLI demo/replay and installed SDK scene/music/choreography APIs passed |
+| Clean source | Source archive extracted outside the checkout; npm ci, all 68 tests, strict checks, build, CLI operations and headless/scene/choreography examples passed |
+| Static release player | Two production-browser checks passed: actual song decode, cached-analysis rebuild and report export; Phrases in orbit completed with no misses |
+
+The original choreography example produced 176 note heads, six held paths and 36 paired
+moments. Ordinary pose commands earned all 176 hits with zero misses and a verified replay.
+The packaged player was served locally on port 4183 for the production checks. Release
+archives and checksums are under `artifacts/release/0.3.0/`; packages remain unpublished.
+
+The movement inspector covers authored hand centers and nominal hand reservations. It does
+not establish shoulder anatomy, full-body clearance, physical fatigue, perceptual readability,
+or room safety. Scripted completion does not establish human playability. The current 20 Hz
+music analysis and supplied tempo/offset do not perform musical transcription.
+
+See [the product direction](DIRECTION.md), [choreography contracts](CHOREOGRAPHY.md) and
+[the Quest playtest](QUEST_PLAYTEST.md) for the next gates. No claim of superior play quality
+to Synth Riders follows from the automated results.
+
+## Earlier 0.2.0 baseline on Windows, 2026-09-08
 
 | Evidence | Actual result |
 |---|---|

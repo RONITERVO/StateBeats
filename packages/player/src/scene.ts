@@ -66,6 +66,9 @@ export class OrbitScene {
   };
   private torus = new THREE.TorusGeometry(0.16, 0.012, 6, 36);
   private sphere = new THREE.IcosahedronGeometry(0.13, 1);
+  private railTransform = new THREE.Object3D();
+  private railDirection = new THREE.Vector3();
+  private railAxis = new THREE.Vector3(0, 1, 0);
   private ringMaterial = new THREE.MeshBasicMaterial({
     color: cyan,
     transparent: true,
@@ -192,7 +195,8 @@ export class OrbitScene {
     }
     this.targets.remove(object);
     object.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
+      if (child instanceof THREE.Mesh || child instanceof THREE.Line) {
+        if (child instanceof THREE.InstancedMesh) child.dispose();
         if (child.geometry !== this.torus && child.geometry !== this.sphere)
           child.geometry.dispose();
         if (child.material instanceof THREE.Material && child.material !== this.ringMaterial)
@@ -268,6 +272,23 @@ export class OrbitScene {
         core.scale.setScalar(0.3);
         core.name = 'core';
         group.add(core);
+        if (entity.kind === 'hold') {
+          const rail = new THREE.InstancedMesh(
+            new THREE.CylinderGeometry(0.012, 0.012, 1, 6),
+            new THREE.MeshBasicMaterial({
+              color,
+              transparent: true,
+              opacity: 0.8,
+              depthWrite: false,
+            }),
+            63,
+          );
+          rail.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+          rail.count = 0;
+          rail.name = 'contact-path';
+          rail.frustumCulled = false;
+          group.add(rail);
+        }
         group.add(
           this.label(
             entity.kind === 'hazard'
@@ -293,6 +314,29 @@ export class OrbitScene {
       }
       group.position.fromArray(entity.position);
       group.quaternion.fromArray(entity.orientation);
+      const rail = group.getObjectByName('contact-path') as THREE.InstancedMesh | undefined;
+      if (rail && entity.contactPath) {
+        const inverse = group.quaternion.clone().invert();
+        const points = entity.contactPath
+          .slice(0, 64)
+          .map((point) =>
+            new THREE.Vector3(...point.position).sub(group!.position).applyQuaternion(inverse),
+          );
+        rail.count = Math.max(0, points.length - 1);
+        points.slice(1).forEach((point, i) => {
+          this.railDirection.subVectors(point, points[i]);
+          const length = this.railDirection.length();
+          this.railTransform.position.copy(points[i]).add(point).multiplyScalar(0.5);
+          this.railTransform.quaternion.setFromUnitVectors(
+            this.railAxis,
+            length > 0 ? this.railDirection.divideScalar(length) : this.railAxis,
+          );
+          this.railTransform.scale.set(1, length, 1);
+          this.railTransform.updateMatrix();
+          rail.setMatrixAt(i, this.railTransform.matrix);
+        });
+        rail.instanceMatrix.needsUpdate = true;
+      }
       const remain = (entity.hitTick - view.tick) / view.tickRate;
       const timing = group.getObjectByName('timing') as THREE.Mesh;
       timing.scale.setScalar(1 + Math.max(0, Math.min(2, remain)) * 2);

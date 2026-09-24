@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.0 — musical choreography (development release candidate)
+
+Added original musical phrase generation with replaceable selector/composer/facing adapters,
+song beat offsets, independent movement controls, recorded recipes and explanation reports.
+Added conservative authored hand reach/speed/reservation checks and SDK/CLI/MCP composition
+and inspection operations. Existing saved maps keep their authored behavior; newly generated
+music maps use the versioned choreography algorithm.
+
+Approaching holds can continue into moving contact paths. Observations and the reference player
+show the same remaining rail path used by simulation. Added the original Phrases in orbit map,
+browser rebuilding from cached music features, report export, drag/depth-assisted desktop input,
+and imported-song support for the existing device audio offset control. Legacy recording version
+0.1.0 is retained. Real Quest comfort/performance and comparative play quality remain unverified.
+
 ## 0.2.0 — StateBeats scenes, music and access
 
 Renamed packages to `@statebeats/*`, CLI to `statebeats`, and MCP configuration to
