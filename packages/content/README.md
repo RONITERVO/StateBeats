@@ -17,6 +17,7 @@ standalone WebXR and keyboard/manual text play.
 Release tarballs can be installed together from the source release. The public package
 namespace is prepared; publication is a separate maintainer action.
 
-License: CC0-1.0. See LICENSE.
+License: (CC0-1.0 AND Apache-2.0). See LICENSE.
+The Ink-Battle catalog entry and maps/ink-battle-between-the-lines.json are Apache-2.0; see INK_BATTLE_LICENSE.txt, INK_BATTLE_NOTICE.txt and @statebeats/ink-battle.
 
 Musical phrase generation, custom composers and movement inspection are described in [the choreography guide](https://github.com/RONITERVO/StateBeats/blob/main/docs/CHOREOGRAPHY.md).

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { controllerSamples } from './xr-input.js';
 import type { TrackedController } from './xr-input.js';
 import { sampleMaps, sampleMap, EVENT_HORIZON_ID } from '@statebeats/content';
+import { INK_BATTLE_ID } from '@statebeats/ink-battle';
 import {
   beatToTick,
   beatValue,
@@ -102,7 +103,7 @@ function addMapCard(map: MapDefinition, index: number) {
   const card = document.createElement('button');
   card.className = 'map-card';
   card.dataset.map = map.id;
-  if (map.id === EVENT_HORIZON_ID) card.classList.add('featured-map');
+  if (map.id === EVENT_HORIZON_ID || map.id === INK_BATTLE_ID) card.classList.add('featured-map');
   card.setAttribute('aria-label', map.title);
   card.setAttribute('aria-pressed', String(index === 0));
   const seconds = beatToTick(map.durationBeats, map) / map.tickRate;
@@ -111,13 +112,15 @@ function addMapCard(map: MapDefinition, index: number) {
   card.querySelector('.map-art')!.textContent = symbols[index] ?? '♫';
   card.querySelector('.map-title')!.textContent = map.title;
   card.querySelector('.map-meta')!.textContent =
-    `${map.id === EVENT_HORIZON_ID ? 'MASTER · ORIGINAL SOUNDTRACK' : index === 0 ? 'TUTORIAL' : index === 2 ? 'COOPERATIVE' : index >= 4 ? 'LIVING SCENE' : '360° SEQUENCE'} · ${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}`;
+    `${map.id === INK_BATTLE_ID ? 'INK-BATTLE · SIX AGES · ORIGINAL SOUNDTRACK' : map.id === EVENT_HORIZON_ID ? 'MASTER · ORIGINAL SOUNDTRACK' : index === 0 ? 'TUTORIAL' : index === 2 ? 'COOPERATIVE' : index >= 4 ? 'LIVING SCENE' : '360° SEQUENCE'} · ${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}`;
   card.onclick = () => selectMap(map.id);
   el('maps').append(card);
 }
 sampleMaps.forEach(addMapCard);
 const featuredCard = el('maps').querySelector(`[data-map="${EVENT_HORIZON_ID}"]`);
 if (featuredCard) el('maps').insertBefore(featuredCard, el('maps').children[1]);
+const inkCard = el('maps').querySelector(`[data-map="${INK_BATTLE_ID}"]`);
+if (inkCard) el('maps').insertBefore(inkCard, el('maps').children[1]);
 
 const menuCanvas = document.createElement('canvas');
 menuCanvas.width = 1024;
@@ -498,7 +501,7 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
       ? description.targets
           .map(
             (target) =>
-              `${target.action === 'avoid' ? 'AVOID' : target.requirement.toUpperCase()} · ${target.clockPosition} o'clock ${target.height} · ${target.secondsUntil > 0 ? target.secondsUntil.toFixed(1) + 's' : 'NOW'}${target.holdSeconds ? ' · HOLD' : ''}`,
+              `${target.action === 'avoid' ? 'AVOID' : target.requirement === 'any effector' ? 'EITHER HAND' : target.requirement.toUpperCase()} · ${target.clockPosition} o'clock ${target.height} · ${target.secondsUntil > 0 ? target.secondsUntil.toFixed(1) + 's' : 'NOW'}${target.holdSeconds ? ' · HOLD' : ''}`,
           )
           .join('     |     ')
       : '';

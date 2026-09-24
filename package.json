@@ -10,7 +10,7 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "build:lib": "tsc -b packages/core packages/sdk packages/content packages/cli packages/mcp packages/adapters-node",
+    "build:lib": "tsc -b packages/core packages/sdk packages/ink-battle packages/content packages/cli packages/mcp packages/adapters-node",
     "build": "npm run build:lib && npm run build --workspace @statebeats/player",
     "typecheck": "npm run build:lib && tsc -p packages/player/tsconfig.json --noEmit",
     "test": "vitest run",
@@ -29,7 +29,8 @@
     "notices": "node scripts/notices.mjs",
     "release:local": "node scripts/release.mjs && node scripts/package-smoke.mjs",
     "test:source": "node scripts/source-smoke.mjs",
-    "check": "npm run typecheck && npm run test && npm run lint && npm run build"
+    "check": "npm run typecheck && npm run test && npm run lint && npm run build",
+    "content:ink-battle": "node scripts/record-ink-battle.mjs"
   },
   "devDependencies": {
     "typescript": "5.9.3",

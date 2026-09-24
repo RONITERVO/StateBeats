@@ -17,7 +17,7 @@ const run = (args, cwd) =>
   });
 await writeFile(join(directory, 'package.json'), JSON.stringify({ private: true, type: 'module' }));
 const tarballs = (await readdir(release)).filter((n) =>
-  /^statebeats-(core|sdk|content|cli|mcp|adapters-node)-/.test(n),
+  /^statebeats-(core|sdk|ink-battle|content|cli|mcp|adapters-node)-/.test(n),
 );
 await run(
   [npm, 'install', '--ignore-scripts', ...tarballs.map((n) => join(release, n))],
@@ -32,6 +32,16 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, generateChoreography, inspectChoreography, planTurns, createFacingSampler, createNotePresenter, PRESENTATION_VERSION } from '@statebeats/sdk';
 import { sampleMap, eventHorizonSoundtrack } from '@statebeats/content';
+import { inkBattleMap, inkSoundtrack, sampleInkBattle } from '@statebeats/ink-battle';
+import { Session as Battle } from '@statebeats/ink-battle/upstream/src/sdk/session.js';
+const inkAudio = await readFile(new URL(import.meta.resolve('@statebeats/ink-battle/audio/between-the-lines.mp3')));
+assert.equal(createHash('sha256').update(inkAudio).digest('hex'),inkSoundtrack.sha256);
+assert.equal(inkBattleMap().notes.length,358);
+assert.equal(sampleInkBattle(330).age,5);
+assert.equal(new Battle({battlefield:'tabletop'}).tick,0);
+assert.match(await readFile(new URL('../LICENSE',import.meta.resolve('@statebeats/ink-battle')),'utf8'),/Apache License/);
+assert.match(await readFile(new URL('../NOTICE',import.meta.resolve('@statebeats/ink-battle')),'utf8'),/Ink-Battle/);
+assert.match(await readFile(new URL('../INK_BATTLE_LICENSE.txt',import.meta.resolve('@statebeats/content')),'utf8'),/Apache License/);
 const bundledAudio = await readFile(new URL(import.meta.resolve('@statebeats/content/audio/event-horizon.mp3')));
 assert.equal(createHash('sha256').update(bundledAudio).digest('hex'), eventHorizonSoundtrack.sha256);
 assert.equal(sampleMap('event-horizon-master').music.source.sha256, eventHorizonSoundtrack.sha256);

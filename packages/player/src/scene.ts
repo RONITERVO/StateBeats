@@ -304,6 +304,14 @@ export class OrbitScene {
         );
         const appearance = createAppearance(entity, color);
         if (appearance) {
+          if (appearance.cueColor !== undefined) {
+            ring.material.color.setHex(appearance.cueColor);
+            const marker = group.getObjectByName('waiting-marker') as
+              | THREE.LineSegments
+              | undefined;
+            if (marker)
+              (marker.material as THREE.LineBasicMaterial).color.setHex(appearance.cueColor);
+          }
           this.appearances.set(group, appearance);
           const artworkRoot = new THREE.Group();
           artworkRoot.name = 'artwork-root';
@@ -383,6 +391,10 @@ export class OrbitScene {
       core.visible = !resolved && style.emphasis > 0;
       const appearance = this.appearances.get(group);
       if (appearance) {
+        if (appearance.referenceBody === false) {
+          body.visible = false;
+          core.visible = false;
+        }
         const update = () => appearance.update?.(entity, view, this.theme.preferences);
         const present = () => {
           if (appearance.handlesPresence) update();

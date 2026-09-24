@@ -1,3 +1,8 @@
 * text=auto eol=lf
 packages/content/maps/event-horizon-master.json linguist-generated=true
 packages/content/src/event-horizon-score.ts linguist-generated=true
+packages/content/maps/ink-battle-between-the-lines.json linguist-generated=true
+packages/ink-battle/src/battle-data.ts linguist-generated=true
+packages/ink-battle/src/score.ts linguist-generated=true
+packages/ink-battle/recordings/*.json linguist-generated=true
+packages/ink-battle/upstream/** linguist-vendored=true

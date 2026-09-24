@@ -16,9 +16,10 @@ async function run(command, args, cwd = process.cwd()) {
 }
 const npm = process.env.npm_execpath;
 if (!npm) throw new Error('Use npm run release:local so the npm executable is known.');
-for (const name of ['core', 'sdk', 'content', 'cli', 'mcp', 'adapters-node']) {
+for (const name of ['core', 'sdk', 'ink-battle', 'content', 'cli', 'mcp', 'adapters-node']) {
   const path = `packages/${name}`;
-  await cp(name === 'content' ? 'LICENSE-CC0.txt' : 'LICENSE', `${path}/LICENSE`);
+  if (name !== 'ink-battle')
+    await cp(name === 'content' ? 'LICENSE-CC0.txt' : 'LICENSE', `${path}/LICENSE`);
   await run(
     process.execPath,
     [npm, 'pack', '--ignore-scripts', '--pack-destination', destination],

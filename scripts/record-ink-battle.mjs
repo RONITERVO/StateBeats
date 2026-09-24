@@ -1,0 +1,133 @@
+// SPDX-License-Identifier: Apache-2.0
+// Offline, legal-command-only recording. No mutation of upstream state or rules.
+import { mkdir, writeFile, readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { Session } from '../packages/ink-battle/upstream/src/sdk/session.js';
+import { AGES } from '../packages/ink-battle/upstream/src/content/ages.js';
+
+const destination = 'packages/ink-battle';
+const check = process.argv.includes('--check');
+async function save(path, text) {
+  if (check) {
+    if ((await readFile(path, 'utf8')) !== text) throw new Error(`Recording is stale: ${path}`);
+  } else await writeFile(path, text);
+}
+const provenance = JSON.parse(await readFile(`${destination}/PROVENANCE.json`, 'utf8'));
+const round = (n) => Math.round(n * 1000) / 1000;
+const point = (x, y, z) => [
+  round((x - 640) * 0.01875),
+  round((600 - y) * 0.01875),
+  round(z * 0.01875),
+];
+await mkdir(`${destination}/recordings`, { recursive: true });
+await mkdir(`${destination}/src`, { recursive: true });
+const chapters = [];
+for (let age = 0; age < 6; age++) {
+  const session = new Session({
+    seed: 73190 + age,
+    startAge: age,
+    difficulty: 'normal',
+    opponent: false,
+    battlefield: 'tabletop',
+  });
+  const frames = [],
+    launches = [],
+    seen = new Set();
+  const warmup = 840,
+    duration = 1920;
+  let peak = 0;
+  for (let tick = 0; tick <= warmup + duration; tick++) {
+    if (!session.running)
+      throw new Error(`Chapter ${age} ended at ${tick}; choose a balanced legal director.`);
+    if (tick % 30 === 0) {
+      for (const team of [1, -1]) {
+        const step = Math.floor(tick / 30);
+        const index = [2, 0, 1, 0, 1, 0][Math.floor(step / 3) % 6];
+        const z = [-180, -90, 100, 180, 40, -140][Math.floor(step / 3) % 6];
+        const command = { type: 'unit', index, z: z * team };
+        if (session.legal(team, command)) session.command(team, command);
+        if (tick === 180 || tick === 900 || tick === 1800) {
+          const turret = { type: 'turret', index: age < 2 ? 0 : 1 };
+          if (session.legal(team, turret)) session.command(team, turret);
+        }
+        // Specials are real upstream commands, deliberately late in each excerpt.
+        if (tick === warmup + 1380 && session.legal(team, { type: 'special' }))
+          session.command(team, { type: 'special' });
+      }
+    }
+    const state = session.observe();
+    peak = Math.max(peak, state.units.length);
+    if (tick >= warmup) {
+      for (const p of state.projectiles)
+        if (!seen.has(p.id)) {
+          seen.add(p.id);
+          launches.push({
+            tick: tick - warmup,
+            id: p.id,
+            team: p.team,
+            type: p.type,
+            sourceId: p.sourceId ?? null,
+            sourceRole: p.sourceRole ?? null,
+            origin: point(p.startX, p.startY, p.startZ),
+          });
+        }
+      if ((tick - warmup) % 15 === 0)
+        frames.push({
+          tick: tick - warmup,
+          units: state.units.map((u) => [
+            u.id,
+            u.team,
+            u.uType,
+            ...point(u.x, u.y, u.z),
+            round(u.heading),
+            round(u.size / 50),
+            round(u.drawProgress),
+            round(u.attackCooldown),
+            round(u.attackSpeed),
+            +u.isAttacking,
+            +u.moving,
+          ]),
+          shots: state.projectiles.map((p) => [p.id, p.team, p.type, ...point(p.x, p.y, p.z)]),
+          sides: [state.player, state.enemy].map((p) => ({
+            hp: round(p.hp / p.maxHp),
+            turrets: p.turrets.map((index, slot) =>
+              index === null
+                ? null
+                : [
+                    index,
+                    round(p.turretAim[slot].heading),
+                    round(p.turretProgress[slot]),
+                    round(p.turretTimers[slot]),
+                  ],
+            ),
+          })),
+          specials: state.specials.map((s) => [s.team, ...point(s.x, 600, s.z), s.remaining]),
+        });
+    }
+    if (tick < warmup + duration) session.advance(1);
+  }
+  const replay = session.replay();
+  if (Session.fromReplay(replay).digest() !== session.digest())
+    throw new Error('Replay verification failed');
+  await save(`${destination}/recordings/age-${age}.json`, JSON.stringify(replay) + '\n');
+  chapters.push({
+    age,
+    name: AGES[age].name,
+    special: AGES[age].special.name,
+    unitNames: AGES[age].units.map((u) => u.name),
+    seed: replay.options.seed,
+    warmupTicks: warmup,
+    replayDigest: replay.digest,
+    frames,
+    launches,
+  });
+  console.log(
+    `${AGES[age].name}: ${frames.length} frames, ${launches.length} shots, peak ${peak} units; replay ${replay.digest}`,
+  );
+}
+const payload = JSON.stringify(chapters);
+const hash = createHash('sha256').update(payload).digest('hex');
+await save(
+  `${destination}/src/battle-data.ts`,
+  `// Generated by scripts/record-ink-battle.mjs. Apache-2.0; see NOTICE.\nimport type { BattleChapter } from './types.js';\nexport const battleSource = ${JSON.stringify({ repository: provenance.repository, commit: provenance.commit, sha256: hash, tickRate: 60, sampleTicks: 15 })} as const;\nexport const battleChapters: BattleChapter[] = ${payload};\n`,
+);

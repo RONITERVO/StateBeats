@@ -12,7 +12,8 @@
     "@statebeats/core": "0.3.0",
     "@statebeats/sdk": "0.3.0",
     "@statebeats/content": "0.3.0",
-    "three": "0.185.1"
+    "three": "0.185.1",
+    "@statebeats/ink-battle": "0.3.0"
   },
   "devDependencies": {
     "vite": "8.2.2",

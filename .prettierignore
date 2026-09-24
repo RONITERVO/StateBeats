@@ -6,3 +6,8 @@ playwright-report
 test-results
 schemas
 packages/content/maps
+
+packages/ink-battle/upstream
+packages/ink-battle/src/battle-data.ts
+packages/ink-battle/src/score.ts
+packages/ink-battle/recordings
