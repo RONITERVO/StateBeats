@@ -503,6 +503,14 @@ footer button span {
   padding: 7px;
   border-radius: 4px;
 }
+.dialog input[type='number'] {
+  width: 90px;
+  background: #152236;
+  color: #edf2f7;
+  border: 1px solid var(--line);
+  padding: 7px;
+  border-radius: 4px;
+}
 input[type='checkbox'] {
   accent-color: var(--cyan);
   margin-right: auto;

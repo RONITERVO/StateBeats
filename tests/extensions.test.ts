@@ -1,5 +1,12 @@
 import { expect, it } from 'vitest';
-import { Session, standardActor, compile, MapBuilder, canonical } from '@statebeats/sdk';
+import {
+  Session,
+  standardActor,
+  compile,
+  MapBuilder,
+  canonical,
+  fitMapToPlayer,
+} from '@statebeats/sdk';
 import {
   doubleEntry,
   examplePolicies,
@@ -25,6 +32,15 @@ const map = {
     },
   ],
 };
+it('personal layout accepts the host interaction/scoring adapters', () => {
+  const fitted = fitMapToPlayer(map, { height: 1.65, roomScale: 1.2 }, examplePolicies, {
+    scoring: flatScore,
+  });
+  expect(fitted.notes[0].policy).toBe(doubleEntry.id);
+  expect(compile(fitted, examplePolicies, { scoring: flatScore }).program.scoring.id).toBe(
+    flatScore.id,
+  );
+});
 it('a new interaction stores its memory across checkpoint restore without core edits', async () => {
   const session = await Session.create(map, [standardActor()], examplePolicies, {
     scoring: flatScore,

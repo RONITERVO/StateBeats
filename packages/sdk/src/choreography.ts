@@ -14,11 +14,13 @@ export const musicGenerationSchema = z
     seed: z.number().int().min(1).max(4294967295).default(1),
     bpm: z.number().min(40).max(240).default(120),
     tickRate: z.union([z.literal(60), z.literal(120), z.literal(240)]).optional(),
-    difficulty: z.enum(['gentle', 'flow', 'busy']).default('gentle'),
+    difficulty: z.enum(['gentle', 'flow', 'busy', 'master']).default('gentle'),
     turning: z.boolean().optional(),
     turnMode: z.enum(['forward', 'bounded', 'full']).optional(),
-    turnDegrees: z.number().min(5).max(90).default(30),
-    maxTurnSpeed: z.number().min(5).max(60).default(30),
+    turnDegrees: z.number().min(5).max(180).default(30),
+    maxTurnSpeed: z.number().min(5).max(120).default(30),
+    turnStyle: z.enum(['rests', 'continuous']).default('rests'),
+    movementRange: z.enum(['compact', 'wide']).default('compact'),
     theme: idSchema.default('statebeats/landscape'),
     beatOffsetSeconds: z.number().min(-10).max(30).default(0),
     style: z.enum(['approach', 'stationary', 'mixed']).default('approach'),
@@ -50,7 +52,7 @@ export interface PhraseContext {
   phrase: PhrasePlan;
   settings: GenerationSettings;
   /** Coordinates are relative to the facing direction; x/y/z are metres. */
-  place(x: number, y: number, z?: number): Vec3;
+  place(x: number, y: number, z?: number, beat?: number): Vec3;
 }
 export interface PhraseComposer {
   id: string;
@@ -188,8 +190,11 @@ export const phraseFacing: FacingPlanner = {
     const mode = settings.turnMode ?? (settings.turning ? 'full' : 'forward');
     let heading = 0,
       direction = 1;
-    // Every built-in phrase leaves two beats clear; never turn during its held path.
-    const step = Math.min(settings.turnDegrees, (settings.maxTurnSpeed * 120) / settings.bpm);
+    const turnBeats = settings.turnStyle === 'continuous' ? 8 : 2;
+    const step = Math.min(
+      settings.turnDegrees,
+      (settings.maxTurnSpeed * turnBeats * 60) / settings.bpm,
+    );
     return phrases.map((_, i) => {
       if (i && mode !== 'forward') {
         if (mode === 'bounded' && Math.abs(heading + direction * step) > 60) direction *= -1;
@@ -220,9 +225,10 @@ export const dancePhrases: PhraseComposer = {
     const result: NoteInput[] = [];
     const spacing = s.difficulty === 'gentle' ? 2 : s.difficulty === 'flow' ? 1 : 0.5;
     const lateBeats = Math.min((0.15 * s.bpm) / 60, 0.4);
-    const playableEnd = Math.min(p.endBeat - p.beat, 6) - lateBeats;
-    const width = s.reach * 0.5,
-      height = s.reach * 0.32;
+    const playableEnd =
+      Math.min(p.endBeat - p.beat, s.turnStyle === 'continuous' ? 8 : 6) - lateBeats;
+    const width = s.reach * (s.movementRange === 'wide' ? 0.92 : 0.5),
+      height = s.reach * (s.movementRange === 'wide' ? 0.95 : 0.32);
     const variant = p.index % 4,
       mirror = variant >= 2 ? -1 : 1;
     const add = (offset: number, hand: 'left' | 'right', x: number, y: number) => {
@@ -230,7 +236,7 @@ export const dancePhrases: PhraseComposer = {
         id: `p${p.index}-${result.length}`,
         beat: round(p.beat + offset),
         preset: hand,
-        position: place(x, y),
+        position: place(x, y, undefined, p.beat + offset),
         label: `${hand} ${p.motif}`,
         appearance: 'statebeats/star',
       });
@@ -259,6 +265,8 @@ export const dancePhrases: PhraseComposer = {
             position: place(
               sign * width * (0.8 + 0.15 * Math.sin(Math.PI * phase)),
               height * (-0.6 + 1.2 * Math.sin(Math.PI * phase)),
+              undefined,
+              p.beat + end * phase,
             ),
           };
         }),
@@ -274,7 +282,12 @@ export const dancePhrases: PhraseComposer = {
       for (let i = 0, index = 0; i < playableEnd; i += spacing, index++) {
         if (p.motif === 'pairs') {
           add(i, 'left', -width, height * Math.sin((i * Math.PI) / 3));
-          add(i, 'right', width, height * Math.sin((i * Math.PI) / 3));
+          add(
+            i,
+            'right',
+            width,
+            height * Math.sin((i * Math.PI) / 3) * (s.difficulty === 'master' ? -1 : 1),
+          );
         } else {
           const left = (p.motif === 'pulses' ? Math.floor(index / 2) : index) % 2 === 0;
           const hand = left === (mirror === 1) ? 'left' : 'right';
@@ -364,6 +377,7 @@ export function generateChoreography(
   parsed(idSchema, selector.id);
   const headings = facing.plan(structuredClone(plans), structuredClone(s));
   const mode = s.turnMode ?? (s.turning ? 'full' : 'forward');
+  const turnBeats = s.turnStyle === 'continuous' ? 8 : 2;
   if (
     headings.length !== plans.length ||
     headings.some(
@@ -372,14 +386,25 @@ export function generateChoreography(
         Math.abs(h) > 36000 ||
         (mode === 'forward' && h !== 0) ||
         (mode === 'bounded' && Math.abs(h) > 60) ||
-        (i > 0 && Math.abs(h - headings[i - 1]) > s.maxTurnSpeed * 2 * secondsPerBeat + 0.0001),
+        (i > 0 &&
+          Math.abs(h - headings[i - 1]) > s.maxTurnSpeed * turnBeats * secondsPerBeat + 0.0001),
     )
   )
     throw new EngineError(
       'CHOREOGRAPHY_INVALID',
-      'Facing planner exceeds the two-beat turn budget.',
+      'Facing planner exceeds the selected turn budget.',
     );
   const phrases = plans.map((p, i) => ({ ...p, heading: headings[i] }));
+  const headingAt = (beat: number) => {
+    const index = Math.max(0, Math.min(phrases.length - 1, Math.floor((beat - first + 1e-6) / 8)));
+    const phrase = phrases[index],
+      next = phrases[index + 1];
+    if (s.turnStyle === 'rests' || !next) return phrase.heading;
+    return (
+      phrase.heading +
+      (next.heading - phrase.heading) * Math.max(0, Math.min(1, (beat - phrase.beat) / 8))
+    );
+  };
   const sceneKeys: { beat: number; position: Vec3 }[] = [];
   const emitter = (heading: number): Vec3 => {
     const angle = (heading * Math.PI) / 180;
@@ -392,6 +417,15 @@ export function generateChoreography(
   for (let i = 0; i < phrases.length; i++) {
     const p = phrases[i];
     const beat = Math.max(0, p.beat - s.leadSeconds / secondsPerBeat);
+    if (s.turnStyle === 'continuous') {
+      // Four keys per phrase preserve a bounded curved source path without stopping spawns.
+      for (let offset = 0; offset < Math.min(8, p.endBeat - p.beat); offset += 2)
+        sceneKeys.push({
+          beat: round(beat + offset),
+          position: emitter(headingAt(p.beat + offset)),
+        });
+      continue;
+    }
     if (i)
       sceneKeys.push({
         beat: round(Math.max(sceneKeys.at(-1)!.beat + 0.001, beat - 2)),
@@ -399,9 +433,9 @@ export function generateChoreography(
       });
     sceneKeys.push({ beat: round(beat), position: emitter(p.heading) });
   }
-  // Long songs retain a bounded visual track; collision paths always use the compiled emitter.
-  const stride = Math.max(1, Math.ceil(sceneKeys.length / 250));
-  const path = sceneKeys.filter((_, i) => i % stride === 0 || i === sceneKeys.length - 1);
+  // Keep every hold/turn boundary: decimating these keys changes actual emission positions.
+  // Thirty minutes at 240 BPM needs at most 3,600 keys, within the scene's 4,096-key bound.
+  const path = sceneKeys;
   const map: MapInput = {
     version: 1,
     id: s.id ?? `music-${s.seed}`,
@@ -423,7 +457,10 @@ export function generateChoreography(
     scene: {
       version: 1,
       theme: s.theme,
-      label: 'Follow the traveling sun; each phrase has a stable facing direction.',
+      label:
+        s.turnStyle === 'continuous'
+          ? 'Follow the traveling sun through continuous turns.'
+          : 'Follow the traveling sun; each phrase has a stable facing direction.',
       objects: [
         {
           id: 'sun',
@@ -446,12 +483,22 @@ export function generateChoreography(
   const omitted: ChoreographyReport['omitted'] = [];
   const draft: NoteInput[] = [];
   for (const phrase of phrases) {
-    const radians = (phrase.heading * Math.PI) / 180;
-    const place = (x: number, y: number, z = -s.reach * 0.64): Vec3 => [
-      round(x * Math.cos(radians) - z * Math.sin(radians)),
-      round(s.playerHeight * 0.78 + y),
-      round(x * Math.sin(radians) + z * Math.cos(radians)),
-    ];
+    const place = (
+      x: number,
+      y: number,
+      z = -s.reach * (s.movementRange === 'wide' ? 0.4 : 0.64),
+      beat = phrase.beat,
+    ): Vec3 => {
+      const radians = (headingAt(beat) * Math.PI) / 180;
+      // Wide gestures use the full configured reach, including opposed high/low pairs.
+      const scale =
+        s.movementRange === 'wide' ? Math.min(1, (s.reach * 0.98) / Math.hypot(x, y, z)) : 1;
+      return [
+        round((x * Math.cos(radians) - z * Math.sin(radians)) * scale),
+        round(s.playerHeight * 0.78 + y * scale),
+        round((x * Math.sin(radians) + z * Math.cos(radians)) * scale),
+      ];
+    };
     const notes = composer.compose({
       phrase: structuredClone(phrase),
       settings: structuredClone(s),
@@ -470,16 +517,20 @@ export function generateChoreography(
         note.preset === 'hold'
           ? Math.min(50, secondsPerBeat * 200)
           : Math.min(150, secondsPerBeat * 400);
+      const interactionEnd = Math.min(
+        phrase.endBeat,
+        phrase.beat + (s.turnStyle === 'continuous' ? 8 : 6),
+      );
       if (
         beat < phrase.beat ||
-        beat >= Math.min(phrase.endBeat, phrase.beat + 6) ||
+        beat >= interactionEnd ||
         beat +
           ((note.preset === 'hold' ? (note.holdMs ?? 500) : 0) + lateMs) / 1000 / secondsPerBeat >
-          Math.min(phrase.endBeat, phrase.beat + 6)
+          interactionEnd
       )
         throw new EngineError(
           'CHOREOGRAPHY_INVALID',
-          'Composer must leave the final two beats free for recovery and turning.',
+          'Composer must respect the selected phrase interval and recovery and turning budget.',
         );
       const features = sampleMusic(music, Math.round(beat * beatTicks));
       if (
@@ -499,6 +550,8 @@ export function generateChoreography(
       note.leadMs = s.leadSeconds * 1000;
       if (s.style === 'approach' || (s.style === 'mixed' && i % 2 === 0))
         note.emission = { source: 'sun', beat: round(beat - s.leadSeconds / secondsPerBeat) };
+      else if (note.motion?.length && beatValue(note.motion[0].beat) > beat)
+        note.motion.unshift({ beat: note.beat, position: structuredClone(note.position) });
       draft.push(note);
     }
     if (

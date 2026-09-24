@@ -66,6 +66,7 @@ trusted local launch configuration, not network authentication.
 | `map.generate` | `seed`, `count`, `style`, `turning`; returns/stores reproducible map (admin) |
 | `music.generate` | Stored `music` timeline and `options:{bpm,difficulty,turning,seed}`; returns/stores an authored scene map (admin) |
 | `map.edit` | `mapId`/`map`, and `note`, `remove` ID, `scene`, or `music`; null removes scene/music (admin) |
+| `map.fit` | `mapId`/`map` and `options: { height, roomScale }`; stores the same baked personal layout used by the player (admin, retryable) |
 | `map.compile` | `mapId`/`map`; returns `{compiled,scene?,warnings}` with gameplay content hash (admin) |
 | `actor.register` | `tick`, `actor:{id,effectors}`; queues actor addition (admin) |
 | `command.submit` | `commands` array; validated atomically under caller capability |

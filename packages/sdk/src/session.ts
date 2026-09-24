@@ -463,7 +463,7 @@ export class Session {
           ? {
               contactPath: (() => {
                 const start = Math.max(e.spec.hitTick, this.world.tick);
-                const end = Math.max(start, e.spec.hitTick + e.spec.holdTicks);
+                const end = Math.max(start, e.spec.endTick);
                 const ticks = [
                   start,
                   ...e.spec.motion.filter((k) => k.tick > start && k.tick < end).map((k) => k.tick),

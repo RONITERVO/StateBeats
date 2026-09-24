@@ -3,7 +3,15 @@ import * as THREE from 'three';
 import { controllerSamples } from './xr-input.js';
 import type { TrackedController } from './xr-input.js';
 import { sampleMaps, sampleMap } from '@statebeats/content';
-import { beatToTick, beatValue, compile, describeObservation } from '@statebeats/sdk';
+import {
+  beatToTick,
+  beatValue,
+  compile,
+  describeObservation,
+  fitMapToPlayer,
+  musicGenerationSchema,
+  CHOREOGRAPHY_VERSION,
+} from '@statebeats/sdk';
 import type {
   Observation,
   Replay,
@@ -17,6 +25,7 @@ import type { FromWorker, ToWorker, HandSample } from './protocol.js';
 import { OrbitScene, sceneVector } from './scene.js';
 import { RhythmAudio } from './audio.js';
 import { readPreferences, storePreferences } from './preferences.js';
+import { assistedTargetPoint } from './desktop-input.js';
 
 const el = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const button = (id: string, fn: () => void) => el(id).addEventListener('click', fn);
@@ -26,6 +35,11 @@ const orbit = new OrbitScene(el('stage')),
 const send = (message: ToWorker) => worker.postMessage(message);
 let importedMap: MapDefinition | undefined;
 let generationReport: ChoreographyReport | undefined;
+let generationBaseline: MusicGenerationOptions = {};
+let rebuildSupported = false;
+let personalHeight = 1.65,
+  roomScale = 1;
+let activeHeight = 1.65;
 let importedSong: { buffer: AudioBuffer; sha256: string } | undefined;
 let analysisWorker: Worker | undefined;
 const maps = () => (importedMap ? [...sampleMaps, importedMap] : sampleMaps);
@@ -255,7 +269,14 @@ async function prepareAudio() {
 async function start(bot: boolean) {
   await prepareAudio();
   audio.reset();
-  const map = mapFor(selected);
+  let map: MapDefinition;
+  try {
+    map = fitMapToPlayer(mapFor(selected), { height: personalHeight, roomScale });
+  } catch (error) {
+    notify(`This map could not use the selected height/scale: ${String(error)}`);
+    return;
+  }
+  activeHeight = personalHeight;
   audio.setScore(map);
   if (map.music?.source && importedSong?.sha256 === map.music.source.sha256)
     audio.setSong(importedSong.buffer, map.music.frames[0]?.tick ?? 0);
@@ -553,7 +574,28 @@ function installMap(map: MapDefinition, report?: ChoreographyReport) {
   for (const card of el('maps').querySelectorAll('[data-imported]')) card.remove();
   importedMap = map;
   generationReport = report;
-  el<HTMLButtonElement>('regenerate-map').disabled = !map.music;
+  const restored =
+    map.generation?.algorithm === CHOREOGRAPHY_VERSION
+      ? musicGenerationSchema.strip().safeParse(map.generation.settings)
+      : undefined;
+  const recipe = map.generation?.settings as Record<string, unknown> | undefined;
+  const supported =
+    !map.generation ||
+    (restored?.success &&
+      recipe?.composer === 'statebeats/dance-phrases-v1' &&
+      recipe?.facing === 'statebeats/phrase-facing-v1' &&
+      recipe?.selector === 'statebeats/phrase-rhythm-v1');
+  generationBaseline = restored?.success
+    ? restored.data
+    : { bpm: Math.max(40, Math.min(240, map.tempo[0].bpm)) };
+  restoreSongControls(generationBaseline);
+  rebuildSupported =
+    !!map.music &&
+    !!supported &&
+    map.tempo.length === 1 &&
+    map.tempo[0].bpm >= 40 &&
+    map.tempo[0].bpm <= 240;
+  el<HTMLButtonElement>('regenerate-map').disabled = !rebuildSupported;
   el<HTMLButtonElement>('save-generation-report').disabled = !report;
   el('generation-summary').textContent = report
     ? `${report.summary.heads} notes · ${report.summary.rails} held paths · ${report.summary.pairs} paired moments · ${report.summary.hazards} obstacles. ${report.omitted.length} candidates omitted for musical selection or movement limits. ${report.issues.length ? `${report.issues.length} hand movement issues need review.` : 'Hand movement checks passed.'} Preview with a bot, then start gently on your headset.`
@@ -562,8 +604,85 @@ function installMap(map: MapDefinition, report?: ChoreographyReport) {
   el('maps').lastElementChild!.setAttribute('data-imported', 'true');
   selectMap(map.id);
   el('import-status').textContent =
-    `${map.title} is ready. ${map.notes.length} interactions. Save the map to keep its generated sequence.`;
+    `${map.title} is ready. ${map.notes.length} interactions. Save the map to keep its generated sequence.${supported && map.tempo.length === 1 ? '' : ' This recipe requires its original generator or tempo editor to rebuild.'}`;
 }
+function restoreSongControls(options: MusicGenerationOptions) {
+  const settings = musicGenerationSchema.parse(options);
+  const values = {
+    'song-bpm': settings.bpm,
+    'song-difficulty': settings.difficulty,
+    'song-turning': settings.turnMode ?? (settings.turning ? 'full' : 'forward'),
+    'song-turn-style': settings.turnStyle,
+    'song-range': settings.movementRange,
+    'song-turn-degrees': settings.turnDegrees,
+    'song-turn-speed': settings.maxTurnSpeed,
+    'song-hand-speed': settings.maxHandSpeed,
+    'song-style': settings.style,
+    'song-rhythm': settings.rhythm,
+    'song-beat-offset': settings.beatOffsetSeconds,
+    'song-height': settings.playerHeight,
+    'song-reach': settings.reach,
+    'song-lead': settings.leadSeconds,
+    'song-distance': settings.spawnDistance,
+    'song-seed': settings.seed,
+  };
+  for (const [id, value] of Object.entries(values)) el<HTMLInputElement>(id).value = String(value);
+  for (const [id, value] of Object.entries({
+    'song-rails': settings.rails,
+    'song-pairs': settings.pairs,
+    'song-crossovers': settings.crossovers,
+    'song-duck': settings.obstacles === 'duck',
+  }))
+    el<HTMLInputElement>(id).checked = value;
+  el<HTMLSelectElement>('song-preset').value = 'custom';
+}
+el<HTMLSelectElement>('song-preset').onchange = () => {
+  const preset = el<HTMLSelectElement>('song-preset').value;
+  if (preset === 'custom') return;
+  const master = preset === 'master',
+    beginner = preset === 'beginner';
+  restoreSongControls({
+    ...songOptions(),
+    difficulty: master ? 'master' : preset === 'hard' ? 'busy' : beginner ? 'gentle' : 'flow',
+    turnMode: beginner ? 'forward' : preset === 'normal' ? 'bounded' : 'full',
+    turnStyle: master ? 'continuous' : 'rests',
+    movementRange: master || preset === 'hard' ? 'wide' : 'compact',
+    turnDegrees: master ? 120 : 30,
+    maxTurnSpeed: master ? 60 : 30,
+    maxHandSpeed: master ? 6 : 3,
+    rails: !beginner,
+    pairs: !beginner,
+    crossovers: master || preset === 'hard',
+    obstacles: 'none',
+    rhythm: master ? 'steady' : 'hybrid',
+  });
+  el<HTMLSelectElement>('song-preset').value = preset;
+};
+for (const [id, set, low, high] of [
+  [
+    'player-height',
+    (n: number) => {
+      personalHeight = n;
+    },
+    1,
+    2.3,
+  ],
+  [
+    'room-scale',
+    (n: number) => {
+      roomScale = n;
+    },
+    0.5,
+    1.75,
+  ],
+] as const)
+  el<HTMLInputElement>(id).onchange = () => {
+    const input = el<HTMLInputElement>(id),
+      value = Number(input.value);
+    const valid = Number.isFinite(value) ? Math.max(low, Math.min(high, value)) : low;
+    input.value = String(valid);
+    set(valid);
+  };
 button('save-map', () => downloadJson(mapFor(selected), `statebeats-${selected}.json`));
 button('save-generation-report', () => {
   if (generationReport) downloadJson(generationReport, `statebeats-${selected}-generation.json`);
@@ -571,10 +690,18 @@ button('save-generation-report', () => {
 function songOptions(): MusicGenerationOptions {
   const number = (id: string) => Number(el<HTMLInputElement>(id).value);
   return {
+    ...generationBaseline,
     bpm: number('song-bpm'),
     difficulty: el<HTMLSelectElement>('song-difficulty')
       .value as MusicGenerationOptions['difficulty'],
     turnMode: el<HTMLSelectElement>('song-turning').value as MusicGenerationOptions['turnMode'],
+    turnStyle: el<HTMLSelectElement>('song-turn-style')
+      .value as MusicGenerationOptions['turnStyle'],
+    movementRange: el<HTMLSelectElement>('song-range')
+      .value as MusicGenerationOptions['movementRange'],
+    turnDegrees: number('song-turn-degrees'),
+    maxTurnSpeed: number('song-turn-speed'),
+    maxHandSpeed: number('song-hand-speed'),
     style: el<HTMLSelectElement>('song-style').value as MusicGenerationOptions['style'],
     rhythm: el<HTMLSelectElement>('song-rhythm').value as MusicGenerationOptions['rhythm'],
     beatOffsetSeconds: number('song-beat-offset'),
@@ -623,7 +750,7 @@ async function composeSong(payload: {
     if (analysisWorker === current) analysisWorker = undefined;
     el<HTMLInputElement>('song-file').disabled = false;
     el<HTMLInputElement>('map-file').disabled = false;
-    el<HTMLButtonElement>('regenerate-map').disabled = !importedMap?.music;
+    el<HTMLButtonElement>('regenerate-map').disabled = !rebuildSupported;
   }
 }
 button('regenerate-map', () => {
@@ -776,21 +903,8 @@ function desktopAim(hand?: number) {
     (a, b) => Math.max(0, a.hitTick - view!.tick) - Math.max(0, b.hitTick - view!.tick),
   );
   for (const entity of candidates) {
-    const target = new THREE.Vector3(
-      ...(entity.kind === 'hold' && view!.tick >= entity.hitTick
-        ? entity.position
-        : (entity.targetPosition ?? entity.position)),
-    );
-    const projected = target.clone().sub(raycaster.ray.origin).dot(raycaster.ray.direction);
-    const radius = entity.shape.kind === 'sphere' ? entity.shape.radius : 0.15;
-    if (
-      projected >= 0.15 &&
-      projected <= 2 &&
-      raycaster.ray.distanceToPoint(target) <= radius + 0.035
-    ) {
-      depth = projected;
-      break;
-    }
+    const point = assistedTargetPoint(raycaster.ray, entity, view!.tick);
+    if (point) return point;
   }
   const point = raycaster.ray.origin
     .clone()
@@ -922,7 +1036,7 @@ orbit.renderer.setAnimationLoop((time) => {
       1.2,
     );
     orbit.camera.rotation.set(desktopPitch, desktopYaw, 0, 'YXZ');
-    orbit.camera.position.y = keys.has('KeyC') ? 1.0 : 1.65;
+    orbit.camera.position.y = keys.has('KeyC') ? activeHeight * 0.61 : activeHeight;
     orbit.aim.visible = running && !autoplay;
     orbit.aim.position.copy(desktopAim());
     orbit.aim.quaternion.copy(orbit.camera.quaternion);
@@ -1048,9 +1162,15 @@ function savePreferences() {
     audioOnly: hideTargets,
     speed,
     offsetMs: audio.offsetMs,
+    playerHeight: personalHeight,
+    roomScale,
   });
 }
 const preferences = readPreferences();
+personalHeight = preferences.playerHeight;
+roomScale = preferences.roomScale;
+el<HTMLInputElement>('player-height').value = String(personalHeight);
+el<HTMLInputElement>('room-scale').value = String(roomScale);
 audio.enabled = preferences.sound;
 audio.musicEnabled = preferences.music;
 audio.cuesEnabled = preferences.cues;
@@ -1081,6 +1201,7 @@ document.body.classList.toggle('high-contrast', preferences.highContrast);
 document.addEventListener('change', (event) => {
   if ((event.target as HTMLElement).closest('#settings-panel')) savePreferences();
 });
+el<HTMLSelectElement>('song-preset').dispatchEvent(new Event('change'));
 selectMap('tutorial');
 el<HTMLButtonElement>('play').disabled = true;
 el<HTMLButtonElement>('watch').disabled = true;

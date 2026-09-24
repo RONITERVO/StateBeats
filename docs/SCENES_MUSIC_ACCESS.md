@@ -53,7 +53,7 @@ calibrations.
 
 Trails are reconstructed from explicit ticks, with at most 64 samples per object and a
 30-second maximum. Backward seeking needs no particle history. Scene objects are bounded
-at 128 and motion tracks at 256 keys. They are distinct from the 2,000-active-entity gameplay
+at 128 and scene motion tracks at 4,096 keys (note motion remains 256). They are distinct from the 2,000-active-entity gameplay
 limit. A renderer should use instancing/particles for large decorative fields.
 
 `appearance` is a namespaced visual identifier, not an interaction policy. `label` describes

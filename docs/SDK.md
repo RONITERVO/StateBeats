@@ -147,6 +147,11 @@ are unverified until actual playtesting.
 
 ## StateBeats 0.2 extensions
 
+Personal layout adaptation is available as `fitMapToPlayer(map, { height, roomScale })` and
+the CLI/MCP `map.fit` operation. It bakes standard map coordinates, records `playerProfile`,
+preserves timing and collision sizes, and is idempotent for the same profile. Room scale is
+horizontal X/Z spread; height scales vertical layout from the floor. See CHOREOGRAPHY.md.
+
 The package namespace is now `@statebeats/*`; the CLI is `statebeats`, and MCP host settings
 use `STATEBEATS_ROLE`, `STATEBEATS_ACTOR`, `STATEBEATS_MAP` and `STATEBEATS_ALLOW_ADVANCE`.
 Kernel recording version 0.1.0 remains unchanged: existing pure transition semantics and

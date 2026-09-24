@@ -118,7 +118,7 @@ export const sceneObjectSchema = z
     position: positionSchema,
     motion: z
       .array(z.object({ beat: beatSchema, position: positionSchema }).strict())
-      .max(256)
+      .max(4096)
       .default([]),
     anchor: idSchema.optional(),
     scale: num.positive().max(100).default(1),
@@ -151,6 +151,12 @@ export const sceneSchema = z
   .strict();
 export type SceneDefinition = z.infer<typeof sceneSchema>;
 export type SceneInput = z.input<typeof sceneSchema>;
+export const playerProfileSchema = z
+  .object({
+    height: num.min(1).max(2.3).default(1.65),
+    roomScale: num.min(0.5).max(1.75).default(1),
+  })
+  .strict();
 export const noteSchema = z
   .object({
     id: idSchema,
@@ -220,6 +226,7 @@ export const mapSchema = z
     notes: z.array(noteSchema).max(10000),
     scene: sceneSchema.optional(),
     music: musicSchema.optional(),
+    playerProfile: playerProfileSchema.optional(),
     generation: z
       .object({
         version: z.literal(1),

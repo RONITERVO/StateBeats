@@ -12,10 +12,18 @@ The local Synth Riders study examined 25 underlying charts, not the proprietary 
 - Offline PCM features and persisted music timelines; author-supplied BPM and beat offset.
 - Replaceable musical selector, phrase composer and facing planner. Saved generator identity/settings and a separate explanation report.
 - Original paired pulses, arcs, mirrored variations, simultaneous hand notes, crossovers and rail counterpoint.
-- Forward, bounded and full-turn phrase plans with a speed budget and recovery intervals. Approach, stationary and mixed placement.
+- Forward, bounded and full-turn plans with a speed budget; optional recovery gaps or continuous notes during turns. Approach, stationary and mixed placement.
 - Player-height/reach parameters, per-hand conflict/speed checks, deterministic omission of invalid candidates, and explicit diagnostics. These are geometric checks, not medical or room-safety certification.
 - A graphical hold-path preview derived from the same positions used by simulation, plus SDK observations for alternative senses.
 - Player controls for rebuilding an imported song without decoding it again, and CLI/MCP composition and inspection operations.
+- Beginner/Normal/Hard/Master quick setups, compact/full-reach movement, manual height and horizontal room scale. Profiles are baked through the shared SDK and recorded in playback data.
+
+The owner's reference is experienced Master/360+ play at 1.65 m height and 1.20 room scale:
+wide simultaneous reaches, high/low variation and reacting to a continuously moving source can
+be the desired challenge. Beginner comfort is a default profile, not a universal restriction on
+the engine. Expert settings must keep deliberate challenge available and make each dimension
+easy to tune. Difficulty labels and room-scale formulas are original StateBeats definitions;
+comparative calibration requires playtesting.
 
 ## Next quality gates, in order
 

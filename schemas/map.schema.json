@@ -865,7 +865,7 @@
               },
               "motion": {
                 "default": [],
-                "maxItems": 256,
+                "maxItems": 4096,
                 "type": "array",
                 "items": {
                   "type": "object",
@@ -1205,6 +1205,28 @@
         "tickRate",
         "algorithm",
         "frames"
+      ],
+      "additionalProperties": false
+    },
+    "playerProfile": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "default": 1.65,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2.3
+        },
+        "roomScale": {
+          "default": 1,
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 1.75
+        }
+      },
+      "required": [
+        "height",
+        "roomScale"
       ],
       "additionalProperties": false
     },

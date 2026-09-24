@@ -13,7 +13,9 @@ scope.onmessage = (
 ) => {
   try {
     const { samples, sampleRate, source, options } = event.data;
-    const music = event.data.music ?? analyzePcm({ samples: samples!, sampleRate: sampleRate! });
+    const music =
+      event.data.music ??
+      analyzePcm({ samples: samples!, sampleRate: sampleRate!, tickRate: options.tickRate });
     if (source) music.source = source;
     const result = generateChoreography(music, {
       ...options,

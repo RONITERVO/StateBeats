@@ -51,6 +51,15 @@
         <details id="import-panel">
           <summary>Your music &amp; community maps</summary>
           <label
+            >Quick setup<select id="song-preset">
+              <option value="beginner">Beginner</option>
+              <option value="normal">Normal</option>
+              <option value="hard">Hard</option>
+              <option value="master">Master · continuous 360°</option>
+              <option value="custom">Custom / saved recipe</option>
+            </select></label
+          >
+          <label
             >Song tempo (BPM)<input id="song-bpm" type="number" min="40" max="240" value="120"
           /></label>
           <label
@@ -58,17 +67,55 @@
               <option value="gentle">Gentle</option>
               <option value="flow">Flow</option>
               <option value="busy">Busy</option>
+              <option value="master">Master coordination</option>
             </select></label
           >
           <label
             >Turning<select id="song-turning">
-              <option value="forward">Face forward</option>
+              <option value="forward" selected>Face forward</option>
               <option value="bounded">Turn within 120°</option>
-              <option value="full" selected>Full 360° journey</option>
+              <option value="full">Full 360° journey</option>
             </select></label
           >
           <details class="generation-options">
             <summary>Shape your movement</summary>
+            <label
+              >Turning style<select id="song-turn-style">
+                <option value="rests">Recovery gaps between turns</option>
+                <option value="continuous">Continuous · notes during turns</option>
+              </select></label
+            >
+            <label
+              >Movement range<select id="song-range">
+                <option value="compact">Compact</option>
+                <option value="wide">Full reach · high, low and wide</option>
+              </select></label
+            >
+            <label
+              >Turn per phrase (degrees)<input
+                id="song-turn-degrees"
+                type="number"
+                min="5"
+                max="180"
+                value="30"
+            /></label>
+            <label
+              >Turn speed limit (degrees/second)<input
+                id="song-turn-speed"
+                type="number"
+                min="5"
+                max="120"
+                value="30"
+            /></label>
+            <label
+              >Hand speed limit (metres/second)<input
+                id="song-hand-speed"
+                type="number"
+                min="0.5"
+                max="6"
+                step="0.5"
+                value="3"
+            /></label>
             <label
               >First beat offset in the audio (seconds)<input
                 id="song-beat-offset"
@@ -241,6 +288,28 @@
     <section id="settings-panel" class="dialog" hidden>
       <div class="eyebrow">YOUR PRACTICE SPACE</div>
       <h2>Make it yours.</h2>
+      <label
+        >Your height (metres)<input
+          id="player-height"
+          type="number"
+          min="1"
+          max="2.3"
+          step="0.01"
+          value="1.65"
+      /></label>
+      <label
+        >Room scale · horizontal spread<input
+          id="room-scale"
+          type="number"
+          min="0.5"
+          max="1.75"
+          step="0.05"
+          value="1"
+      /></label>
+      <p>
+        Applies on your next start or restart, to every map. 1.20× asks for wider reaches. Height
+        adjusts the vertical layout; note sizes stay the same.
+      </p>
       <label
         >Playback speed
         <select id="speed">

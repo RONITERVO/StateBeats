@@ -37190,6 +37190,7 @@
       "leadSeconds": 2.5,
       "maxHandSpeed": 3,
       "maxTurnSpeed": 30,
+      "movementRange": "compact",
       "obstacles": "none",
       "pairs": true,
       "playerHeight": 1.65,
@@ -37203,7 +37204,8 @@
       "theme": "statebeats/landscape",
       "title": "Phrases in orbit",
       "turnDegrees": 30,
-      "turnMode": "full"
+      "turnMode": "full",
+      "turnStyle": "rests"
     }
   },
   "groups": [],

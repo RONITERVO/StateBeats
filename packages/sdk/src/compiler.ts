@@ -243,6 +243,8 @@ export function compile(
           errors.push(
             `Emission motion keys must follow release, omit the implicit hit key, at most 254: ${note.id}`,
           );
+        if (motion.some((key) => key.tick > endTick))
+          errors.push(`Emission motion must finish within the entity lifetime: ${note.id}`);
         spawnTick = releaseTick;
         motion = [
           { tick: releaseTick, position: scenePositionAt(emitter, releaseTick) },
@@ -360,6 +362,7 @@ export function presentationIdentity(map: MapDefinition): Promise<string> {
     scene: map.scene ?? null,
     music: map.music ?? null,
     ...(map.generation ? { generation: map.generation } : {}),
+    ...(map.playerProfile ? { playerProfile: map.playerProfile } : {}),
     labels: map.notes
       .filter((note) => note.label || note.appearance)
       .map((note) => ({ id: note.id, label: note.label, appearance: note.appearance })),

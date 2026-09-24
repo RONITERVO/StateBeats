@@ -121,7 +121,7 @@ describe('musical choreography pipeline', () => {
         expect(rail.motion.some((k) => k.tick > rail.hitTick)).toBe(true);
         if (style === 'approach')
           expect(Math.hypot(...rail.motion[0].position)).toBeGreaterThan(499);
-        if (style === 'stationary') expect(rail.motion[0].tick).toBeGreaterThan(rail.hitTick);
+        if (style === 'stationary') expect(rail.motion[0].tick).toBe(rail.hitTick);
       }
       for (let i = 1; i < report.phrases.length; i++)
         expect(

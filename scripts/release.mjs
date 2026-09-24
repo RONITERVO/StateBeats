@@ -58,6 +58,7 @@ const source = [
   'tsconfig.json',
   'vitest.config.ts',
   'playwright.config.ts',
+  'playwright.pages.config.ts',
   '.prettierrc.json',
   '.prettierignore',
   '.gitignore',

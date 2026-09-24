@@ -2,6 +2,12 @@
 
 ## 0.3.0 — musical choreography (development release candidate)
 
+Review follow-up fixes long-song emitter holds, stationary rail starts, late-path previews,
+post-expiry motion validation, saved recipe restoration and shape-aware desktop aiming.
+Adds Beginner/Normal/Hard/Master quick setups, continuous turns with incoming notes, wider
+high/low gestures, and shared SDK/CLI/MCP personal height/room-scale adaptation. Adds a tested
+GitHub Pages workflow that publishes verified merges to main.
+
 Added original musical phrase generation with replaceable selector/composer/facing adapters,
 song beat offsets, independent movement controls, recorded recipes and explanation reports.
 Added conservative authored hand reach/speed/reservation checks and SDK/CLI/MCP composition

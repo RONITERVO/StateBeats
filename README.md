@@ -45,6 +45,12 @@ map of musical movement phrases. **Shape your movement** controls beat offset, r
 style, facing range, rails, paired notes, crossovers and optional ducking. Rebuild from the stored
 analysis, inspect the summary, and save the generation report. Try **Phrases in orbit** for an
 original demonstration of rail counterpoint and phrase-based turns.
+Quick setups run from **Beginner** to **Master**. Master enables wide movement and continuous
+360° turning with notes arriving throughout the turn; advanced controls remain independent.
+Settings also has manual **height** and **room scale** for every map, applied on the next start.
+For wider play at 1.65 m, set height **1.65** and room scale **1.20**. Our room scale spreads X/Z
+positions; height controls vertical layout. Collision sizes stay authored and recordings retain
+the profile used.
 Music features, generation settings and note paths are saved in exported
 JSON; audio stays local. Load a community map and its matching soundtrack through the same
 controls. Browser decoding supports the formats available on the current device.
@@ -58,6 +64,11 @@ headset validation. See [choreography APIs and controls](docs/CHOREOGRAPHY.md) a
 For Quest Browser, see [the short standalone guide](docs/QUEST_PLAYTEST.md). A static HTTPS host
 is enough; simulation runs locally on the headset. No PC simulation, Link, accounts, keys or API
 subscription is required. Local USB forwarding is an optional development setup.
+
+**Public hosting:** [GitHub Pages deployment](docs/HOSTING.md) is configured for
+`https://ronitervo.github.io/StateBeats/`. The first successful deployment after merging the
+workflow makes that URL playable. Reviewed maps/adapters registered in the project become
+available after merge and verification. Local imports are private; they are not public uploads.
 
 ## Use the engine
 

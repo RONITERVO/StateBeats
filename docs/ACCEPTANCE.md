@@ -6,6 +6,16 @@ comfort or accessibility usability claims.
 
 ## Choreography verification on Windows, 2026-09-24
 
+The pre-merge review follow-up adds ten regression/profile tests: **78 tests in 13 files**.
+They cover long-song emission holds, stationary starts, expiry bounds, late previews,
+moving/box/capsule desktop aiming, continuous wide expert movement and shared service/replay
+verification of personal layout. All **16 browser cases** passed, including saved recipe
+restoration; one case was rerun after simultaneous Playwright suites collided in their output
+directory. The Pages suite now has a separate output directory. Both production Pages tests
+passed under `/StateBeats/`, exercising gameplay/replay, personal room scale, authoring-worker
+rebuild, the guide and text player. These are local results; see the PR checks for the current
+commit's remote status. The table below records the earlier 0.3.0 baseline.
+
 Node 24.13.0 x64. Results below apply to the 0.3.0 choreography work; the older baseline
 and performance measurements remain separately dated below.
 
