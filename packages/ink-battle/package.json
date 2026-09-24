@@ -1,0 +1,52 @@
+{
+  "name": "@statebeats/ink-battle",
+  "version": "0.3.0",
+  "description": "Ink-Battle collaboration: reproducible battles, sketchbook art and rhythm encounters",
+  "type": "module",
+  "license": "Apache-2.0",
+  "files": [
+    "dist",
+    "src",
+    "upstream",
+    "recordings",
+    "audio",
+    "PROVENANCE.json",
+    "NOTICE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./visuals": {
+      "types": "./src/visuals.d.ts",
+      "import": "./src/visuals.js"
+    },
+    "./audio/*": "./audio/*",
+    "./upstream/*": "./upstream/*"
+  },
+  "dependencies": {
+    "@statebeats/core": "0.3.0",
+    "@statebeats/sdk": "0.3.0"
+  },
+  "peerDependencies": {
+    "three": "^0.185.1"
+  },
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RONITERVO/StateBeats.git",
+    "directory": "packages/ink-battle"
+  },
+  "homepage": "https://github.com/RONITERVO/StateBeats/tree/main/packages/ink-battle#readme",
+  "bugs": {
+    "url": "https://github.com/RONITERVO/StateBeats/issues"
+  }
+}

@@ -26,6 +26,7 @@ await run(process.execPath, ['examples/scenes.mjs']);
 await run(process.execPath, ['examples/choreography.mjs']);
 await run(process.execPath, ['examples/turns.mjs']);
 await run(process.execPath, ['examples/event-horizon.mjs']);
+await run(process.execPath, ['examples/ink-battle.mjs']);
 await run(process.execPath, [
   'packages/cli/dist/index.js',
   'run',

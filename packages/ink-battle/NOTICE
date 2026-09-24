@@ -1,0 +1,11 @@
+Ink-Battle × StateBeats: Between the Lines
+
+Contains unmodified code and procedural artwork from Ink-Battle by Roni Tervo.
+https://github.com/RONITERVO/Ink-Battle
+Revision and per-file SHA-256 hashes: PROVENANCE.json
+Upstream files retain their original Apache-2.0 license (LICENSE).
+
+StateBeats adapters, recordings and choreography in this package are modifications
+and additions, not part of upstream Ink-Battle. Copyright 2026 Roni Tervo.
+Licensed under Apache-2.0. The bundled original score is also Apache-2.0.
+No upstream commercial recordings, fonts or third-party textures are included.

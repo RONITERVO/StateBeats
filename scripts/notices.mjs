@@ -2,7 +2,8 @@ import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 const lock = JSON.parse(await readFile('package-lock.json', 'utf8'));
 let text =
-  '# Third-party notices\n\nGenerated from the exact installed lockfile, including build/test dependencies.\nOriginal StateBeats code is MIT; original maps and procedural audio are CC0-1.0.\n\n';
+  '# Third-party notices\n\nGenerated from the exact installed lockfile, including build/test dependencies.\nOriginal StateBeats code is MIT; original maps and procedural audio are CC0-1.0, except the Apache-2.0 Ink-Battle collaboration (see CONTENT_LICENSE.md).\n\n';
+text += `## Ink-Battle collaboration\n\n${await readFile('packages/ink-battle/NOTICE', 'utf8')}\n\n~~~text\n${await readFile('packages/ink-battle/LICENSE', 'utf8')}\n~~~\n\n`;
 const missing = [];
 for (const [path, info] of Object.entries(lock.packages).sort()) {
   if (!path.startsWith('node_modules/') || info.link) continue;

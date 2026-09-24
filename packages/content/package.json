@@ -3,12 +3,14 @@
   "version": "0.3.0",
   "description": "Original spatial rhythm maps and procedural scores",
   "type": "module",
-  "license": "CC0-1.0",
+  "license": "(CC0-1.0 AND Apache-2.0)",
   "files": [
     "dist",
     "maps",
     "audio",
-    "src"
+    "src",
+    "INK_BATTLE_LICENSE.txt",
+    "INK_BATTLE_NOTICE.txt"
   ],
   "exports": {
     ".": {
@@ -19,7 +21,8 @@
   },
   "dependencies": {
     "@statebeats/core": "0.3.0",
-    "@statebeats/sdk": "0.3.0"
+    "@statebeats/sdk": "0.3.0",
+    "@statebeats/ink-battle": "0.3.0"
   },
   "engines": {
     "node": ">=24 <25"

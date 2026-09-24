@@ -1,0 +1,32 @@
+{
+  "repository": "https://github.com/RONITERVO/Ink-Battle",
+  "commit": "06ff88ca474b077226bfb41e6ff10652b6c5a634",
+  "license": "Apache-2.0",
+  "files": {
+    "src/content/ages.js": "6f2a0dfe8786b3de3d67c7d10831b4fef5cfd69e017121974b3895b74edb5861",
+    "src/core/battlefield.js": "c7ec155a4afb9314ccf048907091dbabbce1894c3bbaa8ae96b7d1563ca98c79",
+    "src/core/combat.js": "31136495a8f08dd34e9792cbb1276f32481d3e1a6efdbcb58b9d9a5be731c0f9",
+    "src/core/commands.js": "a78a2a009fcf70cc59158b21303c47095685c75c9aaf5a5386c120a420c4cc7d",
+    "src/core/constants.js": "27f7b507d20d60d31b353af8d34f45c04e8e54f4e13aec10fd299df8226ec598",
+    "src/core/engine.js": "ad158996e479975a144cd9a3111d5339c5caee6cce4d112a0bd284bcea284438",
+    "src/core/opponent.js": "783038918360916bdb210bc77e678610acb94c7e840f2eb63c15dc10f4a26c8a",
+    "src/core/state.js": "7fc59d45c3cd5a683b7b5253851e440c21c800c5bea230abc87a19d38137efad",
+    "src/core/tabletop-combat.js": "c06fb4b3c796c0c1a9ae84007d34d0201e3e792106ce5455c0aa12b6c5a178ff",
+    "src/mr/book-paper.js": "923ccbfde0c13aaa40a4cd402cc2bf27915781cf863ece9189b3fa0286ada45b",
+    "src/mr/catalog.js": "814dd020f592f63193832fb8bccea2c4f222ed35835647de8a508e89da66c79d",
+    "src/mr/combat-motion.js": "c8bc2ee4ddbfab049fb7ceb6341ca05c40a9a755941edbf119ce86a46cc388a8",
+    "src/mr/defense-layout.js": "f1ae868a8f18e8d75caee696ff395849ab9054e5ce575a5692190fd297a38601",
+    "src/mr/defense-models.js": "13cf4c4c06c200d45a8e7bad64c57e8ebf3811056f5b1ad621a6039cadb01b1e",
+    "src/mr/dock-model.js": "f1647bc83d36de3d43fab70d2522bd4d8e98dd398fa6ebff7165e9560a8de84d",
+    "src/mr/glyphs.js": "a1d7cf9839514c8372adbeab64189b0e6fab88c8d1f4a0f9a56a417fb3c44abc",
+    "src/mr/infantry-model.js": "245ee0849b76f08b13bf8c873273e31d107a170a213ceea2ea8c337fd0d73c43",
+    "src/mr/ink-batch.js": "7e978322b6c08c9068acc47f975f7ed78ada73eefb29bac537599b2434663274",
+    "src/mr/models.js": "52e5eaf2fd48f2714fa9f93633723c3d247fce8b91fe7fe0b06eb54890e98328",
+    "src/mr/pencil-geometry.js": "d887e2668a6b52d47c20a8bbc06dbc837b370eb8f84514ec02911ce6b8aaa0c2",
+    "src/mr/pencil-palette.js": "a4df2e5e16c5b73028b9358ab07f56671b8931ce31b63e59e7aa5d586d1d2cb4",
+    "src/mr/sketchbook.js": "3ae4e13643dab9de30eed77d654fc91c9c4888934bdd884c771e48de0f210740",
+    "src/mr/troop-models.js": "51670d401de7997c49caa7c7b561f015ae1f125bd627dedf77b2b6691a7508d1",
+    "src/mr/watercolor.js": "51698e34eba71762015f921a6120fd60db596373f9bcc2f512d6c5d45d38337b",
+    "src/sdk/session.js": "4d109199b73c1b9f12ed88674cf818ee6a11d3b3c22068f6565f978889166a75"
+  }
+}

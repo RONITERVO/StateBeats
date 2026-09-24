@@ -3,6 +3,7 @@ import type { MapDefinition, MapInput, NoteInput } from '@statebeats/sdk';
 import { sunlitJourney } from './journey.js';
 import { choreographyJourney } from './choreography.js';
 import { eventHorizonMaster } from './event-horizon.js';
+import { inkBattleMap } from '@statebeats/ink-battle';
 const p = (azimuth: number, radius = 0.8, elevation = 0) => ({
   azimuth,
   elevation,
@@ -170,6 +171,7 @@ const raw = [
   sunlitJourney(true),
   choreographyJourney(),
   eventHorizonMaster(),
+  inkBattleMap(),
 ];
 export const sampleMaps: MapDefinition[] = raw.map((map) => compile(map).map);
 export function sampleMap(id: string): MapDefinition {

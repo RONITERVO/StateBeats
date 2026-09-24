@@ -33,6 +33,14 @@ interactions and five passing bird hazards across a full turn.
 targets include wide linked chords, 52 moving holds, musical sweeps and answering turns,
 stationary constellations, and seven duck/lean passages. No files need importing.
 Use `?map=event-horizon-master` to link to this selection. First orbit remains the default.
+
+**Collaboration: [Ink-Battle — Between the Lines](docs/INK_BATTLE.md).** Stand between
+two armies inside Ink-Battle's original painted book. Six age chapters, a bundled
+3:20 score and 358 marked head strikes, crossfire parries, falling specials and
+two-hand heavy blocks. The surrounding war uses verified recordings of the actual
+Ink-Battle engine; the neutral-player rhythm encounters are an adaptation and do
+not change the recorded battle outcome. Select `?map=ink-battle-between-the-lines`.
+
 Mouse left/right control independent stored hand aims; hold to sustain contact. Space places both
 hands at the reticle. Q/E turn, Up/Down look vertically, C ducks beneath birds, Escape pauses. Mouse bindings, speed and
 audio offset are in Settings, along with music/cue channels, text captions, contrast and reduced motion.
@@ -122,7 +130,8 @@ host operation; JSON maps cannot load or execute code.
 |---|---|
 | `@statebeats/core` | Pure next-tick transition, relative swept contact, requirements and policy contracts |
 | `@statebeats/sdk` | Validation, compiler/builder, sessions, capabilities, clocks, replay and service operations |
-| `@statebeats/content` | Eight original sequences, including Event Horizon and its bundled soundtrack |
+| `@statebeats/content` | Nine catalog sequences, including Event Horizon and the Ink-Battle collaboration |
+| `@statebeats/ink-battle` | Apache-2.0 battle recordings, original sketchbook art and rhythm adaptation |
 | `@statebeats/adapters-node` | Atomic filesystem map/replay stores with opaque filenames |
 | `@statebeats/cli` | SDK service over commands or persistent JSON lines |
 | `@statebeats/mcp` | Real stdio MCP server for agents |
@@ -171,12 +180,13 @@ Browser conformance compares Node with Chromium, Firefox and WebKit; the referen
 player baseline is Chromium. Benchmarks report the actual machine and do not represent Quest.
 The CI workflow is prepared for Windows, Linux and macOS; local evidence does not imply CI has run.
 
-`release:local` creates source/player archives, six npm tarballs and SHA-256 checksums in
+`release:local` creates source/player archives, seven npm tarballs and SHA-256 checksums in
 `artifacts/release/0.3.0/`, then installs all public tarballs together in a fresh directory and runs the CLI
 and packaged scene/music SDK checks.
 The source archive includes the lockfile. Source is maintained at
 [RONITERVO/StateBeats](https://github.com/RONITERVO/StateBeats). The npm packages are **not published**;
 use the local tarballs until a maintainer publishes under an available namespace.
 
-Code is [MIT](LICENSE). Original maps and procedural audio output are [CC0](CONTENT_LICENSE.md).
+StateBeats code is [MIT](LICENSE). Original maps and procedural audio output are
+[CC0](CONTENT_LICENSE.md), except the [Apache-2.0 Ink-Battle collaboration](packages/ink-battle/NOTICE).
 Dependency notices are included in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

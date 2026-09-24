@@ -6,6 +6,10 @@ import type { TargetGuide } from './target-guide.js';
 
 export interface TargetAppearance {
   object: THREE.Object3D;
+  /** Artwork supplies the contact body. Reference timing and requirement cues remain available. */
+  referenceBody?: boolean;
+  /** Optional reference-cue tint for artwork whose palette needs a different contrast. */
+  cueColor?: number;
   /** Own the complete guide; undefined uses the reference guide, false deliberately omits it. */
   guide?: TargetGuide | false;
   /** The adapter interprets lifecycle progress itself instead of using the default opacity envelope. */

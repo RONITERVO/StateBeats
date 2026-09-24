@@ -1,12 +1,15 @@
 import * as THREE from 'three';
 import type { Observation, SceneFrame } from '@statebeats/sdk';
 import { eventHorizonTheme } from './event-horizon-theme.js';
+import { inkBattleTheme } from './ink-battle-theme.js';
 
 export interface ThemePreferences {
   reducedMotion: boolean;
   highContrast: boolean;
 }
 export interface ThemeAdapter {
+  /** An adapter may render its semantic scene objects itself, including calibration landmarks. */
+  handlesObjects?: boolean;
   update(view: Observation, preferences: ThemePreferences): void;
   dispose(): void;
 }
@@ -216,6 +219,7 @@ class LandscapeTheme implements ThemeAdapter {
 registerTheme('statebeats/landscape', (root) => new LandscapeTheme(root, false));
 registerTheme('statebeats/space', (root) => new LandscapeTheme(root, true));
 registerTheme('statebeats/event-horizon', eventHorizonTheme);
+registerTheme('ink-battle/sketchbook-v1', inkBattleTheme);
 
 interface SceneObjectView {
   group: THREE.Group;
@@ -254,7 +258,7 @@ export class ThemeLayer {
         this.remove(object);
         this.objects.delete(id);
       }
-    for (const object of frame.objects) this.object(object);
+    if (!this.adapter?.handlesObjects) for (const object of frame.objects) this.object(object);
   }
   private object(frame: SceneFrame['objects'][number]) {
     let object = this.objects.get(frame.id);
