@@ -24,6 +24,7 @@ await run(process.execPath, [npm, 'run', 'demo']);
 await run(process.execPath, ['examples/headless.mjs']);
 await run(process.execPath, ['examples/scenes.mjs']);
 await run(process.execPath, ['examples/choreography.mjs']);
+await run(process.execPath, ['examples/event-horizon.mjs']);
 await run(process.execPath, [
   'packages/cli/dist/index.js',
   'run',
@@ -57,6 +58,7 @@ await writeFile(
         'headless example',
         'scene/music example',
         'choreography composition/inspection/replay example',
+        'Event Horizon bundled audio resolution and complete Master replay',
         'CLI run/generate/validate/verify',
       ],
     },

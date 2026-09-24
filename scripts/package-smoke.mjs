@@ -28,8 +28,13 @@ await writeFile(
   join(directory, 'sdk-smoke.mjs'),
   `
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
 import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, generateChoreography, inspectChoreography } from '@statebeats/sdk';
-import { sampleMap } from '@statebeats/content';
+import { sampleMap, eventHorizonSoundtrack } from '@statebeats/content';
+const bundledAudio = await readFile(new URL(import.meta.resolve('@statebeats/content/audio/event-horizon.mp3')));
+assert.equal(createHash('sha256').update(bundledAudio).digest('hex'), eventHorizonSoundtrack.sha256);
+assert.equal(sampleMap('event-horizon-master').music.source.sha256, eventHorizonSoundtrack.sha256);
 const session = await Session.create(sampleMap('sunlit-journey'), [standardActor()]);
 session.advance(240);
 const view = session.observe({role:'admin'});

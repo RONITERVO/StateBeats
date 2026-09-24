@@ -27,6 +27,12 @@ Open **http://127.0.0.1:4173**. Choose **First orbit** to learn the controls, **
 for a moving-sun landscape, or **A sky full of stars** for its space variation. Select
 **Play on desktop** or **Watch a bot**. The original sun journey contains 66 star/hold
 interactions and five passing bird hazards across a full turn.
+
+**Featured: [Event Horizon — Master](docs/EVENT_HORIZON.md).** A complete original 2:40,
+150 BPM electronic track ships with the game and loads automatically. Its 620 scoring
+targets include wide linked chords, 52 moving holds, continuous turns and reversals,
+stationary constellations, and seven duck/lean passages. No files need importing.
+Use `?map=event-horizon-master` to link to this selection. First orbit remains the default.
 Mouse left/right control independent stored hand aims; hold to sustain contact. Space places both
 hands at the reticle. Q/E turn, Up/Down look vertically, C ducks beneath birds, Escape pauses. Mouse bindings, speed and
 audio offset are in Settings, along with music/cue channels, text captions, contrast and reduced motion.
@@ -66,8 +72,7 @@ is enough; simulation runs locally on the headset. No PC simulation, Link, accou
 subscription is required. Local USB forwarding is an optional development setup.
 
 **Public hosting:** [GitHub Pages deployment](docs/HOSTING.md) is configured for
-`https://ronitervo.github.io/StateBeats/`. The first successful deployment after merging the
-workflow makes that URL playable. Reviewed maps/adapters registered in the project become
+`https://ronitervo.github.io/StateBeats/`. Reviewed maps/adapters registered in the project become
 available after merge and verification. Local imports are private; they are not public uploads.
 
 ## Use the engine
@@ -111,7 +116,7 @@ host operation; JSON maps cannot load or execute code.
 |---|---|
 | `@statebeats/core` | Pure next-tick transition, relative swept contact, requirements and policy contracts |
 | `@statebeats/sdk` | Validation, compiler/builder, sessions, capabilities, clocks, replay and service operations |
-| `@statebeats/content` | Seven original sequences, including sun/space scenes and musical choreography |
+| `@statebeats/content` | Eight original sequences, including Event Horizon and its bundled soundtrack |
 | `@statebeats/adapters-node` | Atomic filesystem map/replay stores with opaque filenames |
 | `@statebeats/cli` | SDK service over commands or persistent JSON lines |
 | `@statebeats/mcp` | Real stdio MCP server for agents |

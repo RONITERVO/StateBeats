@@ -3,6 +3,7 @@ import { cartesian, compile } from './compiler.js';
 import type { RuleExtensions } from './compiler.js';
 import { parsed, playerProfileSchema } from './schema.js';
 import type { MapDefinition } from './schema.js';
+import { CHOREOGRAPHY_VERSION } from './choreography.js';
 export interface PlayerProfile {
   height: number;
   roomScale: number;
@@ -22,6 +23,7 @@ export function fitMapToPlayer(
     target = parsed(playerProfileSchema, profile);
   const recipe = map.generation?.settings as Record<string, unknown> | undefined;
   const authoredHeight =
+    map.generation?.algorithm === CHOREOGRAPHY_VERSION &&
     typeof recipe?.playerHeight === 'number' &&
     recipe.playerHeight >= 1 &&
     recipe.playerHeight <= 2.3

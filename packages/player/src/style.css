@@ -262,6 +262,17 @@ main {
   border-color: #72f4df75;
   background: linear-gradient(105deg, #153134da, #0d202bde);
 }
+.map-card.featured-map {
+  border-color: #9584ff55;
+  background: linear-gradient(110deg, #352554dd, #101d30ee);
+}
+.map-card.featured-map.selected {
+  border-color: #b6a9ff;
+}
+.featured-map .map-art {
+  color: #c5b6ff;
+  background: radial-gradient(circle, #9f70ff33, transparent);
+}
 .map-art {
   width: 49px;
   height: 49px;

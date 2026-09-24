@@ -7,13 +7,15 @@
   "files": [
     "dist",
     "maps",
+    "audio",
     "src"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./audio/*": "./audio/*"
   },
   "dependencies": {
     "@statebeats/core": "0.3.0",

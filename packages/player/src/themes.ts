@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import type { Observation, SceneFrame } from '@statebeats/sdk';
+import { eventHorizonTheme } from './event-horizon-theme.js';
 
 export interface ThemePreferences {
   reducedMotion: boolean;
@@ -214,6 +215,7 @@ class LandscapeTheme implements ThemeAdapter {
 }
 registerTheme('statebeats/landscape', (root) => new LandscapeTheme(root, false));
 registerTheme('statebeats/space', (root) => new LandscapeTheme(root, true));
+registerTheme('statebeats/event-horizon', eventHorizonTheme);
 
 interface SceneObjectView {
   group: THREE.Group;

@@ -4,6 +4,30 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Event Horizon showcase, 2026-09-24
+
+The complete original 150 BPM/160-second composition ships as a 3.8 MB MP3 with SHA-256
+identity and analysed music features. It has 620 scoring targets, 52 held paths, 84 linked
+chords and seven avoidance volumes. At the authored profile, held-lifetime inspection reports
+no conflicts/reach/speed issues and a 5.105 m/s peak hand-center speed. Ordinary hand poses
+plus a tracked duck/lean head trace complete at room scale 1.20 with no missed targets or
+hazard contacts; a standing tracked head is penalized. Checkpoint continuation and replay agree.
+
+**86 tests in 14 files** passed, along with strict types, dependency boundaries, formatting
+and production build. Audio measurement on the final distributed MP3: about -14.38 LUFS,
+-1.15 dB true peak, 5 LU loudness range; decoded samples are non-silent and unclipped.
+Full Node/Chromium/Firefox/WebKit recording conformance includes the new map. The expanded
+fixture needed a larger test time limit in Firefox/WebKit; conformance assertions remain intact.
+All three production Pages tests passed, exercising actual soundtrack download/decode,
+pause/resume offsets, map-specific report controls and complete playback under the project path.
+The stage compiles and renders once before starting the simulation clock, so initial shader
+preparation cannot consume the opening or trigger a startup timing pause.
+All nine desktop/experience browser cases also passed after that startup change. Fresh
+installation of all six package archives resolves and verifies the bundled audio. A clean
+source archive passed all 86 tests, the full build/check and CLI/examples, including the
+complete Event Horizon headless replay (620 hits, zero misses).
+Hardware Quest performance and human musical/readability judgments remain unmeasured.
+
 ## Choreography verification on Windows, 2026-09-24
 
 The pre-merge review follow-up adds ten regression/profile tests: **78 tests in 13 files**.
