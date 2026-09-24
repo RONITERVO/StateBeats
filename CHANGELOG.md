@@ -16,6 +16,9 @@ reference player fades semantic cues and particles, composes adapter opacity ani
 with lifecycle visibility, and disposes custom guides even when the map suppresses them.
 Finished sessions finalize every remaining release effect. Dense trajectories use exact
 binary position lookup, and legacy observations allocate no unused fallback guide buffers.
+Checkpoint/replay verification now requires the presentation hash for every map, closing
+the bypass where both optional cue settings and their binding were removed. Existing
+version-1 exports containing their hash remain compatible.
 
 Adds reusable musical turn planning with versioned tracks, explicit sweeps/continuations/answers,
 quintic easing, peak speed/acceleration and directional-travel limits, explanation reports and

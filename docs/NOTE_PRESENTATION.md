@@ -94,6 +94,12 @@ information convention, not an anti-cheat boundary: portable maps are inspectabl
 
 Reveal settings affect difficulty. They are covered by `presentationHash`, separately
 from the core program hash, and checkpoint/replay metadata protects their map binding.
+Both recording APIs require this hash even when a map uses only default cues; deleting
+it and the optional map metadata does not turn a recording into a legacy exception.
+Existing version-1 exports from the committed 0.2/0.3 releases already contain this hash
+and remain compatible. Unhashed files cannot be restored or reported as verified.
+This is a content-consistency check, not proof of authorship: a host comparing scores
+must compare the bound hash with its independently trusted map/presentation identity.
 Observations expose that hash and `presentationVersion` (`statebeats/note-presentation-v1`).
 Hosts comparing scores should identify both the collision program and the presentation
 policy/version, plus any host-provided assistance. Do not silently increase lookahead

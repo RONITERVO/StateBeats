@@ -61,7 +61,7 @@ export interface Checkpoint {
   version: 1;
   engineVersion: string;
   programHash: string;
-  presentationHash?: string;
+  presentationHash: string;
   map: MapDefinition;
   compiled: CompiledProgram;
   initialActors: ActorSpec[];
@@ -79,7 +79,7 @@ export interface Replay {
   version: 1;
   engineVersion: string;
   programHash: string;
-  presentationHash?: string;
+  presentationHash: string;
   map: MapDefinition;
   compiled: CompiledProgram;
   initialActors: ActorSpec[];
@@ -147,6 +147,12 @@ const MAX_LOG_COMMANDS = 500000,
   EVENT_RETENTION = 4096;
 const keyOf = (cap: Capability) =>
   cap.role === 'player' ? 'player:' + encodeURIComponent(cap.actorId) : cap.role;
+function requirePresentationHash(value: unknown): void {
+  // Exporters always write this binding, even for maps using only default cues.
+  // Inferring legacy status from optional map fields would permit stripping both.
+  if (typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value))
+    throw new EngineError('PRESENTATION_MISMATCH', 'Recording requires a valid presentation hash');
+}
 function assertSize(value: unknown, limit = 16_000_000): void {
   if (canonical(value).length > limit)
     throw new EngineError('SIZE_LIMIT', 'Payload exceeds size limit');
@@ -636,6 +642,7 @@ export class Session {
     assertSize(input, 64_000_000);
     if (!input || input.version !== 1 || input.engineVersion !== ENGINE_VERSION)
       throw new EngineError('VERSION', 'Unsupported checkpoint version');
+    requirePresentationHash(input.presentationHash);
     const session = await Session.fromCompiled(
       input.compiled,
       input.map,
@@ -645,14 +652,8 @@ export class Session {
     );
     if (session.program.id !== input.programHash || input.world.programId !== input.programHash)
       throw new EngineError('PROGRAM_MISMATCH', 'Checkpoint program hash mismatch');
-    if (
-      (input.presentationHash ||
-        input.map.scene ||
-        input.map.music ||
-        input.map.notes.some((n) => n.presentation)) &&
-      input.presentationHash !== session.presentationHash
-    )
-      throw new EngineError('PRESENTATION_MISMATCH', 'Checkpoint scene/music metadata differs');
+    if (input.presentationHash !== session.presentationHash)
+      throw new EngineError('PRESENTATION_MISMATCH', 'Checkpoint presentation metadata differs');
     // Reconstruct from the accepted timeline, verifying all internal continuation state.
     const restored = await Session.reconstruct(
       input.map,
@@ -784,6 +785,7 @@ export class Session {
     assertSize(replay, 64_000_000);
     if (replay.version !== 1 || replay.engineVersion !== ENGINE_VERSION)
       throw new EngineError('VERSION', 'Unsupported replay version');
+    requirePresentationHash(replay.presentationHash);
     const session = await Session.reconstruct(
       replay.map,
       replay.compiled,
@@ -795,14 +797,8 @@ export class Session {
     );
     if (session.program.id !== replay.programHash)
       throw new EngineError('PROGRAM_MISMATCH', 'Replay program differs');
-    if (
-      (replay.presentationHash ||
-        replay.map.scene ||
-        replay.map.music ||
-        replay.map.notes.some((n) => n.presentation)) &&
-      replay.presentationHash !== session.presentationHash
-    )
-      throw new EngineError('PRESENTATION_MISMATCH', 'Replay scene/music metadata differs');
+    if (replay.presentationHash !== session.presentationHash)
+      throw new EngineError('PRESENTATION_MISMATCH', 'Replay presentation metadata differs');
     const stateHash = await digest(session.world),
       eventDigest = await digest(session.replayEvents);
     if (stateHash !== replay.finalStateHash || eventDigest !== replay.eventDigest)

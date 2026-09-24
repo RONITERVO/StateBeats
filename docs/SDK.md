@@ -5,6 +5,13 @@ facing adapters, saved generation provenance, authoring diagnostics and held-pat
 The version-1 kernel recording contract is unchanged. Maps containing generation metadata need
 the 0.3 SDK or newer; previously saved maps and their presentation hashes remain valid.
 
+Checkpoint and replay `presentationHash` is required, including for default-only maps.
+The committed 0.2/0.3 exporters already write it; valid version-1 exports remain compatible.
+Restore/verification rejects missing, malformed or mismatched hashes with
+`PRESENTATION_MISMATCH`, without inferring a legacy exception from stripped map fields.
+This verifies content consistency, not authorship. Score hosts must compare the recording's
+identity against an independently trusted map/presentation identity.
+
 ## Domain contract
 
 `transition(previous, commands, program)` returns the next immutable mathematical state and ordered

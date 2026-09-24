@@ -4,6 +4,23 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Recording binding review fix, 2026-09-24
+
+The new PR #4 finding was reproduced: deleting both `presentationHash` and all optional
+note presentation settings allowed checkpoint restore and replay verification to accept
+substituted defaults. Default-only maps also accepted missing binding values. Both APIs now
+require a well-formed hash before reconstruction and compare it unconditionally afterwards.
+The TypeScript recording contracts require the field. Every committed 0.2/0.3 exporter
+already writes it, so valid version-1 exports require no migration; unhashed files fail.
+
+`npm run check` passed **124 tests in 20 files**, strict types, formatting, core boundaries
+and production build. Seven new Node regression cases cover metadata/hash stripping,
+default-only maps, malformed/mismatched hashes and intact export compatibility. All three
+new browser cases passed in Chromium, Firefox and WebKit, exercising both recording APIs.
+A pre-fix 19,200-tick Event Horizon replay still verifies with identical state/event hashes.
+Hashes establish content consistency; score hosts must compare presentation identity with
+an independently trusted map, since portable unsigned recordings do not prove authorship.
+
 ## Additional presentation review fixes, 2026-09-24
 
 Three further PR #4 findings were reproduced with failing regression tests, then corrected.

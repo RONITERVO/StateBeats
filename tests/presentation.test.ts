@@ -222,7 +222,7 @@ describe('shared note presentation', () => {
     const saved = a.client(admin).checkpoint();
     saved.map = b.map;
     await expect(Session.restore(saved)).rejects.toMatchObject({ code: 'PRESENTATION_MISMATCH' });
-    delete saved.presentationHash;
+    Reflect.deleteProperty(saved, 'presentationHash');
     await expect(Session.restore(saved)).rejects.toMatchObject({ code: 'PRESENTATION_MISMATCH' });
     expect(() => notePresentationSchema.parse({ ahead: { ms: -1 } })).toThrow();
     expect(() => notePresentationSchema.parse({ ahead: { beats: 1, ms: 200 } })).toThrow();
