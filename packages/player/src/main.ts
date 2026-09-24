@@ -11,6 +11,7 @@ import {
   fitMapToPlayer,
   musicGenerationSchema,
   CHOREOGRAPHY_VERSION,
+  TURN_PLANNER_VERSION,
 } from '@statebeats/sdk';
 import type {
   Observation,
@@ -647,16 +648,20 @@ function installMap(map: MapDefinition, report?: ChoreographyReport) {
   for (const card of el('maps').querySelectorAll('[data-imported]')) card.remove();
   importedMap = map;
   generationReport = report;
-  const restored =
-    map.generation?.algorithm === CHOREOGRAPHY_VERSION
-      ? musicGenerationSchema.strip().safeParse(map.generation.settings)
-      : undefined;
+  const restored = [CHOREOGRAPHY_VERSION, 'statebeats/choreography-v1'].includes(
+    map.generation?.algorithm ?? '',
+  )
+    ? musicGenerationSchema.strip().safeParse(map.generation!.settings)
+    : undefined;
   const recipe = map.generation?.settings as Record<string, unknown> | undefined;
   const supported =
     !map.generation ||
     (restored?.success &&
       recipe?.composer === 'statebeats/dance-phrases-v1' &&
-      recipe?.facing === 'statebeats/phrase-facing-v1' &&
+      recipe?.facing ===
+        (restored.data.turnStyle === 'musical'
+          ? TURN_PLANNER_VERSION
+          : 'statebeats/phrase-facing-v1') &&
       recipe?.selector === 'statebeats/phrase-rhythm-v1');
   generationBaseline = restored?.success
     ? restored.data
@@ -671,7 +676,7 @@ function installMap(map: MapDefinition, report?: ChoreographyReport) {
   el<HTMLButtonElement>('regenerate-map').disabled = !rebuildSupported;
   el<HTMLButtonElement>('save-generation-report').disabled = !report;
   el('generation-summary').textContent = report
-    ? `${report.summary.heads} notes · ${report.summary.rails} held paths · ${report.summary.pairs} paired moments · ${report.summary.hazards} obstacles. ${report.omitted.length} candidates omitted for musical selection or movement limits. ${report.issues.length ? `${report.issues.length} hand movement issues need review.` : 'Hand movement checks passed.'} Preview with a bot, then start gently on your headset.`
+    ? `${report.summary.heads} notes · ${report.summary.rails} held paths · ${report.summary.pairs} paired moments · ${report.summary.hazards} obstacles.${report.turns ? ` ${report.turns.summary.events} musical turns, ${report.turns.summary.reversals} direction changes.` : ''} ${report.omitted.length} candidates omitted for musical selection or movement limits. ${report.issues.length ? `${report.issues.length} hand movement issues need review.` : 'Hand movement checks passed.'} Preview with a bot, then start gently on your headset.`
     : '';
   addMapCard(map, 6);
   el('maps').lastElementChild!.setAttribute('data-imported', 'true');
@@ -689,6 +694,8 @@ function restoreSongControls(options: MusicGenerationOptions) {
     'song-range': settings.movementRange,
     'song-turn-degrees': settings.turnDegrees,
     'song-turn-speed': settings.maxTurnSpeed,
+    'song-turn-acceleration': settings.maxTurnAcceleration,
+    'song-turn-travel': settings.maxDirectionalTravel,
     'song-hand-speed': settings.maxHandSpeed,
     'song-style': settings.style,
     'song-rhythm': settings.rhythm,
@@ -718,10 +725,12 @@ el<HTMLSelectElement>('song-preset').onchange = () => {
     ...songOptions(),
     difficulty: master ? 'master' : preset === 'hard' ? 'busy' : beginner ? 'gentle' : 'flow',
     turnMode: beginner ? 'forward' : preset === 'normal' ? 'bounded' : 'full',
-    turnStyle: master ? 'continuous' : 'rests',
+    turnStyle: beginner ? 'rests' : 'musical',
     movementRange: master || preset === 'hard' ? 'wide' : 'compact',
     turnDegrees: master ? 120 : 30,
     maxTurnSpeed: master ? 60 : 30,
+    maxTurnAcceleration: master ? 240 : 120,
+    maxDirectionalTravel: master ? 360 : 180,
     maxHandSpeed: master ? 6 : 3,
     rails: !beginner,
     pairs: !beginner,
@@ -775,6 +784,8 @@ function songOptions(): MusicGenerationOptions {
       .value as MusicGenerationOptions['movementRange'],
     turnDegrees: number('song-turn-degrees'),
     maxTurnSpeed: number('song-turn-speed'),
+    maxTurnAcceleration: number('song-turn-acceleration'),
+    maxDirectionalTravel: number('song-turn-travel'),
     maxHandSpeed: number('song-hand-speed'),
     style: el<HTMLSelectElement>('song-style').value as MusicGenerationOptions['style'],
     rhythm: el<HTMLSelectElement>('song-rhythm').value as MusicGenerationOptions['rhythm'],

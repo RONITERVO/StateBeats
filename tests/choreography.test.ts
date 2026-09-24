@@ -47,7 +47,7 @@ describe('musical choreography pipeline', () => {
       generateChoreography(source, { ...options, seed: 18 }).map.notes,
     );
     expect(source).toEqual(before);
-    expect(a.map.generation?.algorithm).toBe('statebeats/choreography-v1');
+    expect(a.map.generation?.algorithm).toBe('statebeats/choreography-v2');
     expect(a.report.summary.rails).toBeGreaterThan(0);
     expect(a.report.summary.pairs).toBeGreaterThan(0);
     expect(a.report.issues).toEqual([]);

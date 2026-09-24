@@ -185,5 +185,6 @@ export {
   eventHorizonHeading,
   eventHorizonSoundtrack,
   eventHorizonSections,
+  eventHorizonTurnPlan,
   EVENT_HORIZON_ID,
 } from './event-horizon.js';

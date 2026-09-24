@@ -23,60 +23,71 @@ function wave(seconds = 20) {
     bytes.writeInt16LE(Math.round(Math.sin((2 * Math.PI * 100 * i) / rate) * 14000), 44 + i * 2);
   return bytes;
 }
-test('saved recipes restore nondefault timing and expert options before rebuilding', async ({
-  page,
-}) => {
-  const { map } = generateChoreography(sampleMap('choreography-journey').music, {
-    id: 'saved-recipe',
-    bpm: 137,
-    beatOffsetSeconds: 0.23,
-    seed: 39,
-    difficulty: 'master',
-    turnStyle: 'continuous',
-    turnMode: 'full',
-    movementRange: 'wide',
-    maxHandSpeed: 6,
-    turnDegrees: 100,
-    maxTurnSpeed: 80,
-    style: 'mixed',
-    theme: 'statebeats/space',
+for (const turnStyle of ['continuous', 'musical'] as const)
+  test(`saved ${turnStyle} recipes restore timing and expert options before rebuilding`, async ({
+    page,
+  }) => {
+    const { map } = generateChoreography(sampleMap('choreography-journey').music, {
+      id: 'saved-recipe',
+      bpm: 137,
+      beatOffsetSeconds: 0.23,
+      seed: 39,
+      difficulty: 'master',
+      turnStyle,
+      turnMode: 'full',
+      movementRange: 'wide',
+      maxHandSpeed: 6,
+      turnDegrees: 100,
+      maxTurnSpeed: 80,
+      maxTurnAcceleration: 190,
+      maxDirectionalTravel: 170,
+      style: 'mixed',
+      theme: 'statebeats/space',
+    });
+    const currentRecipe = structuredClone(map.generation);
+    // The legacy algorithm tag must remain rebuildable with its original facing style.
+    if (turnStyle === 'continuous') map.generation!.algorithm = 'statebeats/choreography-v1';
+    await page.goto('/');
+    await expect(page.locator('#play')).toBeEnabled();
+    await page.locator('#import-panel > summary').click();
+    await page.locator('#map-file').setInputFiles({
+      name: 'saved.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(map)),
+    });
+    await expect(page.locator('#song-bpm')).toHaveValue('137');
+    await expect(page.locator('#song-beat-offset')).toHaveValue('0.23');
+    await expect(page.locator('#song-turn-style')).toHaveValue(turnStyle);
+    await expect(page.locator('#song-turn-acceleration')).toHaveValue('190');
+    await expect(page.locator('#song-turn-travel')).toHaveValue('170');
+    await expect(page.locator('#song-range')).toHaveValue('wide');
+    await expect(page.locator('#song-turn-degrees')).toHaveValue('100');
+    await page.locator('#regenerate-map').click();
+    await expect(page.locator('#import-status')).toContainText('is ready');
+    const download = page.waitForEvent('download');
+    await page.locator('#save-map').click();
+    const file = await download;
+    const rebuilt = JSON.parse(await readFile((await file.path())!, 'utf8'));
+    expect(rebuilt.notes).toEqual(map.notes);
+    expect(rebuilt.turns).toEqual(map.turns);
+    expect(rebuilt.generation).toEqual(currentRecipe);
+    await page.locator('#song-preset').selectOption('beginner');
+    await expect(page.locator('#song-turning')).toHaveValue('forward');
+    await page.locator('#song-preset').selectOption('master');
+    await expect(page.locator('#song-turn-style')).toHaveValue('musical');
+    await expect(page.locator('#song-turn-acceleration')).toHaveValue('240');
+    await expect(page.locator('#song-turn-travel')).toHaveValue('360');
+    await expect(page.locator('#song-bpm')).toHaveValue('137');
+    await page.locator('#import-panel > summary').click();
+    await page.locator('#settings').click();
+    await page.locator('#room-scale').fill('1.2');
+    await page.locator('#player-height').fill('1.65');
+    await page.locator('#close-settings').click();
+    await page.reload();
+    await page.locator('#settings').click();
+    await expect(page.locator('#room-scale')).toHaveValue('1.2');
+    await expect(page.locator('#player-height')).toHaveValue('1.65');
   });
-  await page.goto('/');
-  await expect(page.locator('#play')).toBeEnabled();
-  await page.locator('#import-panel > summary').click();
-  await page.locator('#map-file').setInputFiles({
-    name: 'saved.json',
-    mimeType: 'application/json',
-    buffer: Buffer.from(JSON.stringify(map)),
-  });
-  await expect(page.locator('#song-bpm')).toHaveValue('137');
-  await expect(page.locator('#song-beat-offset')).toHaveValue('0.23');
-  await expect(page.locator('#song-turn-style')).toHaveValue('continuous');
-  await expect(page.locator('#song-range')).toHaveValue('wide');
-  await expect(page.locator('#song-turn-degrees')).toHaveValue('100');
-  await page.locator('#regenerate-map').click();
-  await expect(page.locator('#import-status')).toContainText('is ready');
-  const download = page.waitForEvent('download');
-  await page.locator('#save-map').click();
-  const file = await download;
-  const rebuilt = JSON.parse(await readFile((await file.path())!, 'utf8'));
-  expect(rebuilt.notes).toEqual(map.notes);
-  expect(rebuilt.generation).toEqual(map.generation);
-  await page.locator('#song-preset').selectOption('beginner');
-  await expect(page.locator('#song-turning')).toHaveValue('forward');
-  await page.locator('#song-preset').selectOption('master');
-  await expect(page.locator('#song-turn-style')).toHaveValue('continuous');
-  await expect(page.locator('#song-bpm')).toHaveValue('137');
-  await page.locator('#import-panel > summary').click();
-  await page.locator('#settings').click();
-  await page.locator('#room-scale').fill('1.2');
-  await page.locator('#player-height').fill('1.65');
-  await page.locator('#close-settings').click();
-  await page.reload();
-  await page.locator('#settings').click();
-  await expect(page.locator('#room-scale')).toHaveValue('1.2');
-  await expect(page.locator('#player-height')).toHaveValue('1.65');
-});
 test('perception preferences survive a reload and do not require audio to play', async ({
   page,
 }) => {
@@ -188,7 +199,7 @@ test('local audio decodes, becomes a portable scene map, and plays through the s
   ).toBe(true);
   expect(map.notes.length).toBeGreaterThan(4);
   expect(map.scene.objects[0].id).toBe('sun');
-  expect(map.generation.algorithm).toBe('statebeats/choreography-v1');
+  expect(map.generation.algorithm).toBe('statebeats/choreography-v2');
   await page.locator('.generation-options summary').click();
   await page.locator('#song-style').selectOption('mixed');
   await page.locator('#song-reach').fill('0.55');

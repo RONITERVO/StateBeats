@@ -1,6 +1,6 @@
 # Musical choreography
 
-`generateChoreography(music, options, adapters?)` returns `{ map, report }`. The map is an ordinary version-1 StateBeats map: it runs through the same compiler, simulation, replay, worker and text player. `generateMusicMap` remains a convenience entry point returning only the map. Existing saved maps retain their authored behavior; newly generated maps use `statebeats/choreography-v1`.
+`generateChoreography(music, options, adapters?)` returns `{ map, report }`. The map is an ordinary version-1 StateBeats map: it runs through the same compiler, simulation, replay, worker and text player. `generateMusicMap` remains a convenience entry point returning only the map. Existing saved maps retain their authored behavior; newly generated recipes use `statebeats/choreography-v2`.
 
 ```js
 import { analyzePcm, generateChoreography, inspectChoreography } from '@statebeats/sdk';
@@ -26,8 +26,9 @@ Audio decoding belongs to the host. The analyzer and generator require no audio 
 | `rhythm` | `steady`, `accents`, `hybrid`; silence is excluded in every mode |
 | `beatOffsetSeconds` | −10 to 30 seconds relative to the first stored audio frame |
 | `turnMode` | `forward`, `bounded` (±60°), or `full` (unwrapped yaw); legacy `turning` maps to full/forward when turnMode is absent |
-| `turnDegrees`, `maxTurnSpeed` | Desired phrase-to-phrase yaw step and its degrees-per-second cap |
-| `turnStyle` | `rests` reserves two beats between phrases; `continuous` spreads turning through the phrase and keeps notes arriving |
+| `turnDegrees`, `maxTurnSpeed` | Desired turn size and degrees-per-second cap; musical mode checks peak speed |
+| `turnStyle` | `musical` follows hand sweeps/answers with eased turns and ongoing notes; `rests` reserves two recovery beats; legacy `continuous` interpolates across phrases |
+| `maxTurnAcceleration`, `maxDirectionalTravel` | Musical-mode peak acceleration in degrees/second² and consecutive same-direction travel in degrees |
 | `movementRange` | `compact` or `wide`; wide gestures use up to 98% of the configured reach, including high/low and side extremes |
 | `style` | Approaching, stationary or a mixture; held targets still trace their authored contact path |
 | `leadSeconds`, `spawnDistance` | Preview/travel duration and emitter distance are independent |
@@ -43,9 +44,14 @@ The generator enforces the existing 10,000-interaction limit. Scene tracks permi
 
 ## Replaceable stages
 
-`GenerationAdapters` accepts trusted `MusicalSelector`, `PhraseComposer` and `FacingPlanner` implementations. Each has a versioned `id`, recorded in map provenance and the report. The interfaces are exported from the SDK. `dancePhrases`, `phraseRhythm` and `phraseFacing` are the reference implementations.
+`GenerationAdapters` accepts trusted `MusicalSelector`, `PhraseComposer`, `FacingPlanner` and `TurnPlanner` implementations. Each has a versioned `id`, recorded in provenance and the report. `dancePhrases`, `phraseRhythm`, `phraseFacing` and `musicalTurns` are reference implementations. The `turns` adapter belongs to `musical` style; `facing` belongs to legacy styles. See [turn tracks, limits, SDK and tool operations](TURNS.md).
 
 A composer receives a phrase, normalized settings, and a `place(x, y, z?, beat?)` helper. Pass each note/waypoint's absolute beat to follow continuous facing; omitted beat uses the phrase start. It returns at most 128 ordinary `NoteInput` values per phrase and must respect the selected interaction/recovery interval. A selector receives a candidate note, sampled music features, phrase and settings. A facing planner returns one unwrapped yaw per phrase; range and turn budget are validated. JSON cannot execute arbitrary code; only the host supplies implementations.
+
+For musical turning, composition and selection happen once in local forward-facing coordinates;
+the turn planner then reads those movements and bakes the facing into all contact paths. Composers
+should use the supplied placement helper and retain each waypoint's beat, without adding another
+rotation. Reports record the resulting phrase-start headings and the full turn cues/decisions.
 
 `inspectChoreography(map, profile)` checks non-hazard contact centers, held paths, overlapping same-hand reservations and transition/rail speeds. Unspecified hands are conservatively treated as needing both hands. The check works in authored coordinates, before actor transforms. It does not resolve room boundaries, shoulder anatomy, visibility, head clearance, collision with another hand, or every possible runtime policy. The generator removes the later candidate involved in an invalid hand transition and records its reason; read the report, since removing too many events can harm musical intent.
 
@@ -70,7 +76,7 @@ Held entities expose a bounded `contactPath` through their actual end tick, incl
 
 The browser offers Beginner, Normal, Hard and Master quick setups. They change coordination,
 turning and movement range without changing a song's BPM or beat offset. Master opts into
-continuous full turns, wide gestures, crossovers and a higher hand-speed limit. These are
+musical full turns, wide gestures, crossovers and a higher hand-speed limit. These are
 StateBeats presets, not calibrated equivalents of another game's named difficulty.
 
 Under Settings, **Your height** and **Room scale** apply to all maps at the next start/restart.

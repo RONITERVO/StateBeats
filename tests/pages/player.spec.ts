@@ -134,7 +134,8 @@ test('the production authoring worker rebuilds an expert map under the project p
   await page.locator('#save-map').click();
   const file = await download;
   const map = JSON.parse(await readFile((await file.path())!, 'utf8'));
-  expect(map.generation.settings.turnStyle).toBe('continuous');
+  expect(map.generation.settings.turnStyle).toBe('musical');
+  expect(map.turns.events.length).toBeGreaterThan(0);
   expect(map.generation.settings.difficulty).toBe('master');
   await expect(page.locator('#save-generation-report')).toBeEnabled();
   await page.locator('#import-panel > summary').click();

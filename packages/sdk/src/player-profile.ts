@@ -23,7 +23,9 @@ export function fitMapToPlayer(
     target = parsed(playerProfileSchema, profile);
   const recipe = map.generation?.settings as Record<string, unknown> | undefined;
   const authoredHeight =
-    map.generation?.algorithm === CHOREOGRAPHY_VERSION &&
+    [CHOREOGRAPHY_VERSION, 'statebeats/choreography-v1'].includes(
+      map.generation?.algorithm ?? '',
+    ) &&
     typeof recipe?.playerHeight === 'number' &&
     recipe.playerHeight >= 1 &&
     recipe.playerHeight <= 2.3

@@ -2,6 +2,13 @@
 
 ## 0.3.0 — musical choreography (development release candidate)
 
+Adds reusable musical turn planning with versioned tracks, explicit sweeps/continuations/answers,
+quintic easing, peak speed/acceleration and directional-travel limits, explanation reports and
+SDK/CLI/MCP operations. Event Horizon replaces section-wide rotation with score-authored turn
+phrases, retaining all 620 scoring targets. Generated music maps derive turn cues from per-hand
+movement. Normal/Hard/Master presets expose the new style; legacy baked maps remain playable.
+New recipes identify choreography-v2.
+
 Adds Event Horizon — Master: a bundled original 150 BPM/2:40 electronic score, 620 scoring
 targets, 52 moving holds, 84 linked chords, seven duck/lean passages and a replaceable orbital
 stage. Its soundtrack loads automatically through a trusted, hashed asset registry and keeps

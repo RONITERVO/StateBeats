@@ -26,6 +26,7 @@ import type {
 } from './schema.js';
 import { scenePositionAt } from './scene.js';
 import type { CompiledScene } from './scene.js';
+import { validateTurnTrack } from './turns.js';
 export const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 export function canonical(value: unknown, depth = 0, ancestors = new Set<object>()): string {
   if (depth > 64) throw new EngineError('JSON_DEPTH', 'JSON nesting exceeds 64 levels');
@@ -188,6 +189,11 @@ export function compile(
     errors.push('Music feature ticks must strictly increase');
   if (map.music && map.music.tickRate !== map.tickRate)
     errors.push('Music and map tick rates must match');
+  if (map.turns) {
+    validateTurnTrack(map.turns);
+    if (map.turns.events.some((e) => e.endBeat > beatValue(map.durationBeats)))
+      errors.push('Turn track extends past map duration');
+  }
   // Validate tempo before sampling any presentation/emitter paths.
   if (errors.length) throw new EngineError('MAP_INVALID', 'Map compilation failed', errors);
   const scene = compileScene(map);

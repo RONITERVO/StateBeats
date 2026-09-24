@@ -4,7 +4,27 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
-## Event Horizon showcase, 2026-09-24
+## Musical turn revision, 2026-09-24
+
+The shared turn planner replaces Event Horizon's long section rotations with 82 turn events
+and 27 reversals, including a score-authored sustained sweep. Peak planned rates at normal
+speed stay below 78 degrees/second and 220 degrees/second². All 620 targets remain; authored
+hand inspection reports no issues and a 5.030 m/s peak. The room-scale-1.20 tracked-head test
+completes with zero misses/hazard contacts and matching checkpoint/replay continuation.
+
+93 tests in 15 files passed with strict types, formatting, core boundaries and production
+build. Browser coverage includes saved musical controls, recipe reconstruction, actual audio
+decoding and Node/Chromium/Firefox/WebKit replay conformance. All 17 browser cases passed
+across the main run and one focused rerun: a rebuild during the first run caused Vite to
+reload the imported-song test; the unchanged-build rerun passed. All three production Pages
+cases passed, including bundled soundtrack playback and musical Master generation under
+the project path. Turn/shape properties, invalid adapter output and real CLI/MCP parity are
+covered. The planner has constant-tempo authoring limits described in [TURNS.md](TURNS.md).
+
+These checks establish software behavior, not Quest comfort or musical preference. Hardware
+playtesting remains the next acceptance step.
+
+## Original Event Horizon showcase, 2026-09-24
 
 The complete original 150 BPM/160-second composition ships as a 3.8 MB MP3 with SHA-256
 identity and analysed music features. It has 620 scoring targets, 52 held paths, 84 linked
