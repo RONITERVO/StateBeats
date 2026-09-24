@@ -30,7 +30,7 @@ await writeFile(
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, generateChoreography, inspectChoreography } from '@statebeats/sdk';
+import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, generateChoreography, inspectChoreography, planTurns, createFacingSampler } from '@statebeats/sdk';
 import { sampleMap, eventHorizonSoundtrack } from '@statebeats/content';
 const bundledAudio = await readFile(new URL(import.meta.resolve('@statebeats/content/audio/event-horizon.mp3')));
 assert.equal(createHash('sha256').update(bundledAudio).digest('hex'), eventHorizonSoundtrack.sha256);
@@ -43,11 +43,14 @@ assert.ok(describeObservation(view).targets.length > 0);
 const music = analyzePcm({ samples: Float32Array.from({length:16000}, (_, i) => Math.sin(i * .1) * .4), sampleRate:16000 });
 assert.ok(sampleMusic(music, 500).energy > 0);
 session.close();
-const composed = generateChoreography(sampleMap('choreography-journey').music, { seed:17, difficulty:'flow', turnMode:'full' });
+const composed = generateChoreography(sampleMap('choreography-journey').music, { seed:17, difficulty:'flow', turnMode:'full', turnStyle:'musical' });
 assert.ok(composed.report.summary.rails > 0);
 assert.equal(inspectChoreography(composed.map, composed.report.settings).issues.length, 0);
-assert.equal(composed.map.generation.algorithm, 'statebeats/choreography-v1');
-console.log('Packaged scenes, music, choreography and semantic perception work.');
+assert.equal(composed.map.generation.algorithm, 'statebeats/choreography-v2');
+assert.ok(composed.map.turns.events.length > 0);
+const turn = planTurns([{id:'accent',beat:4,endBeat:7,gesture:'sweep',direction:'right',reason:'Lead'}],{bpm:150});
+assert.ok(createFacingSampler(turn.track)(7) > 0);
+console.log('Packaged scenes, music, choreography, musical turns and semantic perception work.');
 `,
 );
 await run(['sdk-smoke.mjs'], directory);

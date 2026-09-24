@@ -37176,9 +37176,13 @@
       }
     ]
   },
+  "playerProfile": {
+    "height": 1.65,
+    "roomScale": 1
+  },
   "generation": {
     "version": 1,
-    "algorithm": "statebeats/choreography-v1",
+    "algorithm": "statebeats/choreography-v2",
     "settings": {
       "beatOffsetSeconds": 0,
       "bpm": 120,
@@ -37188,7 +37192,9 @@
       "facing": "statebeats/phrase-facing-v1",
       "id": "choreography-journey",
       "leadSeconds": 2.5,
+      "maxDirectionalTravel": 270,
       "maxHandSpeed": 3,
+      "maxTurnAcceleration": 180,
       "maxTurnSpeed": 30,
       "movementRange": "compact",
       "obstacles": "none",

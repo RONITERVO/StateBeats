@@ -6,6 +6,22 @@ import { EngineService, SILENT_FEATURES } from '@statebeats/sdk';
 import type { ServiceRequest } from '@statebeats/sdk';
 import { sampleMaps } from '@statebeats/content';
 const requests: ServiceRequest[] = [
+  {
+    op: 'turns.plan',
+    args: {
+      cues: [
+        {
+          id: 'phrase',
+          beat: 4,
+          endBeat: 7,
+          gesture: 'sweep',
+          direction: 'right',
+          reason: 'Lead phrase',
+        },
+      ],
+      options: { bpm: 150 },
+    },
+  },
   { op: 'session.create', sessionId: 'parity', args: { mapId: 'agent-arena' } },
   {
     op: 'command.submit',

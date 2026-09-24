@@ -30,7 +30,7 @@ interactions and five passing bird hazards across a full turn.
 
 **Featured: [Event Horizon — Master](docs/EVENT_HORIZON.md).** A complete original 2:40,
 150 BPM electronic track ships with the game and loads automatically. Its 620 scoring
-targets include wide linked chords, 52 moving holds, continuous turns and reversals,
+targets include wide linked chords, 52 moving holds, musical sweeps and answering turns,
 stationary constellations, and seven duck/lean passages. No files need importing.
 Use `?map=event-horizon-master` to link to this selection. First orbit remains the default.
 Mouse left/right control independent stored hand aims; hold to sustain contact. Space places both
@@ -51,8 +51,9 @@ map of musical movement phrases. **Shape your movement** controls beat offset, r
 style, facing range, rails, paired notes, crossovers and optional ducking. Rebuild from the stored
 analysis, inspect the summary, and save the generation report. Try **Phrases in orbit** for an
 original demonstration of rail counterpoint and phrase-based turns.
-Quick setups run from **Beginner** to **Master**. Master enables wide movement and continuous
-360° turning with notes arriving throughout the turn; advanced controls remain independent.
+Quick setups run from **Beginner** to **Master**. Master enables wide movement and musical
+360° turns with notes arriving throughout. Turn size, speed, acceleration and directional
+travel remain independently adjustable. See [musical turn planning](docs/TURNS.md).
 Settings also has manual **height** and **room scale** for every map, applied on the next start.
 For wider play at 1.65 m, set height **1.65** and room scale **1.20**. Our room scale spreads X/Z
 positions; height controls vertical layout. Collision sizes stay authored and recordings retain

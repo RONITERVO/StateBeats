@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { turnTrackSchema } from './turn-schema.js';
 export const idSchema = z.string().regex(/^[\w./:-]{1,100}$/);
 export const tickSchema = z.number().int().min(1).max(2147483647);
 const num = z.number().finite();
@@ -225,6 +226,7 @@ export const mapSchema = z
       .max(256),
     notes: z.array(noteSchema).max(10000),
     scene: sceneSchema.optional(),
+    turns: turnTrackSchema.optional(),
     music: musicSchema.optional(),
     playerProfile: playerProfileSchema.optional(),
     generation: z

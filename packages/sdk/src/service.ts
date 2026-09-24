@@ -15,6 +15,7 @@ import type { SceneInput, MusicTimeline } from './schema.js';
 import { generateMusicMap } from './music.js';
 import { generateChoreography, inspectChoreography } from './choreography.js';
 import { fitMapToPlayer } from './player-profile.js';
+import { planTurns, inspectTurns } from './turns.js';
 import { describeObservation } from './perception.js';
 import { Session, standardActor } from './session.js';
 import type { Capability, Checkpoint, Replay } from './session.js';
@@ -63,6 +64,8 @@ export const operations = [
   'music.generate',
   'music.compose',
   'choreography.inspect',
+  'turns.plan',
+  'turns.inspect',
   'map.edit',
   'map.fit',
   'map.compile',
@@ -205,6 +208,13 @@ export class EngineService {
           await findMap(),
           a.options as Parameters<typeof inspectChoreography>[1],
         );
+      case 'turns.plan':
+        return planTurns(
+          a.cues as Parameters<typeof planTurns>[0],
+          a.options as Parameters<typeof planTurns>[1],
+        );
+      case 'turns.inspect':
+        return inspectTurns(a.track, a.bpm as number);
       case 'map.fit': {
         admin();
         const map = fitMapToPlayer(

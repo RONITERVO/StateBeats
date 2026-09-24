@@ -18,16 +18,20 @@ playtesting is pending; automated completion does not establish comparative play
 | Ignition | 1–8 | Bell melody, alternating hands, establishing the moving sources |
 | Accretion | 9–24 | Repeated melodic phrases, syncopation and returning crossovers |
 | Event horizon | 25–40 | Wide linked chords, one-hand rail plus other-hand counterpoint, double helices |
-| Weightless | 41–48 | Stationary constellation ribbons, low catches and a gradual turn reversal |
+| Weightless | 41–48 | Stationary constellation ribbons, low catches, gentle sweeps and settled answers |
 | Escape velocity | 49–56 | Rising alternating snare staircases; sixteenth notes build anticipation |
-| Binary stars | 57–72 | Continuous fast turns, asymmetric rails, high/low pairs and body movement |
-| Supernova | 73–88 | Counter-rotation, octave answers, overhead/low opposition and chord pickups |
-| Afterglow | 89–96 | Returning melody, slowing rotation and a final two-hand unison |
+| Binary stars | 57–72 | Sustained four-bar sweep, asymmetric rails, high/low pairs and body movement |
+| Supernova | 73–88 | Sharp answering turns, octave responses, overhead/low opposition and chord pickups |
+| Afterglow | 89–96 | Smaller melodic turns, a settled ending and a final two-hand unison |
 
-Turns ease between angular velocities and continue during scoring passages. Maximum authored
-turn speed is 56.25 degrees/second. At the original 1.65 m / 1.0 profile, targets range from
+The shared [musical turn planner](TURNS.md) authors 82 individual turns and 27 reversals,
+mostly landing after 3–3.5 beats. One four-bar driving phrase carries a longer 240° sweep.
+Notes and holds remain active through turns. Body obstacles have stable facing at contact.
+Peak authored turn speed is capped at 78 degrees/second and acceleration at 220 degrees/second²;
+successive same-direction travel is capped at 540°. These limits apply at normal playback speed.
+At the original 1.65 m / 1.0 profile, targets range from
 0.49 m to 2.05 m high. Hand-center inspection uses a 1 m envelope and a 6 m/s transition
-budget; measured peak is about 5.105 m/s, including full hold lifetimes. These are authoring
+budget; measured peak is about 5.030 m/s, including full hold lifetimes. These are authoring
 dimensions, not measured biomechanics. Room scale 1.20 widens horizontal distances by 20%.
 
 Two traveling sources are roughly 40–50 metres away with five-second trails. Notes take
@@ -75,6 +79,8 @@ as a pair. Composition, map data and audio are CC0; synthesis code is MIT.
 
 - `packages/content/src/event-horizon.ts`: ordinary map authoring, facing, scene motion,
   hand requirements, hold paths, linked groups and avoidance volumes.
+- `packages/sdk/src/turns.ts`: replaceable cue-driven planner, analytic movement limits,
+  deterministic sampling and inspection. `eventHorizonTurnPlan()` exports decisions and reasons.
 - `packages/player/src/soundtracks.ts`: trusted host registry and lazy, integrity-checked
   loading. Imported JSON cannot request arbitrary URLs. Decoded audio is reused on restart;
   failed downloads can be retried.

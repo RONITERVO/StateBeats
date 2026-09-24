@@ -5,6 +5,7 @@ import {
   eventHorizonMaster,
   eventHorizonHeading,
   eventHorizonSoundtrack,
+  eventHorizonTurnPlan,
 } from '@statebeats/content';
 import {
   compile,
@@ -20,6 +21,9 @@ import type { Command, Vec3 } from '@statebeats/core';
 describe('Event Horizon original bundled showcase', () => {
   it('ships the audio identified by the saved map, with analysed features and complete timing', async () => {
     const map = eventHorizonMaster();
+    expect(
+      JSON.parse(await readFile('packages/content/maps/event-horizon-master.json', 'utf8')),
+    ).toEqual(map);
     const audio = await readFile('packages/content/audio/event-horizon.mp3');
     expect(createHash('sha256').update(audio).digest('hex')).toBe(map.music!.source!.sha256);
     expect(map.music!.source!.sha256).toBe(eventHorizonSoundtrack.sha256);
@@ -42,8 +46,31 @@ describe('Event Horizon original bundled showcase', () => {
     expect(Math.min(...y)).toBeLessThan(0.51);
     expect(Math.max(...y)).toBeGreaterThan(2);
     expect(map.notes.some((n) => n.preset === 'combined')).toBe(true);
-    expect(eventHorizonHeading(280)).toBeGreaterThan(eventHorizonHeading(240));
-    expect(eventHorizonHeading(340)).toBeLessThan(eventHorizonHeading(300));
+    const turns = eventHorizonTurnPlan();
+    expect(map.turns).toEqual(turns.track);
+    expect(turns.summary.reversals).toBeGreaterThan(20);
+    expect(turns.summary.peakSpeed).toBeLessThanOrEqual(78);
+    expect(turns.summary.peakAcceleration).toBeLessThanOrEqual(220);
+    expect(turns.summary.longestDirectionalTravel).toBeGreaterThan(360);
+    expect(turns.summary.longestDirectionalTravel).toBeLessThanOrEqual(540);
+    // Every turning phrase contains scoring opportunities, including the sustained sweep.
+    for (const turn of map.turns!.events)
+      expect(
+        map.notes.some(
+          (n) =>
+            n.preset !== 'hazard' &&
+            typeof n.beat === 'number' &&
+            ((n.beat > turn.beat && n.beat <= turn.endBeat) ||
+              (n.preset === 'hold' &&
+                n.beat <= turn.endBeat &&
+                n.beat + n.holdMs / 400 > turn.beat)),
+        ),
+      ).toBe(true);
+    // Body obstacles have a stable contact-facing window while the hands keep playing.
+    for (const hazard of map.notes.filter((n) => n.preset === 'hazard')) {
+      const beat = Number(hazard.beat) - 8;
+      expect(eventHorizonHeading(beat + 1)).toBeCloseTo(eventHorizonHeading(beat), 6);
+    }
     // There are scoring events inside every full bar of the fast-turn sections.
     for (let bar = 56; bar < 88; bar++)
       expect(

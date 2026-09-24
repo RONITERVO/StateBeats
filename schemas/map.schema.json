@@ -1054,6 +1054,77 @@
       ],
       "additionalProperties": false
     },
+    "turns": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "planner": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        },
+        "initialHeading": {
+          "type": "number",
+          "minimum": -1000000,
+          "maximum": 1000000
+        },
+        "events": {
+          "maxItems": 8192,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[\\w./:-]{1,100}$"
+              },
+              "beat": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000
+              },
+              "endBeat": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000
+              },
+              "angle": {
+                "type": "number",
+                "minimum": -360,
+                "maximum": 360
+              },
+              "curve": {
+                "type": "string",
+                "const": "smootherstep"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            },
+            "required": [
+              "id",
+              "beat",
+              "endBeat",
+              "angle",
+              "curve",
+              "reason"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "version",
+        "planner",
+        "initialHeading",
+        "events"
+      ],
+      "additionalProperties": false
+    },
     "music": {
       "type": "object",
       "properties": {

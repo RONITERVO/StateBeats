@@ -1,5 +1,12 @@
-import { compile, SILENT_FEATURES } from '@statebeats/sdk';
-import type { MapInput, NoteInput, MusicTimeline } from '@statebeats/sdk';
+import {
+  compile,
+  clone,
+  SILENT_FEATURES,
+  planTurns,
+  createFacingSampler,
+  facePoint,
+} from '@statebeats/sdk';
+import type { MapInput, NoteInput, MusicTimeline, TurnCueInput } from '@statebeats/sdk';
 import type { Vec3 } from '@statebeats/core';
 import { eventHorizonScore as score } from './event-horizon-score.js';
 
@@ -15,38 +22,85 @@ export const eventHorizonSoundtrack = {
 } as const;
 export const eventHorizonSections = score.sections;
 const round = (v: number) => Math.round(v * 1e6) / 1e6;
-const turns = [
-  [0, 0],
-  [32, 180],
-  [96, 900],
-  [160, 1980],
-  [192, 1800],
-  [224, 2160],
-  [288, 3600],
-  [352, 2160],
-  [384, 2340],
-];
-/** Unwrapped authored facing, with a short eased transition between angular velocities. */
+const duckBars = new Set([30, 62, 78, 86]);
+const leanBars = new Set([35, 67, 83]);
+function turnCues(): TurnCueInput[] {
+  return Array.from({ length: score.bars }, (_, bar): TurnCueInput[] => {
+    const section = score.sections.find((s) => bar >= s.bar && bar < s.endBar)!;
+    const local = bar - section.bar,
+      motif = local % 8;
+    const intense = section.kind === 'drop' || section.kind === 'finale';
+    const obstacle = duckBars.has(bar) || leanBars.has(bar);
+    if (bar > 56 && bar < 60) return [];
+    if (bar === 56)
+      return [
+        {
+          id: 'eh-turn-56',
+          beat: score.leadBeats + 224,
+          endBeat: score.leadBeats + 239.5,
+          gesture: 'continue',
+          direction: 'right',
+          strength: 1,
+          degrees: 240,
+          reason: 'Binary stars: carry the four-bar driving lead through a sustained sweep',
+        },
+      ];
+    // These directions belong to the original score's calls, answers and held phrases.
+    // A repeated lead may carry on; the response and cadence do not inherit its drift.
+    const calls = [1, 1, 1, -1, -1, -1, 1, 0];
+    const responses = [-1, -1, 1, 1, 1, -1, -1, 0];
+    const sustained = section.name === 'Binary stars' && local < 8;
+    const sign = sustained ? 1 : (section.kind === 'finale' ? responses : calls)[motif];
+    const settle =
+      bar >= 94 || (section.kind === 'break' && local % 2 === 1) || (!intense && motif === 7);
+    const degrees =
+      section.kind === 'intro'
+        ? 24
+        : section.kind === 'outro'
+          ? 20
+          : section.kind === 'break'
+            ? 32
+            : section.kind === 'build'
+              ? 32 + local * 4
+              : section.kind === 'finale'
+                ? 72
+                : intense
+                  ? 60
+                  : 38;
+    // Chords resolve on the backbeat; melody/ribbon phrases land on the last pickup.
+    const duration = obstacle ? 1.5 : intense && bar % 4 === 0 ? 3 : 3.5;
+    return [
+      {
+        id: `eh-turn-${bar}`,
+        beat: score.leadBeats + bar * 4,
+        endBeat: score.leadBeats + bar * 4 + duration,
+        gesture: settle ? 'settle' : sustained && local > 0 ? 'continue' : 'sweep',
+        ...(sign ? { direction: sign > 0 ? ('right' as const) : ('left' as const) } : {}),
+        strength: 1,
+        degrees,
+        reason: `${section.name}, bar ${local + 1}: ${settle ? 'let the cadence settle' : obstacle ? 'arrive before the body accent' : sustained ? 'sustained driving phrase' : sign === 0 ? 'phrase turnaround' : intense && bar % 4 === 2 ? 'rail and counterpoint sweep' : intense && bar % 4 === 0 ? 'stereo chord accent' : 'melodic call and response'}`,
+      },
+    ];
+  }).flat();
+}
+const turnPlan = planTurns(turnCues(), {
+  bpm: score.bpm,
+  seed: 20260924,
+  degrees: 360,
+  maxSpeed: 78,
+  maxAcceleration: 220,
+  maxDirectionalTravel: 540,
+});
+const facingAt = createFacingSampler(turnPlan.track);
+export function eventHorizonTurnPlan() {
+  return clone(turnPlan);
+}
+/** Local score beat; the saved track uses absolute map beats including the count-in. */
 export function eventHorizonHeading(beat: number): number {
-  const raw = (b: number) => {
-    if (b <= 0) return 0;
-    for (let i = 1; i < turns.length; i++)
-      if (b <= turns[i][0]) {
-        const [start, a] = turns[i - 1],
-          [end, z] = turns[i];
-        return a + ((b - start) / (end - start)) * (z - a);
-      }
-    return turns.at(-1)![1];
-  };
-  return (raw(beat - 2) + 2 * raw(beat) + raw(beat + 2)) / 4;
+  return facingAt(beat + score.leadBeats);
 }
 function place(beat: number, x: number, y: number, z = -0.4): Vec3 {
-  const a = (eventHorizonHeading(beat) * Math.PI) / 180;
-  return [
-    round(x * Math.cos(a) - z * Math.sin(a)),
-    round(y),
-    round(x * Math.sin(a) + z * Math.cos(a)),
-  ];
+  return facePoint([x, round(y), z], eventHorizonHeading(beat));
 }
 
 /** Original musical choreography. Playback is ordinary map geometry and pose commands. */
@@ -84,22 +138,25 @@ export function eventHorizonMaster() {
     title: 'Event Horizon — Master',
     seed: 20260924,
     description:
-      'Original 150 BPM melodic electronic soundtrack included. Expert 360° choreography: continuous turns and reversals, wide linked chords, independent hand rails, stationary constellations, ducking and leaning. 2:40. Start at room scale 1.0; 1.2 widens the same authored layout.',
+      'Original 150 BPM electronic soundtrack included. Expert musical turns: sweeping calls, counter-turn answers and cadences, with notes throughout. Wide linked chords, independent hand rails, stationary constellations, ducking and leaning. 2:40. Room scale 1.2 widens the authored layout.',
     durationBeats: score.durationBeats,
     tempo: [{ beat: 0, bpm: score.bpm }],
     tickRate: 120,
     playerProfile: { height: 1.65, roomScale: 1 },
     music,
+    turns: clone(turnPlan.track),
     notes: [],
     groups: [],
     generation: {
       version: 1,
-      algorithm: 'statebeats/event-horizon-authored-v1',
+      algorithm: 'statebeats/event-horizon-authored-v2',
       settings: {
         playerHeight: 1.65,
         difficulty: 'master',
         bpm: score.bpm,
         score: score.sha256,
+        turnPlanner: turnPlan.track.planner,
+        turnSettings: { ...turnPlan.settings },
         composer: 'Original score-led choreography; see docs/EVENT_HORIZON.md',
       },
     },
@@ -181,7 +238,7 @@ export function eventHorizonMaster() {
     });
     add(beat, hand, path(0), {
       preset: 'hold',
-      holdMs: length * 400,
+      holdMs: (length * 60000) / score.bpm,
       breakMs: 100,
       durationBeats: length + 0.3,
       label: stationary ? 'Stationary constellation ribbon' : 'Follow the independent orbit',
@@ -189,8 +246,6 @@ export function eventHorizonMaster() {
       ...(stationary ? { emission: undefined, leadMs: 2400, motion } : { motion: motion.slice(1) }),
     });
   };
-  const duckBars = new Set([30, 62, 78, 86]);
-  const leanBars = new Set([35, 67, 83]);
   for (let bar = 0; bar < score.bars; bar++) {
     const section = score.sections.find((s) => bar >= s.bar && bar < s.endBar)!;
     const b = bar * 4,

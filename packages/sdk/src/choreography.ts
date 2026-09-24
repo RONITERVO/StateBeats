@@ -1,12 +1,22 @@
 import { nextRandom, positionAt } from '@statebeats/core';
 import type { EntitySpec, Vec3 } from '@statebeats/core';
 import { z } from 'zod';
-import { beatValue, canonical, compile } from './compiler.js';
+import { beatValue, canonical, compile, cartesian } from './compiler.js';
+import { planTurns, musicalTurns, createFacingSampler, facePoint, faceShape } from './turns.js';
+import type { TurnPlanner } from './turns.js';
+import type { TurnCueInput } from './turn-schema.js';
 import { sampleMusic } from './music.js';
-import { EngineError, idSchema, musicSchema, noteSchema, parsed } from './schema.js';
+import {
+  EngineError,
+  idSchema,
+  musicSchema,
+  noteSchema,
+  positionSchema,
+  parsed,
+} from './schema.js';
 import type { MapDefinition, MapInput, MusicFeatures, NoteInput } from './schema.js';
 
-export const CHOREOGRAPHY_VERSION = 'statebeats/choreography-v1';
+export const CHOREOGRAPHY_VERSION = 'statebeats/choreography-v2';
 export const musicGenerationSchema = z
   .object({
     id: idSchema.optional(),
@@ -19,7 +29,9 @@ export const musicGenerationSchema = z
     turnMode: z.enum(['forward', 'bounded', 'full']).optional(),
     turnDegrees: z.number().min(5).max(180).default(30),
     maxTurnSpeed: z.number().min(5).max(120).default(30),
-    turnStyle: z.enum(['rests', 'continuous']).default('rests'),
+    turnStyle: z.enum(['rests', 'continuous', 'musical']).default('rests'),
+    maxTurnAcceleration: z.number().min(10).max(720).default(180),
+    maxDirectionalTravel: z.number().min(30).max(1440).default(270),
     movementRange: z.enum(['compact', 'wide']).default('compact'),
     theme: idSchema.default('statebeats/landscape'),
     beatOffsetSeconds: z.number().min(-10).max(30).default(0),
@@ -76,6 +88,7 @@ export interface GenerationAdapters {
   composer?: PhraseComposer;
   facing?: FacingPlanner;
   selector?: MusicalSelector;
+  turns?: TurnPlanner;
 }
 export interface ChoreographyIssue {
   code: 'reach' | 'hand-conflict' | 'hand-speed' | 'rail-speed';
@@ -101,6 +114,7 @@ export interface ChoreographyReport {
   omitted: { note: string; reason: string }[];
   issues: ChoreographyIssue[];
   notices: string[];
+  turns?: ReturnType<typeof planTurns>;
 }
 const round = (n: number) => Math.round(n * 1e6) / 1e6 || 0;
 const distance = (a: Vec3, b: Vec3) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
@@ -226,8 +240,7 @@ export const dancePhrases: PhraseComposer = {
     const result: NoteInput[] = [];
     const spacing = s.difficulty === 'gentle' ? 2 : s.difficulty === 'flow' ? 1 : 0.5;
     const lateBeats = Math.min((0.15 * s.bpm) / 60, 0.4);
-    const playableEnd =
-      Math.min(p.endBeat - p.beat, s.turnStyle === 'continuous' ? 8 : 6) - lateBeats;
+    const playableEnd = Math.min(p.endBeat - p.beat, s.turnStyle === 'rests' ? 6 : 8) - lateBeats;
     const width = s.reach * (s.movementRange === 'wide' ? 0.92 : 0.5),
       height = s.reach * (s.movementRange === 'wide' ? 0.95 : 0.32);
     const variant = p.index % 4,
@@ -373,10 +386,18 @@ export function generateChoreography(
   const composer = adapters.composer ?? dancePhrases,
     facing = adapters.facing ?? phraseFacing,
     selector = adapters.selector ?? phraseRhythm;
+  const musical = s.turnStyle === 'musical';
+  if ((musical && adapters.facing) || (!musical && adapters.turns))
+    throw new EngineError(
+      'CHOREOGRAPHY_INVALID',
+      'Use the turns adapter for musical turning and facing for legacy styles.',
+    );
   parsed(idSchema, composer.id);
   parsed(idSchema, facing.id);
   parsed(idSchema, selector.id);
-  const headings = facing.plan(structuredClone(plans), structuredClone(s));
+  const headings = musical
+    ? plans.map(() => 0)
+    : facing.plan(structuredClone(plans), structuredClone(s));
   const mode = s.turnMode ?? (s.turning ? 'full' : 'forward');
   const turnBeats = s.turnStyle === 'continuous' ? 8 : 2;
   if (
@@ -396,11 +417,11 @@ export function generateChoreography(
       'Facing planner exceeds the selected turn budget.',
     );
   const phrases = plans.map((p, i) => ({ ...p, heading: headings[i] }));
-  const headingAt = (beat: number) => {
+  let headingAt = (beat: number) => {
     const index = Math.max(0, Math.min(phrases.length - 1, Math.floor((beat - first + 1e-6) / 8)));
     const phrase = phrases[index],
       next = phrases[index + 1];
-    if (s.turnStyle === 'rests' || !next) return phrase.heading;
+    if (musical || s.turnStyle === 'rests' || !next) return phrase.heading;
     return (
       phrase.heading +
       (next.heading - phrase.heading) * Math.max(0, Math.min(1, (beat - phrase.beat) / 8))
@@ -418,7 +439,7 @@ export function generateChoreography(
   for (let i = 0; i < phrases.length; i++) {
     const p = phrases[i];
     const beat = Math.max(0, p.beat - s.leadSeconds / secondsPerBeat);
-    if (s.turnStyle === 'continuous') {
+    if (s.turnStyle !== 'rests') {
       // Four keys per phrase preserve a bounded curved source path without stopping spawns.
       for (let offset = 0; offset < Math.min(8, p.endBeat - p.beat); offset += 2)
         sceneKeys.push({
@@ -448,18 +469,24 @@ export function generateChoreography(
     durationBeats: round(endSeconds / secondsPerBeat + 1),
     tempo: [{ beat: 0, bpm: s.bpm }],
     music,
+    playerProfile: { height: s.playerHeight, roomScale: 1 },
     generation: {
       version: 1,
       algorithm: CHOREOGRAPHY_VERSION,
       settings: JSON.parse(
-        canonical({ ...s, composer: composer.id, facing: facing.id, selector: selector.id }),
+        canonical({
+          ...s,
+          composer: composer.id,
+          facing: musical ? (adapters.turns ?? musicalTurns).id : facing.id,
+          selector: selector.id,
+        }),
       ),
     },
     scene: {
       version: 1,
       theme: s.theme,
       label:
-        s.turnStyle === 'continuous'
+        s.turnStyle !== 'rests'
           ? 'Follow the traveling sun through continuous turns.'
           : 'Follow the traveling sun; each phrase has a stable facing direction.',
       objects: [
@@ -520,7 +547,7 @@ export function generateChoreography(
           : Math.min(150, secondsPerBeat * 400);
       const interactionEnd = Math.min(
         phrase.endBeat,
-        phrase.beat + (s.turnStyle === 'continuous' ? 8 : 6),
+        phrase.beat + (s.turnStyle === 'rests' ? 6 : 8),
       );
       const lifetimeBeats =
         note.preset === 'hold' || note.preset === 'hazard'
@@ -583,6 +610,83 @@ export function generateChoreography(
       'MAP_CAPACITY',
       'Reduce density or shorten the song; at most 10,000 interactions.',
     );
+  let turnPlan: ReturnType<typeof planTurns> | undefined;
+  if (musical) {
+    // Compose/select once in local facing, then read actual per-hand movement, never the
+    // alternating left/right hand centers as if they were one zigzagging hand.
+    const cues: TurnCueInput[] = [];
+    const point = (p: NoteInput['position']) => cartesian(parsed(positionSchema, p));
+    const samples = draft
+      .filter((n) => n.preset !== 'hazard')
+      .flatMap((n) => {
+        const semantic = n.slots?.[0]?.semantic ?? n.preset ?? 'any';
+        return [
+          { beat: beatValue(n.beat), x: point(n.position)[0], hand: semantic },
+          ...(n.motion ?? []).map((p) => ({
+            beat: beatValue(p.beat),
+            x: point(p.position)[0],
+            hand: semantic,
+          })),
+        ];
+      });
+    for (const phrase of phrases)
+      for (let start = phrase.beat; start + 1 < phrase.endBeat; start += 4) {
+        const end = Math.min(start + 4, phrase.endBeat);
+        const points = samples
+          .filter((p) => p.beat >= start && p.beat < end)
+          .sort((a, b) => a.beat - b.beat);
+        let displacement = 0,
+          travel = 0;
+        for (const hand of new Set(points.map((p) => p.hand))) {
+          const path = points.filter((p) => p.hand === hand);
+          if (path.length < 2) continue;
+          displacement += path.at(-1)!.x - path[0].x;
+          for (let i = 1; i < path.length; i++) travel += Math.abs(path[i].x - path[i - 1].x);
+        }
+        const directed = Math.abs(displacement) > 0.12 && Math.abs(displacement) > travel * 0.45;
+        const settle = new Set(points.map((p) => p.beat)).size < 2;
+        cues.push({
+          id: `turn-${cues.length}`,
+          beat: start,
+          endBeat: Math.max(start + 1, Math.min(end, points.at(-1)?.beat ?? end)),
+          gesture: settle ? 'settle' : 'sweep',
+          ...(directed
+            ? { direction: displacement > 0 ? ('right' as const) : ('left' as const) }
+            : {}),
+          strength: phrase.section === 'lift' ? 1 : phrase.section === 'quiet' ? 0.3 : 0.65,
+          reason: `${phrase.motif}: ${settle ? 'sparse passage' : directed ? 'coherent hand sweep' : 'balanced or answering movement'}`,
+        });
+      }
+    turnPlan = planTurns(
+      cues,
+      {
+        bpm: s.bpm,
+        seed: s.seed,
+        mode,
+        degrees: s.turnDegrees,
+        maxSpeed: s.maxTurnSpeed,
+        maxAcceleration: s.maxTurnAcceleration,
+        maxDirectionalTravel: s.maxDirectionalTravel,
+      },
+      adapters.turns,
+    );
+    map.turns = turnPlan.track;
+    headingAt = createFacingSampler(turnPlan.track);
+    for (const phrase of phrases) phrase.heading = round(headingAt(phrase.beat));
+    for (const note of draft) {
+      const angle = headingAt(beatValue(note.beat));
+      note.position = facePoint(point(note.position), angle);
+      for (const key of note.motion ?? [])
+        key.position = facePoint(point(key.position), headingAt(beatValue(key.beat)));
+      if (note.shape) note.shape = faceShape(note.shape, angle);
+      if (note.direction) note.direction.vector = facePoint(note.direction.vector, angle);
+    }
+    // Every source key anticipates the facing at contact, preserving the existing travel time.
+    for (const key of path)
+      key.position = emitter(headingAt(key.beat + s.leadSeconds / secondsPerBeat));
+    map.scene!.objects![0].position = path[0].position;
+    map.scene!.label = 'Follow the musical sweeps and answers; notes keep arriving during turns.';
+  }
   // Compile and inspect, then remove later conflicting requirements deterministically. Repeat only
   // if a removal exposes a different transition. Custom composers obey the same checks.
   map.notes = draft;
@@ -614,7 +718,7 @@ export function generateChoreography(
       version: 1,
       algorithm: CHOREOGRAPHY_VERSION,
       composer: composer.id,
-      facing: facing.id,
+      facing: musical ? (adapters.turns ?? musicalTurns).id : facing.id,
       selector: selector.id,
       settings: s,
       phrases,
@@ -628,6 +732,7 @@ export function generateChoreography(
       },
       omitted,
       issues: check.issues,
+      ...(turnPlan ? { turns: turnPlan } : {}),
       notices: [
         'Beat timing uses your BPM and beat offset. Energy regions are estimates, not detected verse/chorus labels.',
         'Reach/speed checks cover authored hand centers. Validate tracking, visibility, turn comfort and obstacle clearance on a headset.',
