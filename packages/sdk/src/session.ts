@@ -9,6 +9,7 @@ import type {
   WorldState,
   Vec3,
   Quat,
+  LiveEntity,
 } from '@statebeats/core';
 import {
   canonical,
@@ -24,6 +25,8 @@ import {
 import { sampleScene } from './scene.js';
 import type { CompiledScene, SceneFrame } from './scene.js';
 import { sampleMusic } from './music.js';
+import { createNotePresenter, PRESENTATION_VERSION } from './presentation.js';
+import type { TargetPresentation, TargetResolution } from './presentation.js';
 import type { MusicFeatures } from './schema.js';
 import type { MapDefinition, CompiledProgram } from './schema.js';
 import type { RuleExtensions } from './compiler.js';
@@ -58,7 +61,7 @@ export interface Checkpoint {
   version: 1;
   engineVersion: string;
   programHash: string;
-  presentationHash?: string;
+  presentationHash: string;
   map: MapDefinition;
   compiled: CompiledProgram;
   initialActors: ActorSpec[];
@@ -76,7 +79,7 @@ export interface Replay {
   version: 1;
   engineVersion: string;
   programHash: string;
-  presentationHash?: string;
+  presentationHash: string;
   map: MapDefinition;
   compiled: CompiledProgram;
   initialActors: ActorSpec[];
@@ -87,6 +90,8 @@ export interface Replay {
 }
 export interface Observation {
   version: 1;
+  presentationVersion?: string;
+  presentationHash?: string;
   tick: number;
   eventSeq: number;
   finished: boolean;
@@ -96,6 +101,8 @@ export interface Observation {
   durationTicks: number;
   scene?: SceneFrame;
   music?: MusicFeatures;
+  /** Non-interactive, bounded release effects; never returned as active targets. */
+  resolvedEntities?: Observation['entities'];
   entities: {
     id: string;
     kind: EntitySpec['kind'];
@@ -105,6 +112,7 @@ export interface Observation {
     contactPath?: { tick: number; position: Vec3 }[];
     label?: string;
     appearance?: string;
+    presentation?: TargetPresentation;
     orientation: [number, number, number, number];
     shape: EntitySpec['shape'];
     hitTick: number;
@@ -139,6 +147,12 @@ const MAX_LOG_COMMANDS = 500000,
   EVENT_RETENTION = 4096;
 const keyOf = (cap: Capability) =>
   cap.role === 'player' ? 'player:' + encodeURIComponent(cap.actorId) : cap.role;
+function requirePresentationHash(value: unknown): void {
+  // Exporters always write this binding, even for maps using only default cues.
+  // Inferring legacy status from optional map fields would permit stripping both.
+  if (typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value))
+    throw new EngineError('PRESENTATION_MISMATCH', 'Recording requires a valid presentation hash');
+}
 function assertSize(value: unknown, limit = 16_000_000): void {
   if (canonical(value).length > limit)
     throw new EngineError('SIZE_LIMIT', 'Payload exceeds size limit');
@@ -158,6 +172,8 @@ export class Session {
   readonly initialActors: ActorSpec[];
   private readonly scene?: CompiledScene;
   private readonly descriptions: Map<string, { label?: string; appearance?: string }>;
+  private readonly presenter: ReturnType<typeof createNotePresenter>;
+  private releases: { entity: LiveEntity; resolution: TargetResolution }[] = [];
   private world: WorldState;
   private pending: Command[] = [];
   private timeline: TimelineBatch[] = [];
@@ -181,6 +197,7 @@ export class Session {
     this.program = freeze(program);
     this.map = freeze(map);
     this.scene = compileScene(map);
+    this.presenter = createNotePresenter(map);
     this.descriptions = new Map(
       map.notes.map((note) => [
         note.id,
@@ -372,6 +389,7 @@ export class Session {
       }
       const result = transition(this.world, [...other, ...poses.values()], this.program);
       this.world = result.state;
+      this.rememberReleases(result.resolvedEntities, result.events);
       all.push(...result.events);
       this.eventLog.push(...result.events);
       this.replayEvents.push(...result.events);
@@ -427,12 +445,39 @@ export class Session {
     this.advances.push(result);
     return clone(result);
   }
+  /** Derived SDK state only. Reconstructed by the accepted timeline, never scored or checkpoint-trusted. */
+  private rememberReleases(removed: LiveEntity[], events: DomainEvent[]) {
+    // A finished world will never advance again: finalize all cosmetic tails as well.
+    if (this.world.finished) {
+      this.releases = [];
+      return;
+    }
+    this.releases = this.releases.filter(
+      ({ entity, resolution }) =>
+        this.tick < resolution.tick + this.presenter.releaseTicks(entity.spec.id, entity.spec.kind),
+    );
+    for (const entity of removed) {
+      if (!this.presenter.releaseTicks(entity.spec.id, entity.spec.kind)) continue;
+      const hit = events.some((e) => e.entityId === entity.spec.id && e.type === 'interaction.hit');
+      this.releases.push({
+        entity,
+        resolution: {
+          tick: this.tick,
+          outcome: hit ? 'hit' : entity.spec.kind === 'hazard' ? 'expired' : 'missed',
+        },
+      });
+    }
+    // Release artwork has a separate deterministic budget, independent of active-target capacity.
+    if (this.releases.length > 256) this.releases.splice(0, this.releases.length - 256);
+  }
   observe(cap: Capability): Observation {
     this.alive();
     const privileged = cap.role === 'admin' || cap.role === 'director';
     const music = this.map.music ? sampleMusic(this.map.music, this.world.tick) : undefined;
     return clone({
       version: 1,
+      presentationVersion: PRESENTATION_VERSION,
+      presentationHash: this.presentationHash,
       tick: this.world.tick,
       eventSeq: this.world.eventSeq,
       finished: this.world.finished,
@@ -451,57 +496,10 @@ export class Session {
             ),
           }
         : {}),
-      entities: this.world.entities.map((e) => ({
-        id: e.spec.id,
-        kind: e.spec.kind,
-        position: e.position,
-        targetPosition: add(
-          rotate(positionAt(e.spec, e.spec.hitTick), e.transform.orientation),
-          e.transform.position,
-        ),
-        ...(e.spec.kind === 'hold'
-          ? {
-              contactPath: (() => {
-                const start = Math.max(e.spec.hitTick, this.world.tick);
-                const end = Math.max(start, e.spec.endTick);
-                const ticks = [
-                  start,
-                  ...e.spec.motion.filter((k) => k.tick > start && k.tick < end).map((k) => k.tick),
-                  end,
-                ];
-                const stride = Math.max(1, Math.ceil(ticks.length / 62));
-                return ticks
-                  .filter(
-                    (tick, i) =>
-                      (i % stride === 0 || i === ticks.length - 1) &&
-                      (i === 0 || tick > ticks[i - 1]),
-                  )
-                  .map((tick) => ({
-                    tick,
-                    position: add(
-                      rotate(positionAt(e.spec, tick), e.transform.orientation),
-                      e.transform.position,
-                    ),
-                  }));
-              })(),
-            }
-          : {}),
-        ...this.descriptions.get(e.spec.id),
-        orientation: e.transform.orientation,
-        shape: e.spec.shape,
-        hitTick: e.spec.hitTick,
-        endTick: e.spec.endTick,
-        slots: e.spec.slots,
-        sameActor: e.spec.sameActor,
-        distinctActors: e.spec.distinctActors,
-        window: e.spec.window,
-        linkTicks: e.spec.linkTicks,
-        minSpeed: e.spec.minSpeed,
-        hold: e.hold,
-        holdTicks: e.spec.holdTicks,
-        progress: e.hits.length / e.spec.slots.length,
-        ...(e.spec.direction ? { direction: e.spec.direction } : {}),
-      })),
+      entities: this.world.entities.map((e) => this.describeTarget(e, privileged)),
+      resolvedEntities: this.releases.map(({ entity, resolution }) =>
+        this.describeTarget(entity, false, resolution),
+      ),
       actors: privileged
         ? this.world.actors
         : cap.role === 'player'
@@ -509,6 +507,77 @@ export class Session {
           : [],
       scores: this.world.scores,
     });
+  }
+  private describeTarget(
+    e: LiveEntity,
+    privileged: boolean,
+    resolution?: TargetResolution,
+  ): Observation['entities'][number] {
+    const presentation = this.presenter.sample(e, this.tick, resolution);
+    return {
+      id: e.spec.id,
+      kind: e.spec.kind,
+      position: resolution
+        ? add(
+            rotate(positionAt(e.spec, resolution.tick), e.transform.orientation),
+            e.transform.position,
+          )
+        : e.position,
+      targetPosition: add(
+        rotate(positionAt(e.spec, e.spec.hitTick), e.transform.orientation),
+        e.transform.position,
+      ),
+      ...(e.spec.kind === 'hold' && privileged
+        ? {
+            contactPath: (() => {
+              const start = Math.max(e.spec.hitTick, this.world.tick);
+              const end = Math.max(start, e.spec.endTick);
+              const ticks = [
+                start,
+                ...e.spec.motion.filter((k) => k.tick > start && k.tick < end).map((k) => k.tick),
+                end,
+              ];
+              const stride = Math.max(1, Math.ceil(ticks.length / 62));
+              return ticks
+                .filter(
+                  (tick, i) =>
+                    (i % stride === 0 || i === ticks.length - 1) &&
+                    (i === 0 || tick > ticks[i - 1]),
+                )
+                .map((tick) => ({
+                  tick,
+                  position: add(
+                    rotate(positionAt(e.spec, tick), e.transform.orientation),
+                    e.transform.position,
+                  ),
+                }));
+            })(),
+          }
+        : {}),
+      ...this.descriptions.get(e.spec.id),
+      presentation,
+      ...(!privileged && e.spec.kind === 'hold'
+        ? {
+            contactPath: presentation.path
+              .filter((p) => p.tick >= Math.max(e.spec.hitTick, this.tick))
+              .map(({ tick, position }) => ({ tick, position })),
+          }
+        : {}),
+      orientation: e.transform.orientation,
+      shape: e.spec.shape,
+      hitTick: e.spec.hitTick,
+      endTick: e.spec.endTick,
+      slots: e.spec.slots,
+      sameActor: e.spec.sameActor,
+      distinctActors: e.spec.distinctActors,
+      window: e.spec.window,
+      linkTicks: e.spec.linkTicks,
+      minSpeed: e.spec.minSpeed,
+      hold: e.hold,
+      holdTicks: e.spec.holdTicks,
+      progress: e.hits.length / e.spec.slots.length,
+      ...(e.spec.direction ? { direction: e.spec.direction } : {}),
+    };
   }
   private filterEvents(cap: Capability, events: DomainEvent[]): DomainEvent[] {
     if (cap.role === 'admin' || cap.role === 'director') return clone(events);
@@ -573,6 +642,7 @@ export class Session {
     assertSize(input, 64_000_000);
     if (!input || input.version !== 1 || input.engineVersion !== ENGINE_VERSION)
       throw new EngineError('VERSION', 'Unsupported checkpoint version');
+    requirePresentationHash(input.presentationHash);
     const session = await Session.fromCompiled(
       input.compiled,
       input.map,
@@ -582,11 +652,8 @@ export class Session {
     );
     if (session.program.id !== input.programHash || input.world.programId !== input.programHash)
       throw new EngineError('PROGRAM_MISMATCH', 'Checkpoint program hash mismatch');
-    if (
-      (input.presentationHash || input.map.scene || input.map.music) &&
-      input.presentationHash !== session.presentationHash
-    )
-      throw new EngineError('PRESENTATION_MISMATCH', 'Checkpoint scene/music metadata differs');
+    if (input.presentationHash !== session.presentationHash)
+      throw new EngineError('PRESENTATION_MISMATCH', 'Checkpoint presentation metadata differs');
     // Reconstruct from the accepted timeline, verifying all internal continuation state.
     const restored = await Session.reconstruct(
       input.map,
@@ -718,6 +785,7 @@ export class Session {
     assertSize(replay, 64_000_000);
     if (replay.version !== 1 || replay.engineVersion !== ENGINE_VERSION)
       throw new EngineError('VERSION', 'Unsupported replay version');
+    requirePresentationHash(replay.presentationHash);
     const session = await Session.reconstruct(
       replay.map,
       replay.compiled,
@@ -729,11 +797,8 @@ export class Session {
     );
     if (session.program.id !== replay.programHash)
       throw new EngineError('PROGRAM_MISMATCH', 'Replay program differs');
-    if (
-      (replay.presentationHash || replay.map.scene || replay.map.music) &&
-      replay.presentationHash !== session.presentationHash
-    )
-      throw new EngineError('PRESENTATION_MISMATCH', 'Replay scene/music metadata differs');
+    if (replay.presentationHash !== session.presentationHash)
+      throw new EngineError('PRESENTATION_MISMATCH', 'Replay presentation metadata differs');
     const stateHash = await digest(session.world),
       eventDigest = await digest(session.replayEvents);
     if (stateHash !== replay.finalStateHash || eventDigest !== replay.eventDigest)

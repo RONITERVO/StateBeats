@@ -2,6 +2,24 @@
 
 ## 0.3.0 — musical choreography (development release candidate)
 
+Adds versioned note presentation cues shared by graphical, text, audio and agent adapters:
+tick-derived appearance, arrival, contact and release phases; beat/millisecond reveal windows;
+and bounded trailing paths along authoritative movement. Target appearance adapters can own
+their guides and transitions. Event Horizon uses travelling tapered arcs and distinct stationary
+emergence instead of revealing complete future hold loops, with denser authored curves used by
+both scoring and rendering. Release effects reconstruct on checkpoint restore and never remain
+active collision targets. See [note presentation](docs/NOTE_PRESENTATION.md).
+
+Presentation review fixes preserve the final interaction state in release effects through
+an additive core transition result, with unchanged scoring and recording identity. The
+reference player fades semantic cues and particles, composes adapter opacity animation
+with lifecycle visibility, and disposes custom guides even when the map suppresses them.
+Finished sessions finalize every remaining release effect. Dense trajectories use exact
+binary position lookup, and legacy observations allocate no unused fallback guide buffers.
+Checkpoint/replay verification now requires the presentation hash for every map, closing
+the bypass where both optional cue settings and their binding were removed. Existing
+version-1 exports containing their hash remain compatible.
+
 Adds reusable musical turn planning with versioned tracks, explicit sweeps/continuations/answers,
 quintic easing, peak speed/acceleration and directional-travel limits, explanation reports and
 SDK/CLI/MCP operations. Event Horizon replaces section-wide rotation with score-authored turn

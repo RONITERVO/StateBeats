@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { turnTrackSchema } from './turn-schema.js';
+import { notePresentationSchema } from './presentation-schema.js';
 export const idSchema = z.string().regex(/^[\w./:-]{1,100}$/);
 export const tickSchema = z.number().int().min(1).max(2147483647);
 const num = z.number().finite();
@@ -171,6 +172,7 @@ export const noteSchema = z
       .default([]),
     anchor: idSchema.optional(),
     appearance: idSchema.optional(),
+    presentation: notePresentationSchema.optional(),
     label: z.string().min(1).max(160).optional(),
     emission: z.object({ source: idSchema, beat: beatSchema }).strict().optional(),
     slots: z.array(slotSchema).min(1).max(4).optional(),

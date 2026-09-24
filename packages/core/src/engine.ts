@@ -102,10 +102,19 @@ export function initialState(program: Program, actors: ActorSpec[] = []): WorldS
 export function positionAt(entity: Pick<EntitySpec, 'position' | 'motion'>, tick: number): Vec3 {
   if (entity.motion.length === 0) return [...entity.position];
   if (tick <= entity.motion[0].tick) return [...entity.motion[0].position];
-  for (let i = 1; i < entity.motion.length; i++) {
-    const a = entity.motion[i - 1],
-      b = entity.motion[i];
-    if (tick <= b.tick) return lerp(a.position, b.position, (tick - a.tick) / (b.tick - a.tick));
+  // Validated motion keys are strictly increasing. Find the same right endpoint as
+  // the original scan, including exact knots, without rescanning a dense path.
+  let lo = 1,
+    hi = entity.motion.length;
+  while (lo < hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    if (tick <= entity.motion[mid].tick) hi = mid;
+    else lo = mid + 1;
+  }
+  if (lo < entity.motion.length) {
+    const a = entity.motion[lo - 1],
+      b = entity.motion[lo];
+    return lerp(a.position, b.position, (tick - a.tick) / (b.tick - a.tick));
   }
   return [...entity.motion[entity.motion.length - 1].position];
 }
@@ -195,7 +204,7 @@ export function transition(
 ): TransitionResult {
   if (previous.programId !== program.id || previous.tick >= program.rules.maxTick)
     throw new Error('Program/tick invariant violated');
-  if (previous.finished) return { state: previous, events: [] };
+  if (previous.finished) return { state: previous, events: [], resolvedEntities: [] };
   const state: WorldState = {
     ...previous,
     tick: previous.tick + 1,
@@ -565,6 +574,9 @@ export function transition(
       emit('group.broken', { groupId: group.id });
     }
   }
+  const resolvedEntities = state.entities
+    .filter((e) => resolved.has(e.spec.id))
+    .map((e) => copy(e));
   state.entities = state.entities.filter((e) => !resolved.has(e.spec.id));
   state.resolvedCount += resolved.size;
   if (
@@ -575,5 +587,5 @@ export function transition(
     state.finished = true;
     emit('session.ended', { resolved: state.resolvedCount });
   }
-  return { state, events };
+  return { state, events, resolvedEntities };
 }

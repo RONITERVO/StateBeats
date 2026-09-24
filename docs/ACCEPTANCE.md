@@ -4,6 +4,91 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Recording binding review fix, 2026-09-24
+
+The new PR #4 finding was reproduced: deleting both `presentationHash` and all optional
+note presentation settings allowed checkpoint restore and replay verification to accept
+substituted defaults. Default-only maps also accepted missing binding values. Both APIs now
+require a well-formed hash before reconstruction and compare it unconditionally afterwards.
+The TypeScript recording contracts require the field. Every committed 0.2/0.3 exporter
+already writes it, so valid version-1 exports require no migration; unhashed files fail.
+
+`npm run check` passed **124 tests in 20 files**, strict types, formatting, core boundaries
+and production build. Seven new Node regression cases cover metadata/hash stripping,
+default-only maps, malformed/mismatched hashes and intact export compatibility. All three
+new browser cases passed in Chromium, Firefox and WebKit, exercising both recording APIs.
+A pre-fix 19,200-tick Event Horizon replay still verifies with identical state/event hashes.
+Hashes establish content consistency; score hosts must compare presentation identity with
+an independently trusted map, since portable unsigned recordings do not prove authorship.
+
+## Additional presentation review fixes, 2026-09-24
+
+Three further PR #4 findings were reproduced with failing regression tests, then corrected.
+Finished sessions clear earlier release tails and targets resolved on the terminal tick;
+hit, miss, hazard expiry, checkpoint restore and repeated post-finish advances are covered.
+The browser test keeps rendering the results scene and verifies that no target remains.
+Legacy observations allocate no fallback guide buffers, while explicitly supplied custom
+guides still update and dispose normally.
+
+Shared trajectory lookup now uses binary search with the original interpolation arithmetic.
+Property tests compare exact values against the prior sequential algorithm at keys, between
+keys, outside the motion interval and in reverse query order. A legal 256-key full guide
+producing 288 points fell from 39,037 to 4,724 motion-key reads per sample. A deterministic
+read-count limit guards the scaling independently of machine timing; this is not an FPS claim.
+The pre-fix 19,200-tick Event Horizon recording still verifies with identical state/event hashes.
+
+`npm run check` passed **117 tests in 19 files**, strict types, formatting, core boundaries and
+the production build. All **seven targeted browser cases** passed: four Chromium presentation
+cases and three Node/Chromium/Firefox/WebKit conformance cases. All **three production Pages
+cases** passed, including complete bundled soundtrack playback and verified zero-miss replay.
+The previous commit's GitHub CI was green; subsequent commits require their own remote checks.
+
+## Note presentation review fixes, 2026-09-24
+
+All five PR #4 findings were reproduced and corrected. Core transitions now expose detached
+final states for removed entities, so release effects receive completed strikes/holds and the
+final reset state of failed holds. World state, events and scoring rules are unchanged. A full
+19,200-tick Event Horizon recording captured before these fixes verifies afterwards with the
+same state hash and event digest.
+
+The player fades semantic rings, cores and labels along with artwork, including particles.
+The default envelope restores unfaded material opacity before adapter updates, preserving
+animation across repeated frames and zero visibility. Labels share textures without sharing
+opacity. Suppressed custom guides remain owned by the scene and are disposed exactly once.
+
+`npm run check` passed **112 tests in 18 files**, strict types, formatting, core boundaries and
+the production build. Two targeted Chromium presentation cases passed with actual WebGL
+rendering, independent simultaneous labels, animated particles and disposal counters. All
+three Node/Chromium/Firefox/WebKit conformance cases passed. All three production Pages cases
+passed, including complete bundled Event Horizon playback, synchronized resume, zero misses
+and verified replay. Physical Quest testing remains deferred.
+
+## Note presentation revision, 2026-09-24
+
+The SDK projects authoritative trajectories into versioned appearance, arrival, reveal and
+release cues. Event Horizon's holds use a 0.75-beat leading window and 0.5-beat trail, with
+stationary emergence and 65 authored motion samples. Scoring rules remain unchanged. Full-route
+previews remain available to authoring capabilities; player cues use the map's reveal policy.
+
+The clean source archive passed **106 tests in 16 files**, strict type checking, formatting,
+kernel boundaries, production build and CLI/examples. Target-presentation coverage includes
+tempo changes, exact transformed trajectory alignment, no pre-spawn revelation, dense paths,
+zero-length timing at rounded offsets, appearance before contact, release/restore/replay,
+same-tick director spawns, metadata integrity and bounded disposable guide geometry.
+
+All **18 browser cases** passed, including Node/Chromium/Firefox/WebKit presentation and replay
+conformance and actual WebGL guide rendering/disposal. All **three production Pages cases**
+passed across the suite and one isolated rerun. The first 4x Event Horizon run entered the
+timing-resync pause while package preparation was also running; the unchanged isolated run
+completed, decoded its bundled MP3, resumed in sync and exported a verified zero-miss replay.
+No timing guard or scoring assertion was weakened. All six package archives installed in a
+fresh project and exercised the new presentation API. The clean source's full Event Horizon
+example recorded 620 hits and zero misses; tracked-head clearance remains covered by the suite.
+
+These are desktop software checks. Quest 3 frame timing, human reaction/readability and the
+preferred musical lookahead still require headset playtesting. Contracts and migration notes
+are in [NOTE_PRESENTATION.md](NOTE_PRESENTATION.md).
+
 ## Musical turn revision, 2026-09-24
 
 The shared turn planner replaces Event Horizon's long section rotations with 82 turn events

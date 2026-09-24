@@ -214,4 +214,6 @@ export interface DomainEvent {
 export interface TransitionResult {
   state: WorldState;
   events: DomainEvent[];
+  /** Detached final states of entities removed by this transition, after interaction evaluation. */
+  resolvedEntities: LiveEntity[];
 }

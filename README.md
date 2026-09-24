@@ -54,6 +54,11 @@ original demonstration of rail counterpoint and phrase-based turns.
 Quick setups run from **Beginner** to **Master**. Master enables wide movement and musical
 360° turns with notes arriving throughout. Turn size, speed, acceleration and directional
 travel remain independently adjustable. See [musical turn planning](docs/TURNS.md).
+
+Held paths reveal a short moving arc ahead of the note and fade behind it. Shared
+presentation cues work with manual ticks, replay and every perception adapter; creators
+control appearance, emergence and release effects independently of scoring. See
+[note presentation and adapter contracts](docs/NOTE_PRESENTATION.md).
 Settings also has manual **height** and **room scale** for every map, applied on the next start.
 For wider play at 1.65 m, set height **1.65** and room scale **1.20**. Our room scale spreads X/Z
 positions; height controls vertical layout. Collision sizes stay authored and recordings retain

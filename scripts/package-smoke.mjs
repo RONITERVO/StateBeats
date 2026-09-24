@@ -30,7 +30,7 @@ await writeFile(
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, generateChoreography, inspectChoreography, planTurns, createFacingSampler } from '@statebeats/sdk';
+import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, generateChoreography, inspectChoreography, planTurns, createFacingSampler, createNotePresenter, PRESENTATION_VERSION } from '@statebeats/sdk';
 import { sampleMap, eventHorizonSoundtrack } from '@statebeats/content';
 const bundledAudio = await readFile(new URL(import.meta.resolve('@statebeats/content/audio/event-horizon.mp3')));
 assert.equal(createHash('sha256').update(bundledAudio).digest('hex'), eventHorizonSoundtrack.sha256);
@@ -40,6 +40,12 @@ session.advance(240);
 const view = session.observe({role:'admin'});
 assert.equal(view.scene.objects[0].id, 'sun');
 assert.ok(describeObservation(view).targets.length > 0);
+assert.equal(view.presentationVersion, PRESENTATION_VERSION);
+const presenter=createNotePresenter(session.map);
+const live=session.snapshot().entities[0];
+assert.deepEqual(presenter.sample(live,session.tick),view.entities[0].presentation);
+assert.deepEqual(describeObservation(view).targets[0].presentation,
+  view.entities.find(e=>e.id===describeObservation(view).targets[0].id).presentation);
 const music = analyzePcm({ samples: Float32Array.from({length:16000}, (_, i) => Math.sin(i * .1) * .4), sampleRate:16000 });
 assert.ok(sampleMusic(music, 500).energy > 0);
 session.close();
@@ -50,7 +56,7 @@ assert.equal(composed.map.generation.algorithm, 'statebeats/choreography-v2');
 assert.ok(composed.map.turns.events.length > 0);
 const turn = planTurns([{id:'accent',beat:4,endBeat:7,gesture:'sweep',direction:'right',reason:'Lead'}],{bpm:150});
 assert.ok(createFacingSampler(turn.track)(7) > 0);
-console.log('Packaged scenes, music, choreography, musical turns and semantic perception work.');
+console.log('Packaged scenes, music, choreography, musical turns, target presentation and semantic perception work.');
 `,
 );
 await run(['sdk-smoke.mjs'], directory);

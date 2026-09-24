@@ -10,9 +10,18 @@ export async function conformance(recorded){
       : await Session.create(map,[standardActor(),standardActor('partner')]);
     const commands=scriptedCommands(session.program),admin=session.client({role:'admin'});
     for(let i=0;i<commands.length;i+=1024)admin.submit(`fixture-${i}`,commands.slice(i,i+1024));
-    session.advance(180);
-    const observed = admin.observe();
-    const perceptionHash = await digest({ scene: observed.scene ?? null, music: observed.music ?? null, destinations: observed.entities.map(entity => entity.targetPosition) });
+    const firstHold=session.program.entities.find(e=>e.kind==='hold');
+    const ticks=[...new Set([180,...(firstHold?[firstHold.hitTick+30,firstHold.hitTick+firstHold.holdTicks+8]:[])])].sort((a,b)=>a-b);
+    const frames=[];
+    for(const tick of ticks){
+      session.advance(Math.max(0,tick-session.tick));
+      const observed=admin.observe();
+      frames.push({tick:observed.tick,scene:observed.scene??null,music:observed.music??null,
+        destinations:observed.entities.map(e=>e.targetPosition),
+        presentation:observed.entities.map(e=>e.presentation),
+        releases:observed.resolvedEntities.map(e=>e.presentation)});
+    }
+    const perceptionHash=await digest(frames);
     const restored=await Session.restore(admin.checkpoint());
     session.advance(session.program.durationTicks);
     restored.advance(session.program.durationTicks);

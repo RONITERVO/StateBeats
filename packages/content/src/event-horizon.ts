@@ -204,6 +204,7 @@ export function eventHorizonMaster() {
       anchor: 'player',
       position: place(beat, ...xyz),
       appearance: 'statebeats/prism',
+      presentation: { presence: 'fade', appearMs: 140, releaseMs: 240, guide: 'none' },
       shape: { kind: 'sphere', radius: 0.115 },
       earlyMs: 100,
       lateMs: 110,
@@ -231,8 +232,8 @@ export function eventHorizonMaster() {
     path: (phase: number) => Vec3,
     stationary = false,
   ) => {
-    const motion = Array.from({ length: 25 }, (_, i) => {
-      const phase = i / 24,
+    const motion = Array.from({ length: 65 }, (_, i) => {
+      const phase = i / 64,
         b = beat + length * phase;
       return { beat: round(score.leadBeats + b), position: place(b, ...path(phase)) };
     });
@@ -243,6 +244,14 @@ export function eventHorizonMaster() {
       durationBeats: length + 0.3,
       label: stationary ? 'Stationary constellation ribbon' : 'Follow the independent orbit',
       appearance: 'statebeats/prism',
+      presentation: {
+        presence: stationary ? 'emerge' : 'fade',
+        appearMs: stationary ? 320 : 140,
+        releaseMs: 260,
+        guide: 'window',
+        ahead: { beats: 0.75 },
+        behind: { beats: 0.5 },
+      },
       ...(stationary ? { emission: undefined, leadMs: 2400, motion } : { motion: motion.slice(1) }),
     });
   };
