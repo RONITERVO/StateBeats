@@ -1,6 +1,32 @@
 import { expect, it } from 'vitest';
 import * as THREE from 'three';
-import { applyPresence } from '../packages/player/src/appearances.js';
+import { applyPresence, applyReadiness } from '../packages/player/src/appearances.js';
+
+it('readiness composes with an adapter-owned presence envelope through zero and repeated frames', () => {
+  const material = new THREE.MeshBasicMaterial({ opacity: 0.8 });
+  const geometry = new THREE.SphereGeometry();
+  const object = new THREE.Mesh(geometry, material);
+  const draw = (emphasis: number, visibility: number) =>
+    applyReadiness(object, emphasis, () => applyPresence(object, visibility));
+  draw(0, 0.5);
+  expect(material.opacity).toBe(0);
+  draw(0.5, 0.5);
+  expect(material.opacity).toBe(0.2);
+  draw(0.5, 0.5);
+  expect(material.opacity).toBe(0.2);
+  draw(1, 1);
+  expect(material.opacity).toBe(0.8);
+  applyReadiness(object, 0.5, () =>
+    applyPresence(object, 0.5, () => {
+      material.opacity *= 0.5;
+    }),
+  );
+  expect(material.opacity).toBe(0.1);
+  draw(1, 1);
+  expect(material.opacity).toBe(0.4);
+  geometry.dispose();
+  material.dispose();
+});
 
 it('composes adapter opacity animation with the envelope, including equal outputs and zero visibility', () => {
   const material = new THREE.MeshBasicMaterial({ opacity: 0.8 });

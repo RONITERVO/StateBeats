@@ -17,7 +17,11 @@ Each note may include an optional `presentation` object:
   "releaseMs": 260,
   "guide": "window",
   "ahead": { "beats": 0.75 },
-  "behind": { "beats": 0.5 }
+  "behind": { "beats": 0.5 },
+  "readiness": {
+    "preview": { "beats": 2 },
+    "prepare": { "beats": 1 }
+  }
 }
 ```
 
@@ -30,6 +34,11 @@ Each note may include an optional `presentation` object:
   reveals the complete contact route for a map or practice experience that wants it.
 - `ahead` and `behind`: each uses either `{ "ms": ... }` or `{ "beats": ... }`.
   Beat windows cross tempo changes using the map's tempo timeline and tick quantization.
+- `readiness`: optional staged anticipation, useful for notes that materialize in reach.
+  `preview` sets how long before first eligible contact the note becomes perceptible;
+  `prepare` sets when preparation begins within that preview. Both accept milliseconds
+  or beats. An empty object defaults to two beats of preview and one beat of preparation.
+  Omit the object to preserve the earlier lifecycle without this extra policy.
 
 Existing maps need no migration: holds default to a 350 ms leading window and 180 ms
 trail; other targets default to no guide. Default appearance and release times are
@@ -41,6 +50,31 @@ on its approach trajectory; after arrival, the same window follows the held moti
 Stationary targets have no invented flight: they appear at their contact location and
 reveal their upcoming held movement only as its time enters the window. Separate notes
 are never automatically connected into a path that might imply a required hold.
+
+### Waiting, preparation and contact
+
+Staged anticipation separates existence in the simulation from a request to act. A note
+can already exist at its future contact position while its presentation remains hidden.
+At `previewTick` it starts appearing as a waiting cue. At `prepareTick` its preparation
+progress begins, reaching one at `readyTick`. That last tick is the first time contact can
+count: the start of a strike's early window, or the scheduled start of a hold or hazard.
+It does not depend on when a trajectory starts moving, which might be earlier or later.
+
+Preview cannot precede core spawn; preparation cannot precede preview or finish after
+eligibility. Appearance begins at preview and is shortened to finish by eligibility.
+Zero preview/lead time reveals the note immediately when eligible. These rules avoid a
+fully transparent hittable target. Beats cross tempo changes using the shared timeline.
+Guides remain absent during waiting, then their point strengths increase smoothly with
+preparation. They still follow the same bounded, authoritative route.
+
+The reference player uses a faint broken outline and subdued requirement label while
+waiting. Solid artwork, the contact ring and guidance brighten together during preparation;
+the outline disappears at eligibility. High contrast strengthens the waiting outline;
+reduced motion keeps the same schedule without requiring flashing, shaking or color changes.
+Artists may interpret the shared phases differently, such as a crack in the ground before
+a creature emerges, or a charging source before an energy target activates. Keep anticipation
+and active contact visually distinguishable. This is a per-note map policy, not a global
+opacity rule or a change to collision geometry, scoring, hand acquisition or hold duration.
 
 ## Shared SDK contract
 
@@ -59,6 +93,8 @@ Every session target has `presentation` containing:
 - arrival: `approach` or `materialize` (independent of strike/hold/hazard);
 - normalized `appearanceProgress`, `releaseProgress`, and suggested `visibility`;
 - `spawnTick`, `readyTick` (earliest eligible contact), and optional resolution tick/outcome;
+- optional `readiness`: `phase` (`hidden`, `waiting`, `preparing`, `ready` or `resolved`),
+  `previewTick`, `prepareTick`, and linear preparation `progress` from zero to one;
 - a bounded world-space `path` with `{ tick, position, strength }` samples.
 
 `active` means the scheduled hit time has arrived, not that a hand has acquired the
@@ -83,6 +119,10 @@ Pause/manual stepping still freezes ordinary releases at their current simulatio
 `describeObservation()` carries the same presentation in each semantic target cue;
 audio, speech, haptic and agent adapters can interpret it without importing Three.js.
 CLI/MCP observations expose it through their existing session APIs.
+The semantic description omits readiness-hidden targets and distinguishes upcoming,
+preparing and actionable instructions. Reference audio cues and desktop direction/camera
+selection respect the same hidden interval. Raw observations retain authoritative entities
+for tooling; use their presentation cues when implementing a perception adapter.
 
 ### Compatibility and information policy
 
@@ -106,6 +146,10 @@ policy/version, plus any host-provided assistance. Do not silently increase look
 when changing artwork. Older observations without presentation metadata remain usable;
 the scene allocates no fallback guide without a presentation cue and never guesses the
 timing of a legacy full route. An explicitly supplied custom guide is still supported.
+Readiness is an optional extension of presentation version 1. Omission adds no defaults
+to older maps and preserves their presentation hashes. Enabling it changes the presentation
+hash while leaving the compiled collision program unchanged. Older SDKs may reject maps
+containing this new field; upgrade the SDK to load newly authored readiness policies.
 
 ## Reference player extension
 
@@ -117,6 +161,9 @@ Map JSON never loads executable code. Its returned `TargetAppearance` can now su
   leaving it undefined uses the reference guide when the cue policy calls for one;
 - `handlesPresence: true`: interpret lifecycle progress in the adapter. Otherwise
   `applyPresence` supplies a default opacity envelope for ordinary materials;
+- `handlesReadiness: true`: interpret preparation in the artwork itself. Otherwise the
+  reference player adds its readiness envelope, including to existing presence-aware
+  adapters. This option does not disable the reference semantic cues or change timing;
 - the existing `update` and `dispose` methods.
 
 The scene owns and disposes the guide separately, including a supplied guide suppressed
@@ -131,6 +178,11 @@ recovers correctly from zero visibility. Standalone adapters can use
 supports static opacity; put opacity animation in the callback to avoid ambiguous writes
 that happen to equal the previous faded value. Materials should be owned per appearance
 instance. Custom shaders should interpret lifecycle data themselves.
+Readiness uses an independent outer envelope, so an existing presence-aware adapter can
+continue calling `applyPresence` without compounding its opacity each frame. Artwork sits
+inside a scene-owned wrapper; suppressing waiting artwork does not overwrite visibility
+set by the artist on their own object. Adapters taking readiness ownership receive the
+same linear progress and should preserve the distinction between waiting and eligible.
 
 `createPathGuide(color, radius?)` is a reusable bounded, tapered tube following the exact
 sampled geometry, with no random jitter or frame-time state. It also supports high contrast.
@@ -139,7 +191,9 @@ Labels share textures but have independent material opacity per target. Unknown 
 IDs retain a generic visible target. Completion hides actionable rings, cores and labels.
 
 Event Horizon demonstrates travelling arcs with 0.75 beat anticipation and a 0.5 beat
-tail, plus stationary crystals that assemble at their contact positions. Its motion
+tail. Its stationary holds opt into two beats of preview and one beat of preparation:
+at 150 BPM, an 800 ms preview with brightening during the last 400 ms. Approaching notes
+retain their flight cues. Stationary crystals assemble at their contact positions. Its motion
 curves now use 65 authored samples shared by scoring and drawing. The community mole
 example uses the same lifecycle for ground emergence. These are replaceable examples,
 not new engine interaction types or a mandatory visual language.

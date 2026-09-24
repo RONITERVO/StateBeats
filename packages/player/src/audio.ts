@@ -218,6 +218,7 @@ export class RhythmAudio {
         );
     }
     for (const entity of view.entities) {
+      if (entity.presentation?.readiness?.phase === 'hidden') continue;
       const remaining = (entity.hitTick - view.tick) / view.tickRate;
       if (remaining < -0.1 || remaining > 1.05) continue;
       const stage =

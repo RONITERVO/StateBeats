@@ -4,6 +4,39 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Staged note readiness, 2026-09-25
+
+Event Horizon's stationary holds opt into a shared readiness schedule: hidden until two
+beats before first eligible contact, a faint hollow waiting cue, then preparation during
+the last beat. At 150 BPM this is an 800 ms preview with 400 ms of brightening. Artwork,
+semantic solids and bounded path guidance use the same preparation progress. Other maps
+can opt in per note with beat or millisecond windows; appearance adapters can interpret
+readiness independently of their existing presence/release effects.
+
+`npm run check` passed **133 tests in 21 files**, strict types, formatting, core boundaries
+and production build. New regressions cover tempo changes, short/zero lead time, early
+strike contact, restored checkpoints, metadata integrity and unchanged gameplay. All
+**26 browser cases** passed, including Node/Chromium/Firefox/WebKit conformance. The two new
+WebGL cases exercise actual Event Horizon phases, repeated/rewound frames, high contrast,
+reduced motion, nested material envelopes and adapter-owned visibility/readiness. Rendered
+waiting, preparing and eligible frames were also inspected visually.
+All **three production Pages cases** passed, including automatic soundtrack loading,
+pause/resume synchronization, full Event Horizon playback and a verified zero-miss replay.
+All six package archives installed and exercised successfully in a fresh project. The clean
+source archive passed installation, the full `check` command, CLI operations and all examples;
+its complete Event Horizon example recorded 620 hits and zero misses.
+
+The saved pre-change 19,200-tick Event Horizon recording still verifies. Rebinding its map
+to the new presentation policy also verifies with the same compiled program, final state
+hash and event digest. The presentation hash changes as intended: visual anticipation can
+affect practical difficulty even though collision timing and scoring are unchanged.
+Maps without readiness retain their previous presentation identity and behavior.
+
+These are desktop software checks. Quest 3 readability, reaction comfort and performance
+remain unverified; the owner deferred physical testing. No comparative play-quality claim
+is established by the scripted player. Authoring and adapter contracts are documented in
+[NOTE_PRESENTATION.md](NOTE_PRESENTATION.md).
+
 ## Recording binding review fix, 2026-09-24
 
 The new PR #4 finding was reproduced: deleting both `presentationHash` and all optional

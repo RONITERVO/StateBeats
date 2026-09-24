@@ -10,6 +10,8 @@ export interface TargetAppearance {
   guide?: TargetGuide | false;
   /** The adapter interprets lifecycle progress itself instead of using the default opacity envelope. */
   handlesPresence?: boolean;
+  /** Opt out of the reference readiness envelope when artwork interprets that cue itself. */
+  handlesReadiness?: boolean;
   update?(
     entity: Observation['entities'][number],
     view: Observation,
@@ -96,6 +98,7 @@ registerAppearance('statebeats/prism', (entity, color) => {
 });
 
 const opacityState = new WeakMap<THREE.Material, { baseline: number; applied: number }>();
+const readinessOpacityState = new WeakMap<THREE.Material, { baseline: number; applied: number }>();
 function materialsIn(object: THREE.Object3D): Set<THREE.Material> {
   const materials = new Set<THREE.Material>();
   object.traverse((child) => {
@@ -115,11 +118,23 @@ function materialsIn(object: THREE.Object3D): Set<THREE.Material> {
 }
 /** Restore the unfaded baseline, run adapter animation, then apply this frame's lifecycle envelope. */
 export function applyPresence(object: THREE.Object3D, visibility: number, update?: () => void) {
+  applyEnvelope(object, visibility, opacityState, update);
+}
+/** Independent outer layer: presence-aware adapters may call applyPresence inside their update. */
+export function applyReadiness(object: THREE.Object3D, emphasis: number, update: () => void) {
+  applyEnvelope(object, emphasis, readinessOpacityState, update);
+}
+function applyEnvelope(
+  object: THREE.Object3D,
+  visibility: number,
+  state: typeof opacityState,
+  update?: () => void,
+) {
   for (const material of materialsIn(object)) {
-    const prior = opacityState.get(material);
+    const prior = state.get(material);
     // Preserve assignments made between calls; never divide by a previous zero visibility.
     if (prior && material.opacity === prior.applied) material.opacity = prior.baseline;
-    opacityState.delete(material);
+    state.delete(material);
   }
   update?.();
   // The callback may add/remove children or replace their materials.
@@ -130,7 +145,7 @@ export function applyPresence(object: THREE.Object3D, visibility: number, update
       material.transparent = true;
       material.needsUpdate = true;
     }
-    opacityState.set(material, { baseline, applied });
+    state.set(material, { baseline, applied });
     material.opacity = applied;
   }
 }

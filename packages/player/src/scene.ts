@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import type { Observation } from '@statebeats/sdk';
 import type { Vec3 } from '@statebeats/core';
 import { ThemeLayer } from './themes.js';
-import { createAppearance, applyPresence } from './appearances.js';
+import { createAppearance, applyPresence, applyReadiness } from './appearances.js';
+import { createWaitingMarker, readinessStyle } from './readiness.js';
 import { createPathGuide } from './target-guide.js';
 import type { TargetGuide } from './target-guide.js';
 import type { TargetAppearance } from './appearances.js';
@@ -197,7 +198,7 @@ export class OrbitScene {
     }
     const appearance = this.appearances.get(object);
     if (appearance) {
-      object.remove(appearance.object);
+      appearance.object.removeFromParent();
       appearance.dispose();
       this.appearances.delete(object);
     }
@@ -285,6 +286,7 @@ export class OrbitScene {
         core.scale.setScalar(0.3);
         core.name = 'core';
         group.add(core);
+        if (entity.presentation?.readiness) group.add(createWaitingMarker(color));
         group.add(
           this.label(
             entity.kind === 'hazard'
@@ -303,7 +305,10 @@ export class OrbitScene {
         const appearance = createAppearance(entity, color);
         if (appearance) {
           this.appearances.set(group, appearance);
-          group.add(appearance.object);
+          const artworkRoot = new THREE.Group();
+          artworkRoot.name = 'artwork-root';
+          artworkRoot.add(appearance.object);
+          group.add(artworkRoot);
         }
         const guide =
           appearance?.guide ??
@@ -325,14 +330,15 @@ export class OrbitScene {
       const cue = entity.presentation;
       const visibility = cue?.visibility ?? 1;
       const resolved = cue?.phase === 'resolved';
+      const style = readinessStyle(cue, this.theme.preferences.highContrast);
       group.visible = visibility > 0;
       const requirement = group.getObjectByName('requirement') as THREE.Sprite;
       requirement.visible = !resolved;
-      requirement.material.opacity = visibility;
+      requirement.material.opacity = visibility * style.label;
       const remain = (entity.hitTick - view.tick) / view.tickRate;
       const timing = group.getObjectByName('timing') as THREE.Mesh;
-      timing.visible = !resolved;
-      (timing.material as THREE.MeshBasicMaterial).opacity = 0.8 * visibility;
+      timing.visible = !resolved && style.emphasis > 0;
+      (timing.material as THREE.MeshBasicMaterial).opacity = 0.8 * visibility * style.emphasis;
       timing.scale.setScalar(1 + Math.max(0, Math.min(2, remain)) * 2);
       timing.quaternion.copy(
         this.renderer.xr.isPresenting
@@ -340,9 +346,16 @@ export class OrbitScene {
           : this.camera.quaternion,
       );
       timing.quaternion.premultiply(group.quaternion.clone().invert());
+      const waiting = group.getObjectByName('waiting-marker') as THREE.LineSegments | undefined;
+      if (waiting) {
+        waiting.visible = !resolved && style.marker > 0;
+        (waiting.material as THREE.LineBasicMaterial).opacity = visibility * style.marker;
+        waiting.quaternion.copy(timing.quaternion);
+      }
       const core = group.getObjectByName('core')!;
       core.visible = !resolved;
-      ((core as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity = visibility;
+      ((core as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity =
+        visibility * style.emphasis;
       core.scale.setScalar(
         entity.kind === 'hold'
           ? 0.3 + (0.5 * entity.hold) / entity.holdTicks
@@ -350,7 +363,11 @@ export class OrbitScene {
       );
       const body = group.getObjectByName('body') as THREE.Mesh;
       const material = body.material as THREE.MeshStandardMaterial;
-      material.emissiveIntensity = remain > 0 ? 0.3 : 0.8;
+      material.emissiveIntensity = cue?.readiness
+        ? 0.3 + 0.5 * style.emphasis
+        : remain > 0
+          ? 0.3
+          : 0.8;
       material.opacity = this.theme.preferences.highContrast
         ? entity.kind === 'hazard'
           ? 0.55
@@ -360,12 +377,22 @@ export class OrbitScene {
           : entity.kind === 'hazard'
             ? 0.23
             : 0.72;
-      material.opacity *= visibility;
+      material.opacity *= visibility * style.emphasis;
+      // An invisible solid must not occlude the pending outline or other incoming notes.
+      body.visible = style.emphasis > 0;
+      core.visible = !resolved && style.emphasis > 0;
       const appearance = this.appearances.get(group);
       if (appearance) {
         const update = () => appearance.update?.(entity, view, this.theme.preferences);
-        if (appearance.handlesPresence) update();
-        else applyPresence(appearance.object, visibility, update);
+        const present = () => {
+          if (appearance.handlesPresence) update();
+          else applyPresence(appearance.object, visibility, update);
+        };
+        if (cue?.readiness && !appearance.handlesReadiness) {
+          applyReadiness(appearance.object, style.emphasis, present);
+          // Visibility belongs to our wrapper; an adapter may animate its own object's visibility.
+          group.getObjectByName('artwork-root')!.visible = style.emphasis > 0;
+        } else present();
       }
     }
   }

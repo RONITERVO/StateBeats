@@ -647,6 +647,86 @@
                     "additionalProperties": false
                   }
                 ]
+              },
+              "readiness": {
+                "type": "object",
+                "properties": {
+                  "preview": {
+                    "default": {
+                      "beats": 2
+                    },
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "ms": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 5000
+                          }
+                        },
+                        "required": [
+                          "ms"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "beats": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 8
+                          }
+                        },
+                        "required": [
+                          "beats"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "prepare": {
+                    "default": {
+                      "beats": 1
+                    },
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "ms": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 5000
+                          }
+                        },
+                        "required": [
+                          "ms"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "beats": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 8
+                          }
+                        },
+                        "required": [
+                          "beats"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "preview",
+                  "prepare"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [
