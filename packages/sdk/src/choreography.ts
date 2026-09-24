@@ -194,6 +194,7 @@ export const phraseFacing: FacingPlanner = {
     const step = Math.min(
       settings.turnDegrees,
       (settings.maxTurnSpeed * turnBeats * 60) / settings.bpm,
+      mode === 'bounded' ? 60 : Infinity,
     );
     return phrases.map((_, i) => {
       if (i && mode !== 'forward') {

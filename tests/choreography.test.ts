@@ -73,6 +73,20 @@ describe('musical choreography pipeline', () => {
     }
   });
   it('satisfies hand-center constraints across seeds, intensities, reach, tempo and tick rates', () => {
+    // Switching from an expert profile must not leave bounded turning with an invalid step.
+    for (const turnStyle of ['rests', 'continuous'] as const) {
+      for (const turnDegrees of [90, 120, 180]) {
+        const { report } = generateChoreography(music(), {
+          bpm: 60,
+          turnMode: 'bounded',
+          turnStyle,
+          turnDegrees,
+          maxTurnSpeed: 120,
+        });
+        expect(report.phrases.every((p) => Math.abs(p.heading) <= 60)).toBe(true);
+        expect(report.phrases.some((p) => Math.abs(p.heading) === 60)).toBe(true);
+      }
+    }
     fc.assert(
       fc.property(
         fc.integer({ min: 1, max: 100000 }),
