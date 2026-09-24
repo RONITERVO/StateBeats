@@ -45,6 +45,12 @@ follow head motion. The duet includes a partner bot for the second actor.
 | Sound | Pulse aligns with contact; rear double cue and hand timbres can be distinguished |
 | Sun journey | Follow the traveling sun and trail through a full turn; reach stars and holds; duck beneath birds |
 | Imported music | Choose a local song before entering VR, set its BPM, generate a map and check pause/resume alignment |
+| Choreography | Play Phrases in orbit; verify both rail hands, paired notes, crossovers and recovery time before turns |
+| Personal reach | Generate at your standing headset height and a comfortable reach; verify high/low and side extremes without leaning unexpectedly |
+| Song timing | Correct the song beat offset before device latency; compare a repeated musical accent near the beginning and end |
+| Generation controls | Try forward/bounded/full turning and approach/stationary/mixed arrival; verify that warnings appear early enough |
+| Expert flow | Select Master, then test continuous turning with incoming notes, opposed high/low pairs and crossovers; adjust speed/range separately |
+| Height and room scale | Set 1.65 m and 1.20× as the owner's starting profile; restart and confirm that wider reaches and recorded dimensions match expectations |
 | Perception settings | Try muted captions/glyphs, music without cues, cues without music, contrast and reduced motion |
 | Text alternative | Outside immersive VR, open text.html and complete the arena using explicit steps |
 | Performance | Enable counters before entering; report FPS, pump time, input age and visible stalls |

@@ -1,6 +1,6 @@
 {
   "name": "@statebeats/sdk",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Sessions, maps, clocks and adapters for StateBeats",
   "type": "module",
   "license": "MIT",
@@ -15,7 +15,7 @@
     }
   },
   "dependencies": {
-    "@statebeats/core": "0.2.0",
+    "@statebeats/core": "0.3.0",
     "zod": "4.5.4"
   },
   "sideEffects": false,

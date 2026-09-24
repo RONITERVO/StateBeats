@@ -1,6 +1,7 @@
 import { compile, generateMap } from '@statebeats/sdk';
 import type { MapDefinition, MapInput, NoteInput } from '@statebeats/sdk';
 import { sunlitJourney } from './journey.js';
+import { choreographyJourney } from './choreography.js';
 const p = (azimuth: number, radius = 0.8, elevation = 0) => ({
   azimuth,
   elevation,
@@ -159,7 +160,15 @@ for (let i = 0; i < 8; i++)
     earlyMs: 400,
     lateMs: 400,
   });
-const raw = [tutorial, showcase, duet, arena, sunlitJourney(), sunlitJourney(true)];
+const raw = [
+  tutorial,
+  showcase,
+  duet,
+  arena,
+  sunlitJourney(),
+  sunlitJourney(true),
+  choreographyJourney(),
+];
 export const sampleMaps: MapDefinition[] = raw.map((map) => compile(map).map);
 export function sampleMap(id: string): MapDefinition {
   const map = sampleMaps.find((m) => m.id === id);
@@ -168,3 +177,4 @@ export function sampleMap(id: string): MapDefinition {
 }
 export { generateMap };
 export { sunlitJourney };
+export { choreographyJourney };

@@ -14,7 +14,7 @@ test('imported audio honors a tick-aligned lead-in, resumes at the correct song 
   await page.goto('/conformance.html');
   await page.locator('#run-transport').click();
   await expect(page.locator('#transport-result')).toContainText('late');
-  const [start, resume, paused] = JSON.parse(
+  const [start, resume, paused, later, earlier] = JSON.parse(
     (await page.locator('#transport-result').textContent())!,
   );
   expect(start.early).toBe(0);
@@ -22,4 +22,7 @@ test('imported audio honors a tick-aligned lead-in, resumes at the correct song 
   expect(resume.early).toBeCloseTo(0.081, 5);
   expect(resume.late).toBeCloseTo(0.081, 5);
   expect(paused).toEqual({ early: 0, late: 0 });
+  expect(later.late).toBe(0);
+  expect(earlier.early).toBeCloseTo(0.027, 5);
+  expect(earlier.late).toBeCloseTo(0.081, 5);
 });

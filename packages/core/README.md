@@ -2,7 +2,7 @@
 
 Pure spatial rhythm state machine.
 
-Part of StateBeats 0.2.0. ESM with TypeScript declarations and source included.
+Part of StateBeats 0.3.0. ESM with TypeScript declarations and source included.
 Use Node 24 LTS; core and SDK also run in modern browsers.
 
 The source release includes complete usage in docs/SDK.md, docs/TOOLS.md and
@@ -18,3 +18,5 @@ Release tarballs can be installed together from the source release. The public p
 namespace is prepared; publication is a separate maintainer action.
 
 License: MIT. See LICENSE.
+
+Musical phrase generation, custom composers and movement inspection are described in [the choreography guide](https://github.com/RONITERVO/StateBeats/blob/main/docs/CHOREOGRAPHY.md).

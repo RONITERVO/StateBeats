@@ -13,6 +13,8 @@ import { EngineError, parsed, actorSchema, idSchema } from './schema.js';
 import type { MapDefinition, MapInput } from './schema.js';
 import type { SceneInput, MusicTimeline } from './schema.js';
 import { generateMusicMap } from './music.js';
+import { generateChoreography, inspectChoreography } from './choreography.js';
+import { fitMapToPlayer } from './player-profile.js';
 import { describeObservation } from './perception.js';
 import { Session, standardActor } from './session.js';
 import type { Capability, Checkpoint, Replay } from './session.js';
@@ -59,7 +61,10 @@ export const operations = [
   'map.validate',
   'map.generate',
   'music.generate',
+  'music.compose',
+  'choreography.inspect',
   'map.edit',
+  'map.fit',
   'map.compile',
   'actor.register',
   'command.submit',
@@ -116,8 +121,10 @@ export class EngineService {
         'snapshot.restore',
         'map.generate',
         'music.generate',
+        'music.compose',
         'map.import',
         'map.edit',
+        'map.fit',
       ].includes(captured.op);
       if (!hostOperation || !captured.requestId) return this.perform(captured, capability);
       parsed(idSchema, captured.requestId);
@@ -181,6 +188,29 @@ export class EngineService {
       case 'music.generate': {
         admin();
         const map = generateMusicMap(a.music, a.options as Parameters<typeof generateMusicMap>[1]);
+        await this.maps.put(map);
+        return map;
+      }
+      case 'music.compose': {
+        admin();
+        const result = generateChoreography(
+          a.music,
+          a.options as Parameters<typeof generateChoreography>[1],
+        );
+        await this.maps.put(result.map);
+        return result;
+      }
+      case 'choreography.inspect':
+        return inspectChoreography(
+          await findMap(),
+          a.options as Parameters<typeof inspectChoreography>[1],
+        );
+      case 'map.fit': {
+        admin();
+        const map = fitMapToPlayer(
+          await findMap(),
+          a.options as Parameters<typeof fitMapToPlayer>[1],
+        );
         await this.maps.put(map);
         return map;
       }

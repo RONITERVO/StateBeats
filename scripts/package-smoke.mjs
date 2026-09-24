@@ -28,7 +28,7 @@ await writeFile(
   join(directory, 'sdk-smoke.mjs'),
   `
 import assert from 'node:assert/strict';
-import { Session, standardActor, analyzePcm, sampleMusic, describeObservation } from '@statebeats/sdk';
+import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, generateChoreography, inspectChoreography } from '@statebeats/sdk';
 import { sampleMap } from '@statebeats/content';
 const session = await Session.create(sampleMap('sunlit-journey'), [standardActor()]);
 session.advance(240);
@@ -38,7 +38,11 @@ assert.ok(describeObservation(view).targets.length > 0);
 const music = analyzePcm({ samples: Float32Array.from({length:16000}, (_, i) => Math.sin(i * .1) * .4), sampleRate:16000 });
 assert.ok(sampleMusic(music, 500).energy > 0);
 session.close();
-console.log('Packaged scenes, music and semantic perception work.');
+const composed = generateChoreography(sampleMap('choreography-journey').music, { seed:17, difficulty:'flow', turnMode:'full' });
+assert.ok(composed.report.summary.rails > 0);
+assert.equal(inspectChoreography(composed.map, composed.report.settings).issues.length, 0);
+assert.equal(composed.map.generation.algorithm, 'statebeats/choreography-v1');
+console.log('Packaged scenes, music, choreography and semantic perception work.');
 `,
 );
 await run(['sdk-smoke.mjs'], directory);

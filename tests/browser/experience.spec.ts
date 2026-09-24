@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import { Session } from '@statebeats/sdk';
+import { Session, generateChoreography } from '@statebeats/sdk';
+import { sampleMap } from '@statebeats/content';
 
 function wave(seconds = 20) {
   const rate = 16000,
@@ -22,6 +23,60 @@ function wave(seconds = 20) {
     bytes.writeInt16LE(Math.round(Math.sin((2 * Math.PI * 100 * i) / rate) * 14000), 44 + i * 2);
   return bytes;
 }
+test('saved recipes restore nondefault timing and expert options before rebuilding', async ({
+  page,
+}) => {
+  const { map } = generateChoreography(sampleMap('choreography-journey').music, {
+    id: 'saved-recipe',
+    bpm: 137,
+    beatOffsetSeconds: 0.23,
+    seed: 39,
+    difficulty: 'master',
+    turnStyle: 'continuous',
+    turnMode: 'full',
+    movementRange: 'wide',
+    maxHandSpeed: 6,
+    turnDegrees: 100,
+    maxTurnSpeed: 80,
+    style: 'mixed',
+    theme: 'statebeats/space',
+  });
+  await page.goto('/');
+  await expect(page.locator('#play')).toBeEnabled();
+  await page.locator('#import-panel > summary').click();
+  await page.locator('#map-file').setInputFiles({
+    name: 'saved.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(map)),
+  });
+  await expect(page.locator('#song-bpm')).toHaveValue('137');
+  await expect(page.locator('#song-beat-offset')).toHaveValue('0.23');
+  await expect(page.locator('#song-turn-style')).toHaveValue('continuous');
+  await expect(page.locator('#song-range')).toHaveValue('wide');
+  await expect(page.locator('#song-turn-degrees')).toHaveValue('100');
+  await page.locator('#regenerate-map').click();
+  await expect(page.locator('#import-status')).toContainText('is ready');
+  const download = page.waitForEvent('download');
+  await page.locator('#save-map').click();
+  const file = await download;
+  const rebuilt = JSON.parse(await readFile((await file.path())!, 'utf8'));
+  expect(rebuilt.notes).toEqual(map.notes);
+  expect(rebuilt.generation).toEqual(map.generation);
+  await page.locator('#song-preset').selectOption('beginner');
+  await expect(page.locator('#song-turning')).toHaveValue('forward');
+  await page.locator('#song-preset').selectOption('master');
+  await expect(page.locator('#song-turn-style')).toHaveValue('continuous');
+  await expect(page.locator('#song-bpm')).toHaveValue('137');
+  await page.locator('#import-panel > summary').click();
+  await page.locator('#settings').click();
+  await page.locator('#room-scale').fill('1.2');
+  await page.locator('#player-height').fill('1.65');
+  await page.locator('#close-settings').click();
+  await page.reload();
+  await page.locator('#settings').click();
+  await expect(page.locator('#room-scale')).toHaveValue('1.2');
+  await expect(page.locator('#player-height')).toHaveValue('1.65');
+});
 test('perception preferences survive a reload and do not require audio to play', async ({
   page,
 }) => {
@@ -117,7 +172,7 @@ test('local audio decodes, becomes a portable scene map, and plays through the s
   page.on('pageerror', (error) => errors.push(String(error)));
   await page.goto('/');
   await expect(page.locator('#play')).toBeEnabled();
-  await page.locator('#import-panel summary').click();
+  await page.locator('#import-panel > summary').click();
   await page
     .locator('#song-file')
     .setInputFiles({ name: 'original-tone.wav', mimeType: 'audio/wav', buffer: wave() });
@@ -133,12 +188,50 @@ test('local audio decodes, becomes a portable scene map, and plays through the s
   ).toBe(true);
   expect(map.notes.length).toBeGreaterThan(4);
   expect(map.scene.objects[0].id).toBe('sun');
-  await page.locator('#import-panel summary').click();
+  expect(map.generation.algorithm).toBe('statebeats/choreography-v1');
+  await page.locator('.generation-options summary').click();
+  await page.locator('#song-style').selectOption('mixed');
+  await page.locator('#song-reach').fill('0.55');
+  await page.locator('#song-seed').fill('18');
+  await page.locator('#song-turning').selectOption('bounded');
+  await page.locator('#regenerate-map').click();
+  await expect(page.locator('#import-status')).toContainText('is ready');
+  await expect(page.locator('#generation-summary')).toContainText('Hand movement checks passed');
+  const reportDownload = page.waitForEvent('download');
+  await page.locator('#save-generation-report').click();
+  const reportFile = await reportDownload;
+  const report = JSON.parse(await readFile((await reportFile.path())!, 'utf8'));
+  expect(report.settings.seed).toBe(18);
+  expect(report.settings.style).toBe('mixed');
+  expect(report.settings.reach).toBe(0.55);
+  expect(report.issues).toEqual([]);
+  await page.screenshot({ path: 'artifacts/choreography-studio.png', fullPage: true });
+  await page.locator('#import-panel > summary').click();
   await page.locator('#settings').click();
   await page.locator('#speed').selectOption('4');
   await page.locator('#close-settings').click();
   await page.locator('#watch').click();
   await expect(page.locator('#results')).toBeVisible({ timeout: 20000 });
+  await expect(page.locator('#result-detail')).toContainText('0 missed');
+  expect(errors).toEqual([]);
+});
+
+test('the original choreography journey renders held paths and completes through the worker', async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto('/');
+  await expect(page.locator('#play')).toBeEnabled();
+  await page.getByRole('button', { name: 'Phrases in orbit', exact: true }).click();
+  await page.locator('#settings').click();
+  await page.locator('#speed').selectOption('4');
+  await page.locator('#close-settings').click();
+  await page.locator('#watch').click();
+  await expect(page.locator('#hud')).toBeVisible();
+  await page.waitForTimeout(3500);
+  await page.screenshot({ path: 'artifacts/choreography-journey.png' });
+  await expect(page.locator('#results')).toBeVisible({ timeout: 35000 });
   await expect(page.locator('#result-detail')).toContainText('0 missed');
   expect(errors).toEqual([]);
 });

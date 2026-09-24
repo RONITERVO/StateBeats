@@ -9,6 +9,8 @@ export interface PlayerPreferences {
   audioOnly: boolean;
   speed: number;
   offsetMs: number;
+  playerHeight: number;
+  roomScale: number;
 }
 const key = 'statebeats/preferences/v1';
 export function readPreferences(): PlayerPreferences {
@@ -23,6 +25,8 @@ export function readPreferences(): PlayerPreferences {
     audioOnly: false,
     speed: 1,
     offsetMs: 0,
+    playerHeight: 1.65,
+    roomScale: 1,
   };
   try {
     const stored = JSON.parse(localStorage.getItem(key) ?? 'null');
@@ -46,6 +50,17 @@ export function readPreferences(): PlayerPreferences {
       stored.offsetMs <= 100
     )
       defaults.offsetMs = stored.offsetMs;
+    for (const [name, low, high] of [
+      ['playerHeight', 1, 2.3],
+      ['roomScale', 0.5, 1.75],
+    ] as const)
+      if (
+        typeof stored[name] === 'number' &&
+        Number.isFinite(stored[name]) &&
+        stored[name] >= low &&
+        stored[name] <= high
+      )
+        defaults[name] = stored[name];
   } catch {
     /* Restricted storage does not prevent play. */
   }

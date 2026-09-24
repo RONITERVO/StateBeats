@@ -1,6 +1,6 @@
 # Architecture and implementation contract
 
-Status: StateBeats 0.2.0 passed local headless, desktop, browser and packaging checks; Quest hardware checks remain pending. See [acceptance evidence](ACCEPTANCE.md). This supersedes the provisional architecture; [owner direction](design/OWNER_DIRECTION.md) supplies the original product decisions, extended by the StateBeats scene/music/access request. The user asked Codex to take over implementation on 2026-09-07; the earlier Claude model instruction no longer applies.
+Status: StateBeats 0.3.0 adds musical choreography and authoring adapters to the locally verified 0.2.0 foundation; Quest hardware checks remain pending. See [acceptance evidence](ACCEPTANCE.md). This supersedes the provisional architecture; [owner direction](design/OWNER_DIRECTION.md) supplies the original product decisions, extended by the StateBeats scene/music/access request. The user asked Codex to take over implementation on 2026-09-07; the earlier Claude model instruction no longer applies.
 
 The pure `transition(state, commands, program)` computes exactly the next integer tick. The immutable program contains compiled entity definitions, rules and versioned trusted policies. All authoritative continuation state is explicit. Core has no host API or third-party imports. TypeScript compiles the same implementation for Node and the browser.
 
@@ -24,7 +24,14 @@ are sampled from explicit ticks; output bindings never resize collision shapes o
 Imported PCM analysis runs in an authoring worker. Its versioned feature timeline and the
 resulting chart are saved as JSON, so manual agents and replays need no audio device.
 Gameplay and presentation have separate integrity hashes. Kernel recording version 0.1.0
-remains compatible while the public package version advances to 0.2.0.
+remains compatible while the public package version advances to 0.3.0.
+
+Choreography is an SDK authoring pipeline with replaceable musical selection, phrase composition
+and facing plans. Its output is a validated ordinary map plus a separate explanation report.
+Generation recipes identify their version and trusted adapters; saved geometry is sufficient
+for playback. Runtime simulation never calls a generator. Contact-path previews come from
+the same compiled motion as collision. See CHOREOGRAPHY.md for contracts and DIRECTION.md
+for the product quality gates.
 
 The reference client offers environment and appearance factories alongside generic geometry,
 labels, timing and audio guidance. Text play is a separate DOM entry that imports the SDK

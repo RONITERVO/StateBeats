@@ -503,6 +503,14 @@ footer button span {
   padding: 7px;
   border-radius: 4px;
 }
+.dialog input[type='number'] {
+  width: 90px;
+  background: #152236;
+  color: #edf2f7;
+  border: 1px solid var(--line);
+  padding: 7px;
+  border-radius: 4px;
+}
 input[type='checkbox'] {
   accent-color: var(--cyan);
   margin-right: auto;
@@ -709,12 +717,39 @@ body.xr #hud {
   font-size: 13px;
 }
 #import-panel[open] {
-  max-height: 44vh;
+  position: fixed;
+  z-index: 50;
+  top: 80px;
+  right: max(16px, 5vw);
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100dvh - 164px);
+  margin-top: 0;
   overflow-y: auto;
+  box-shadow: 0 18px 70px #000b;
+  scrollbar-width: thin;
+}
+main:has(#import-panel[open]) {
+  z-index: 3;
 }
 #import-panel summary {
   cursor: pointer;
   color: #d7ece9;
+}
+#import-panel > summary {
+  position: sticky;
+  top: -12px;
+  z-index: 1;
+  padding: 10px 0;
+  background: #101b2e;
+}
+#import-panel p {
+  color: #bfd0df;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.generation-options {
+  border-block: 1px solid #385065;
+  padding: 12px 0;
 }
 #import-panel label {
   display: flex;
@@ -723,11 +758,29 @@ body.xr #hud {
   justify-content: space-between;
   margin: 12px 0;
 }
+#import-panel label:has(input[type='checkbox']) {
+  justify-content: flex-start;
+}
+#import-panel input[type='checkbox'] {
+  margin-right: 0;
+}
+#import-panel select,
 #import-panel input[type='number'] {
-  width: 72px;
+  color: #e4eef3;
+  background: #17263d;
+  border: 1px solid #587086;
+  border-radius: 5px;
+  padding: 7px;
+}
+#import-panel select {
+  max-width: 56%;
+}
+#import-panel input[type='number'] {
+  width: 90px;
+  flex-shrink: 0;
 }
 #import-panel input[type='file'] {
-  max-width: 210px;
+  max-width: 48%;
 }
 #import-status {
   font-size: 12px;

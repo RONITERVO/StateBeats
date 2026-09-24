@@ -1,6 +1,6 @@
 {
   "name": "@statebeats/cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Headless StateBeats command line",
   "type": "module",
   "license": "MIT",
@@ -12,9 +12,9 @@
     "statebeats": "dist/index.js"
   },
   "dependencies": {
-    "@statebeats/core": "0.2.0",
-    "@statebeats/sdk": "0.2.0",
-    "@statebeats/content": "0.2.0"
+    "@statebeats/core": "0.3.0",
+    "@statebeats/sdk": "0.3.0",
+    "@statebeats/content": "0.3.0"
   },
   "engines": {
     "node": ">=24 <25"

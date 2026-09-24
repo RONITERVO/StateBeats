@@ -1,6 +1,6 @@
 {
   "name": "statebeats",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -17,6 +17,7 @@
     "pretest": "npm run build:lib",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:pages": "playwright test --config playwright.pages.config.ts",
     "lint": "node scripts/check-boundaries.mjs && prettier --check packages tests scripts *.json *.ts",
     "format": "prettier --write packages tests scripts *.json *.ts",
     "dev": "npm run build:lib && npm run dev --workspace @statebeats/player",

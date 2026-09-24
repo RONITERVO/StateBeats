@@ -3,13 +3,29 @@ import * as THREE from 'three';
 import { controllerSamples } from './xr-input.js';
 import type { TrackedController } from './xr-input.js';
 import { sampleMaps, sampleMap } from '@statebeats/content';
-import { beatToTick, beatValue, compile, describeObservation } from '@statebeats/sdk';
-import type { Observation, Replay, MapDefinition } from '@statebeats/sdk';
+import {
+  beatToTick,
+  beatValue,
+  compile,
+  describeObservation,
+  fitMapToPlayer,
+  musicGenerationSchema,
+  CHOREOGRAPHY_VERSION,
+} from '@statebeats/sdk';
+import type {
+  Observation,
+  Replay,
+  MapDefinition,
+  ChoreographyReport,
+  MusicGenerationOptions,
+  MusicTimeline,
+} from '@statebeats/sdk';
 import type { Vec3, Quat } from '@statebeats/core';
 import type { FromWorker, ToWorker, HandSample } from './protocol.js';
 import { OrbitScene, sceneVector } from './scene.js';
 import { RhythmAudio } from './audio.js';
 import { readPreferences, storePreferences } from './preferences.js';
+import { assistedTargetPoint } from './desktop-input.js';
 
 const el = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const button = (id: string, fn: () => void) => el(id).addEventListener('click', fn);
@@ -18,6 +34,12 @@ const orbit = new OrbitScene(el('stage')),
   worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
 const send = (message: ToWorker) => worker.postMessage(message);
 let importedMap: MapDefinition | undefined;
+let generationReport: ChoreographyReport | undefined;
+let generationBaseline: MusicGenerationOptions = {};
+let rebuildSupported = false;
+let personalHeight = 1.65,
+  roomScale = 1;
+let activeHeight = 1.65;
 let importedSong: { buffer: AudioBuffer; sha256: string } | undefined;
 let analysisWorker: Worker | undefined;
 const maps = () => (importedMap ? [...sampleMaps, importedMap] : sampleMaps);
@@ -247,7 +269,14 @@ async function prepareAudio() {
 async function start(bot: boolean) {
   await prepareAudio();
   audio.reset();
-  const map = mapFor(selected);
+  let map: MapDefinition;
+  try {
+    map = fitMapToPlayer(mapFor(selected), { height: personalHeight, roomScale });
+  } catch (error) {
+    notify(`This map could not use the selected height/scale: ${String(error)}`);
+    return;
+  }
+  activeHeight = personalHeight;
   audio.setScore(map);
   if (map.music?.source && importedSong?.sha256 === map.music.source.sha256)
     audio.setSong(importedSong.buffer, map.music.frames[0]?.tick ?? 0);
@@ -263,6 +292,7 @@ async function start(bot: boolean) {
   lastPhase = 'loading';
   view = undefined;
   desktopYaw = 0;
+  desktopPitch = 0;
   el('lobby').hidden = true;
   el('pause-panel').hidden = true;
   el('results').hidden = true;
@@ -540,16 +570,201 @@ function downloadJson(data: unknown, filename: string) {
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-function installMap(map: MapDefinition) {
+function installMap(map: MapDefinition, report?: ChoreographyReport) {
   for (const card of el('maps').querySelectorAll('[data-imported]')) card.remove();
   importedMap = map;
+  generationReport = report;
+  const restored =
+    map.generation?.algorithm === CHOREOGRAPHY_VERSION
+      ? musicGenerationSchema.strip().safeParse(map.generation.settings)
+      : undefined;
+  const recipe = map.generation?.settings as Record<string, unknown> | undefined;
+  const supported =
+    !map.generation ||
+    (restored?.success &&
+      recipe?.composer === 'statebeats/dance-phrases-v1' &&
+      recipe?.facing === 'statebeats/phrase-facing-v1' &&
+      recipe?.selector === 'statebeats/phrase-rhythm-v1');
+  generationBaseline = restored?.success
+    ? restored.data
+    : { bpm: Math.max(40, Math.min(240, map.tempo[0].bpm)) };
+  restoreSongControls(generationBaseline);
+  rebuildSupported =
+    !!map.music &&
+    !!supported &&
+    map.tempo.length === 1 &&
+    map.tempo[0].bpm >= 40 &&
+    map.tempo[0].bpm <= 240;
+  el<HTMLButtonElement>('regenerate-map').disabled = !rebuildSupported;
+  el<HTMLButtonElement>('save-generation-report').disabled = !report;
+  el('generation-summary').textContent = report
+    ? `${report.summary.heads} notes · ${report.summary.rails} held paths · ${report.summary.pairs} paired moments · ${report.summary.hazards} obstacles. ${report.omitted.length} candidates omitted for musical selection or movement limits. ${report.issues.length ? `${report.issues.length} hand movement issues need review.` : 'Hand movement checks passed.'} Preview with a bot, then start gently on your headset.`
+    : '';
   addMapCard(map, 6);
   el('maps').lastElementChild!.setAttribute('data-imported', 'true');
   selectMap(map.id);
   el('import-status').textContent =
-    `${map.title} is ready. ${map.notes.length} interactions. Save the map to keep its generated sequence.`;
+    `${map.title} is ready. ${map.notes.length} interactions. Save the map to keep its generated sequence.${supported && map.tempo.length === 1 ? '' : ' This recipe requires its original generator or tempo editor to rebuild.'}`;
 }
+function restoreSongControls(options: MusicGenerationOptions) {
+  const settings = musicGenerationSchema.parse(options);
+  const values = {
+    'song-bpm': settings.bpm,
+    'song-difficulty': settings.difficulty,
+    'song-turning': settings.turnMode ?? (settings.turning ? 'full' : 'forward'),
+    'song-turn-style': settings.turnStyle,
+    'song-range': settings.movementRange,
+    'song-turn-degrees': settings.turnDegrees,
+    'song-turn-speed': settings.maxTurnSpeed,
+    'song-hand-speed': settings.maxHandSpeed,
+    'song-style': settings.style,
+    'song-rhythm': settings.rhythm,
+    'song-beat-offset': settings.beatOffsetSeconds,
+    'song-height': settings.playerHeight,
+    'song-reach': settings.reach,
+    'song-lead': settings.leadSeconds,
+    'song-distance': settings.spawnDistance,
+    'song-seed': settings.seed,
+  };
+  for (const [id, value] of Object.entries(values)) el<HTMLInputElement>(id).value = String(value);
+  for (const [id, value] of Object.entries({
+    'song-rails': settings.rails,
+    'song-pairs': settings.pairs,
+    'song-crossovers': settings.crossovers,
+    'song-duck': settings.obstacles === 'duck',
+  }))
+    el<HTMLInputElement>(id).checked = value;
+  el<HTMLSelectElement>('song-preset').value = 'custom';
+}
+el<HTMLSelectElement>('song-preset').onchange = () => {
+  const preset = el<HTMLSelectElement>('song-preset').value;
+  if (preset === 'custom') return;
+  const master = preset === 'master',
+    beginner = preset === 'beginner';
+  restoreSongControls({
+    ...songOptions(),
+    difficulty: master ? 'master' : preset === 'hard' ? 'busy' : beginner ? 'gentle' : 'flow',
+    turnMode: beginner ? 'forward' : preset === 'normal' ? 'bounded' : 'full',
+    turnStyle: master ? 'continuous' : 'rests',
+    movementRange: master || preset === 'hard' ? 'wide' : 'compact',
+    turnDegrees: master ? 120 : 30,
+    maxTurnSpeed: master ? 60 : 30,
+    maxHandSpeed: master ? 6 : 3,
+    rails: !beginner,
+    pairs: !beginner,
+    crossovers: master || preset === 'hard',
+    obstacles: 'none',
+    rhythm: master ? 'steady' : 'hybrid',
+  });
+  el<HTMLSelectElement>('song-preset').value = preset;
+};
+for (const [id, set, low, high] of [
+  [
+    'player-height',
+    (n: number) => {
+      personalHeight = n;
+    },
+    1,
+    2.3,
+  ],
+  [
+    'room-scale',
+    (n: number) => {
+      roomScale = n;
+    },
+    0.5,
+    1.75,
+  ],
+] as const)
+  el<HTMLInputElement>(id).onchange = () => {
+    const input = el<HTMLInputElement>(id),
+      value = Number(input.value);
+    const valid = Number.isFinite(value) ? Math.max(low, Math.min(high, value)) : low;
+    input.value = String(valid);
+    set(valid);
+  };
 button('save-map', () => downloadJson(mapFor(selected), `statebeats-${selected}.json`));
+button('save-generation-report', () => {
+  if (generationReport) downloadJson(generationReport, `statebeats-${selected}-generation.json`);
+});
+function songOptions(): MusicGenerationOptions {
+  const number = (id: string) => Number(el<HTMLInputElement>(id).value);
+  return {
+    ...generationBaseline,
+    bpm: number('song-bpm'),
+    difficulty: el<HTMLSelectElement>('song-difficulty')
+      .value as MusicGenerationOptions['difficulty'],
+    turnMode: el<HTMLSelectElement>('song-turning').value as MusicGenerationOptions['turnMode'],
+    turnStyle: el<HTMLSelectElement>('song-turn-style')
+      .value as MusicGenerationOptions['turnStyle'],
+    movementRange: el<HTMLSelectElement>('song-range')
+      .value as MusicGenerationOptions['movementRange'],
+    turnDegrees: number('song-turn-degrees'),
+    maxTurnSpeed: number('song-turn-speed'),
+    maxHandSpeed: number('song-hand-speed'),
+    style: el<HTMLSelectElement>('song-style').value as MusicGenerationOptions['style'],
+    rhythm: el<HTMLSelectElement>('song-rhythm').value as MusicGenerationOptions['rhythm'],
+    beatOffsetSeconds: number('song-beat-offset'),
+    playerHeight: number('song-height'),
+    reach: number('song-reach'),
+    leadSeconds: number('song-lead'),
+    spawnDistance: number('song-distance'),
+    seed: number('song-seed'),
+    rails: el<HTMLInputElement>('song-rails').checked,
+    pairs: el<HTMLInputElement>('song-pairs').checked,
+    crossovers: el<HTMLInputElement>('song-crossovers').checked,
+    obstacles: el<HTMLInputElement>('song-duck').checked ? 'duck' : 'none',
+  };
+}
+async function composeSong(payload: {
+  music?: MusicTimeline;
+  samples?: Float32Array;
+  sampleRate?: number;
+  source?: MusicTimeline['source'];
+}) {
+  el('import-status').textContent = 'Composing musical phrases and checking movement…';
+  for (const id of ['song-file', 'map-file', 'regenerate-map'])
+    el<HTMLInputElement>(id).disabled = true;
+  analysisWorker?.terminate();
+  const current = new Worker(new URL('./import-worker.ts', import.meta.url), { type: 'module' });
+  analysisWorker = current;
+  try {
+    return await new Promise<{ map: MapDefinition; report: ChoreographyReport }>(
+      (resolve, reject) => {
+        current.onmessage = (
+          event: MessageEvent<{ map?: MapDefinition; report?: ChoreographyReport; error?: string }>,
+        ) => {
+          if (event.data.error || !event.data.map || !event.data.report)
+            reject(new Error(event.data.error ?? 'Composition failed'));
+          else resolve({ map: event.data.map, report: event.data.report });
+        };
+        current.onerror = (event) => reject(new Error(event.message));
+        current.postMessage(
+          { ...payload, options: songOptions() },
+          payload.samples ? [payload.samples.buffer] : [],
+        );
+      },
+    );
+  } finally {
+    current.terminate();
+    if (analysisWorker === current) analysisWorker = undefined;
+    el<HTMLInputElement>('song-file').disabled = false;
+    el<HTMLInputElement>('map-file').disabled = false;
+    el<HTMLButtonElement>('regenerate-map').disabled = !rebuildSupported;
+  }
+}
+button('regenerate-map', () => {
+  void (async () => {
+    if (!importedMap?.music) return;
+    if (running) pause();
+    try {
+      const { map, report } = await composeSong({ music: importedMap.music });
+      installMap(map, report);
+    } catch (error) {
+      el('import-status').textContent = String(error);
+    }
+  })();
+});
 el<HTMLInputElement>('map-file').onchange = () => {
   void (async () => {
     try {
@@ -595,34 +810,13 @@ el<HTMLInputElement>('song-file').onchange = () => {
         for (let i = 0; i < data.length; i++) samples[i] += data[i] / buffer.numberOfChannels;
       }
       for (let i = 0; i < samples.length; i++) samples[i] = Math.max(-1, Math.min(1, samples[i]));
-      el('import-status').textContent = 'Analyzing the music and building your star sequence…';
-      analysisWorker?.terminate();
-      analysisWorker = new Worker(new URL('./import-worker.ts', import.meta.url), {
-        type: 'module',
-      });
-      const map = await new Promise<MapDefinition>((resolve, reject) => {
-        analysisWorker!.onmessage = (
-          event: MessageEvent<{ map?: MapDefinition; error?: string }>,
-        ) => {
-          if (event.data.error || !event.data.map)
-            reject(new Error(event.data.error ?? 'Import failed'));
-          else resolve(event.data.map);
-        };
-        analysisWorker!.onerror = (event) => reject(new Error(event.message));
-        analysisWorker!.postMessage(
-          {
-            samples,
-            sampleRate: buffer.sampleRate,
-            source: { name: file.name, sha256, durationSeconds: buffer.duration },
-            bpm: Number(el<HTMLInputElement>('song-bpm').value),
-            difficulty: el<HTMLSelectElement>('song-difficulty').value,
-            turning: el<HTMLInputElement>('song-turning').checked,
-          },
-          [samples.buffer],
-        );
+      const { map, report } = await composeSong({
+        samples,
+        sampleRate: buffer.sampleRate,
+        source: { name: file.name, sha256, durationSeconds: buffer.duration },
       });
       importedSong = preparedSong;
-      installMap(map);
+      installMap(map, report);
     } catch (error) {
       notify(String(error));
       el('import-status').textContent = 'Song import did not complete.';
@@ -650,8 +844,12 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden && running) pause();
 });
 orbit.renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
+let activeDesktopHand = 0;
+let desktopPitch = 0;
 orbit.renderer.domElement.addEventListener('pointermove', (e) => {
   targetMouse.set((e.clientX / innerWidth) * 2 - 1, (-e.clientY / innerHeight) * 2 + 1);
+  if (playing && running && !autoplay && desktopHeld[activeDesktopHand])
+    handTargets[activeDesktopHand].copy(desktopAim(activeDesktopHand));
 });
 orbit.renderer.domElement.addEventListener('pointerdown', (e) => {
   if (!playing || !running || autoplay) return;
@@ -659,7 +857,8 @@ orbit.renderer.domElement.addEventListener('pointerdown', (e) => {
   if (e.button !== 0 && e.button !== 2) return;
   const hand = (e.button === 0 ? 0 : 1) ^ (swap ? 1 : 0);
   desktopHeld[hand] = true;
-  const target = desktopAim();
+  activeDesktopHand = hand;
+  const target = desktopAim(hand);
   handTargets[hand].copy(target);
   orbit.hands[hand].position.copy(target);
 });
@@ -671,6 +870,7 @@ const keys = new Set<string>();
 window.addEventListener('keydown', (e) => {
   if ((e.target as HTMLElement).matches('input,select')) return;
   keys.add(e.code);
+  if (playing && (e.code === 'ArrowUp' || e.code === 'ArrowDown')) e.preventDefault();
   if (e.code === 'Escape') {
     if (running) pause();
     else if (playing && !view?.finished) resume();
@@ -687,11 +887,28 @@ window.addEventListener('keyup', (e) => {
   keys.delete(e.code);
   if (e.code === 'Space') desktopHeld = [false, false];
 });
-function desktopAim() {
+function desktopAim(hand?: number) {
   raycaster.setFromCamera(targetMouse, orbit.camera);
+  let depth = 0.85;
+  // Pointer depth assistance is an input adapter, never a hit/scoring shortcut.
+  // The last dragged hand follows the pointer; the other keeps its stored position.
+  const semantic = hand === undefined ? undefined : hand === 0 ? 'left' : 'right';
+  const candidates =
+    view?.entities.filter(
+      (entity) =>
+        entity.kind !== 'hazard' &&
+        (!semantic || entity.slots.some((slot) => !slot.semantic || slot.semantic === semantic)),
+    ) ?? [];
+  candidates.sort(
+    (a, b) => Math.max(0, a.hitTick - view!.tick) - Math.max(0, b.hitTick - view!.tick),
+  );
+  for (const entity of candidates) {
+    const point = assistedTargetPoint(raycaster.ray, entity, view!.tick);
+    if (point) return point;
+  }
   const point = raycaster.ray.origin
     .clone()
-    .add(raycaster.ray.direction.clone().multiplyScalar(0.85));
+    .add(raycaster.ray.direction.clone().multiplyScalar(depth));
   return point;
 }
 
@@ -801,14 +1018,25 @@ orbit.renderer.setAnimationLoop((time) => {
         .filter((e) => e.kind !== 'hazard' && e.endTick >= view!.tick)
         .sort((a, b) => a.hitTick - b.hitTick)[0];
       if (target) {
-        const yaw = Math.atan2(-target.position[0], -target.position[2]);
+        const position = target.targetPosition ?? target.position;
+        const yaw = Math.atan2(-position[0], -position[2]);
         const delta = Math.atan2(Math.sin(yaw - desktopYaw), Math.cos(yaw - desktopYaw));
         desktopYaw += delta * Math.min(1, dt * 4);
+        const pitch = Math.atan2(
+          position[1] - orbit.camera.position.y,
+          Math.hypot(position[0], position[2]),
+        );
+        desktopPitch += (pitch - desktopPitch) * Math.min(1, dt * 3);
       }
     }
     desktopYaw += ((keys.has('KeyQ') ? 1 : 0) - (keys.has('KeyE') ? 1 : 0)) * dt * 1.5;
-    orbit.camera.rotation.set(0, desktopYaw, 0);
-    orbit.camera.position.y = keys.has('KeyC') ? 1.0 : 1.65;
+    desktopPitch = THREE.MathUtils.clamp(
+      desktopPitch + ((keys.has('ArrowUp') ? 1 : 0) - (keys.has('ArrowDown') ? 1 : 0)) * dt,
+      -1.2,
+      1.2,
+    );
+    orbit.camera.rotation.set(desktopPitch, desktopYaw, 0, 'YXZ');
+    orbit.camera.position.y = keys.has('KeyC') ? activeHeight * 0.61 : activeHeight;
     orbit.aim.visible = running && !autoplay;
     orbit.aim.position.copy(desktopAim());
     orbit.aim.quaternion.copy(orbit.camera.quaternion);
@@ -934,9 +1162,15 @@ function savePreferences() {
     audioOnly: hideTargets,
     speed,
     offsetMs: audio.offsetMs,
+    playerHeight: personalHeight,
+    roomScale,
   });
 }
 const preferences = readPreferences();
+personalHeight = preferences.playerHeight;
+roomScale = preferences.roomScale;
+el<HTMLInputElement>('player-height').value = String(personalHeight);
+el<HTMLInputElement>('room-scale').value = String(roomScale);
 audio.enabled = preferences.sound;
 audio.musicEnabled = preferences.music;
 audio.cuesEnabled = preferences.cues;
@@ -967,6 +1201,7 @@ document.body.classList.toggle('high-contrast', preferences.highContrast);
 document.addEventListener('change', (event) => {
   if ((event.target as HTMLElement).closest('#settings-panel')) savePreferences();
 });
+el<HTMLSelectElement>('song-preset').dispatchEvent(new Event('change'));
 selectMap('tutorial');
 el<HTMLButtonElement>('play').disabled = true;
 el<HTMLButtonElement>('watch').disabled = true;

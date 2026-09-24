@@ -34,7 +34,23 @@ export function scenePositionAt(
   object: Pick<CompiledSceneObject, 'position' | 'motion'>,
   tick: number,
 ): Vec3 {
-  return positionAt(object, tick);
+  // Locate the same adjacent keys as the kernel, in logarithmic time for long songs.
+  const keys = object.motion;
+  if (keys.length < 2 || tick <= keys[0].tick || tick >= keys.at(-1)!.tick)
+    return positionAt(
+      keys.length
+        ? { position: object.position, motion: [tick <= keys[0].tick ? keys[0] : keys.at(-1)!] }
+        : object,
+      tick,
+    );
+  let low = 1,
+    high = keys.length - 1;
+  while (low < high) {
+    const mid = (low + high) >>> 1;
+    if (keys[mid].tick < tick) low = mid + 1;
+    else high = mid;
+  }
+  return positionAt({ position: object.position, motion: [keys[low - 1], keys[low]] }, tick);
 }
 
 /** Stateless presentation sampling: seeking/backward/manual ticks need no hidden trail history. */

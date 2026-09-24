@@ -237,17 +237,20 @@ export function compile(
         if (releaseTick < 1 || releaseTick >= hitTick || releaseTick > hitTick - ms(note.earlyMs))
           errors.push(`Emission must precede the interaction window: ${note.id}`);
         if (
-          motion.some((key) => key.tick <= releaseTick || key.tick >= hitTick) ||
+          motion.some((key) => key.tick <= releaseTick || key.tick === hitTick) ||
           motion.length > 254
         )
           errors.push(
-            `Emission motion keys must be strictly between release and hit, at most 254: ${note.id}`,
+            `Emission motion keys must follow release, omit the implicit hit key, at most 254: ${note.id}`,
           );
+        if (motion.some((key) => key.tick > endTick))
+          errors.push(`Emission motion must finish within the entity lifetime: ${note.id}`);
         spawnTick = releaseTick;
         motion = [
           { tick: releaseTick, position: scenePositionAt(emitter, releaseTick) },
-          ...motion,
+          ...motion.filter((key) => key.tick < hitTick),
           { tick: hitTick, position: cartesian(note.position) },
+          ...motion.filter((key) => key.tick > hitTick),
         ];
       }
     }
@@ -358,6 +361,8 @@ export function presentationIdentity(map: MapDefinition): Promise<string> {
     offsetSeconds: map.offsetSeconds,
     scene: map.scene ?? null,
     music: map.music ?? null,
+    ...(map.generation ? { generation: map.generation } : {}),
+    ...(map.playerProfile ? { playerProfile: map.playerProfile } : {}),
     labels: map.notes
       .filter((note) => note.label || note.appearance)
       .map((note) => ({ id: note.id, label: note.label, appearance: note.appearance })),
