@@ -4,11 +4,31 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Note presentation review fixes, 2026-09-24
+
+All five PR #4 findings were reproduced and corrected. Core transitions now expose detached
+final states for removed entities, so release effects receive completed strikes/holds and the
+final reset state of failed holds. World state, events and scoring rules are unchanged. A full
+19,200-tick Event Horizon recording captured before these fixes verifies afterwards with the
+same state hash and event digest.
+
+The player fades semantic rings, cores and labels along with artwork, including particles.
+The default envelope restores unfaded material opacity before adapter updates, preserving
+animation across repeated frames and zero visibility. Labels share textures without sharing
+opacity. Suppressed custom guides remain owned by the scene and are disposed exactly once.
+
+`npm run check` passed **112 tests in 18 files**, strict types, formatting, core boundaries and
+the production build. Two targeted Chromium presentation cases passed with actual WebGL
+rendering, independent simultaneous labels, animated particles and disposal counters. All
+three Node/Chromium/Firefox/WebKit conformance cases passed. All three production Pages cases
+passed, including complete bundled Event Horizon playback, synchronized resume, zero misses
+and verified replay. Physical Quest testing remains deferred.
+
 ## Note presentation revision, 2026-09-24
 
 The SDK projects authoritative trajectories into versioned appearance, arrival, reveal and
 release cues. Event Horizon's holds use a 0.75-beat leading window and 0.5-beat trail, with
-stationary emergence and 65 authored motion samples. The core remains unchanged. Full-route
+stationary emergence and 65 authored motion samples. Scoring rules remain unchanged. Full-route
 previews remain available to authoring capabilities; player cues use the map's reveal policy.
 
 The clean source archive passed **106 tests in 16 files**, strict type checking, formatting,

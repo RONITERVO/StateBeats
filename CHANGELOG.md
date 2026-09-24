@@ -10,6 +10,11 @@ emergence instead of revealing complete future hold loops, with denser authored 
 both scoring and rendering. Release effects reconstruct on checkpoint restore and never remain
 active collision targets. See [note presentation](docs/NOTE_PRESENTATION.md).
 
+Presentation review fixes preserve the final interaction state in release effects through
+an additive core transition result, with unchanged scoring and recording identity. The
+reference player fades semantic cues and particles, composes adapter opacity animation
+with lifecycle visibility, and disposes custom guides even when the map suppresses them.
+
 Adds reusable musical turn planning with versioned tracks, explicit sweeps/continuations/answers,
 quintic easing, peak speed/acceleration and directional-travel limits, explanation reports and
 SDK/CLI/MCP operations. Event Horizon replaces section-wide rotation with score-authored turn

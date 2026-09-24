@@ -1,12 +1,4 @@
-import {
-  contactPolicy,
-  initialState,
-  positionAt,
-  transition,
-  add,
-  rotate,
-  quaternion,
-} from '@statebeats/core';
+import { contactPolicy, initialState, positionAt, transition, add, rotate } from '@statebeats/core';
 import type {
   ActorSpec,
   Command,
@@ -389,10 +381,9 @@ export class Session {
         if (c.type === 'pose') poses.set(JSON.stringify([c.actorId, c.effectorId]), c);
         else other.push(c);
       }
-      const before = this.world;
-      const result = transition(before, [...other, ...poses.values()], this.program);
+      const result = transition(this.world, [...other, ...poses.values()], this.program);
       this.world = result.state;
-      this.rememberReleases(before, ready, result.events);
+      this.rememberReleases(result.resolvedEntities, result.events);
       all.push(...result.events);
       this.eventLog.push(...result.events);
       this.replayEvents.push(...result.events);
@@ -449,56 +440,11 @@ export class Session {
     return clone(result);
   }
   /** Derived SDK state only. Reconstructed by the accepted timeline, never scored or checkpoint-trusted. */
-  private rememberReleases(before: WorldState, commands: Command[], events: DomainEvent[]) {
+  private rememberReleases(removed: LiveEntity[], events: DomainEvent[]) {
     this.releases = this.releases.filter(
       ({ entity, resolution }) =>
         this.tick < resolution.tick + this.presenter.releaseTicks(entity.spec.id, entity.spec.kind),
     );
-    const alive = new Set(this.world.entities.map((e) => e.spec.id));
-    const removed = before.entities.filter((e) => !alive.has(e.spec.id));
-    const spawned = new Set(
-      events.filter((e) => e.type === 'entity.spawned').map((e) => e.entityId),
-    );
-    // Also support entities which spawn and resolve within a single simulation tick.
-    const stages = new Map(before.actors.map((a) => [a.id, a.stage]));
-    const rejected = new Set(
-      events
-        .filter((e) => e.type === 'command.rejected')
-        .map((e) => (e.data as { commandId: string }).commandId),
-    );
-    const addBorn = (spec: EntitySpec) => {
-      if (!spawned.has(spec.id) || alive.has(spec.id)) return;
-      const transform = stages.get(spec.anchor ?? '') ?? {
-        position: [0, 0, 0] as Vec3,
-        orientation: [0, 0, 0, 1] as Quat,
-      };
-      const position = add(
-        rotate(positionAt(spec, this.tick), transform.orientation),
-        transform.position,
-      );
-      removed.push({
-        spec,
-        transform,
-        position,
-        previous: position,
-        hits: [],
-        armedTick: null,
-        hold: 0,
-        brokenFor: 0,
-        occupancy: [],
-        memory: null,
-      });
-    };
-    for (const c of [...commands].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))) {
-      if (rejected.has(c.id)) continue;
-      if (c.type === 'calibrate')
-        stages.set(c.actorId, { position: c.position, orientation: quaternion(c.orientation) });
-      if (c.type === 'actor.remove') stages.delete(c.actorId);
-      if (c.type === 'actor.add')
-        stages.set(c.actor.id, { position: [0, 0, 0], orientation: [0, 0, 0, 1] });
-      if (c.type === 'director.spawn') addBorn(c.entity);
-    }
-    for (let i = before.cursor; i < this.world.cursor; i++) addBorn(this.program.entities[i]);
     for (const entity of removed) {
       if (!this.presenter.releaseTicks(entity.spec.id, entity.spec.kind)) continue;
       const hit = events.some((e) => e.entityId === entity.spec.id && e.type === 'interaction.hit');

@@ -146,6 +146,8 @@ describe('shared note presentation', () => {
     const view = session.observe(player);
     expect(view.entities).toHaveLength(0);
     expect(view.resolvedEntities).toHaveLength(1);
+    expect(view.resolvedEntities![0].progress).toBe(1);
+    expect(view.resolvedEntities![0].hold).toBe(view.resolvedEntities![0].holdTicks);
     const frame = view.resolvedEntities![0].presentation!;
     expect(frame.phase).toBe('resolved');
     expect(frame.outcome).toBe('hit');
@@ -206,6 +208,7 @@ describe('shared note presentation', () => {
     session.advance(60);
     expect(session.observe(player).entities).toEqual([]);
     expect(session.observe(player).resolvedEntities![0].position).toEqual([1, 1, -0.4]);
+    expect(session.observe(player).resolvedEntities![0].progress).toBe(1);
     const restored = await Session.restore(session.client(admin).checkpoint());
     expect(restored.observe(player)).toEqual(session.observe(player));
   });
@@ -271,6 +274,7 @@ describe('shared note presentation', () => {
     const released = session.observe(player).resolvedEntities![0];
     expect(released.position).toEqual([1, 1, -0.4]);
     expect(released.presentation!.outcome).toBe('hit');
+    expect(released.progress).toBe(1);
     const restored = await Session.restore(session.client(admin).checkpoint());
     expect(restored.observe(player)).toEqual(session.observe(player));
   });

@@ -195,7 +195,7 @@ export function transition(
 ): TransitionResult {
   if (previous.programId !== program.id || previous.tick >= program.rules.maxTick)
     throw new Error('Program/tick invariant violated');
-  if (previous.finished) return { state: previous, events: [] };
+  if (previous.finished) return { state: previous, events: [], resolvedEntities: [] };
   const state: WorldState = {
     ...previous,
     tick: previous.tick + 1,
@@ -565,6 +565,9 @@ export function transition(
       emit('group.broken', { groupId: group.id });
     }
   }
+  const resolvedEntities = state.entities
+    .filter((e) => resolved.has(e.spec.id))
+    .map((e) => copy(e));
   state.entities = state.entities.filter((e) => !resolved.has(e.spec.id));
   state.resolvedCount += resolved.size;
   if (
@@ -575,5 +578,5 @@ export function transition(
     state.finished = true;
     emit('session.ended', { resolved: state.resolvedCount });
   }
-  return { state, events };
+  return { state, events, resolvedEntities };
 }

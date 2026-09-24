@@ -95,23 +95,44 @@ registerAppearance('statebeats/prism', (entity, color) => {
   };
 });
 
-/** Default lifecycle envelope for existing adapters; material baselines are retained per instance. */
-const baseOpacity = new WeakMap<THREE.Material, number>();
-export function applyPresence(object: THREE.Object3D, visibility: number) {
+const opacityState = new WeakMap<THREE.Material, { baseline: number; applied: number }>();
+function materialsIn(object: THREE.Object3D): Set<THREE.Material> {
+  const materials = new Set<THREE.Material>();
   object.traverse((child) => {
     if (
-      !(child instanceof THREE.Mesh || child instanceof THREE.Sprite || child instanceof THREE.Line)
+      !(
+        child instanceof THREE.Mesh ||
+        child instanceof THREE.Sprite ||
+        child instanceof THREE.Line ||
+        child instanceof THREE.Points
+      )
     )
       return;
-    for (const material of Array.isArray(child.material) ? child.material : [child.material]) {
-      if (!baseOpacity.has(material)) baseOpacity.set(material, material.opacity);
-      if (!material.transparent) {
-        material.transparent = true;
-        material.needsUpdate = true;
-      }
-      material.opacity = baseOpacity.get(material)! * visibility;
-    }
+    for (const material of Array.isArray(child.material) ? child.material : [child.material])
+      materials.add(material);
   });
+  return materials;
+}
+/** Restore the unfaded baseline, run adapter animation, then apply this frame's lifecycle envelope. */
+export function applyPresence(object: THREE.Object3D, visibility: number, update?: () => void) {
+  for (const material of materialsIn(object)) {
+    const prior = opacityState.get(material);
+    // Preserve assignments made between calls; never divide by a previous zero visibility.
+    if (prior && material.opacity === prior.applied) material.opacity = prior.baseline;
+    opacityState.delete(material);
+  }
+  update?.();
+  // The callback may add/remove children or replace their materials.
+  for (const material of materialsIn(object)) {
+    const baseline = material.opacity,
+      applied = baseline * visibility;
+    if (!material.transparent) {
+      material.transparent = true;
+      material.needsUpdate = true;
+    }
+    opacityState.set(material, { baseline, applied });
+    material.opacity = applied;
+  }
 }
 registerAppearance('statebeats/bird', () => {
   const object = new THREE.Group();

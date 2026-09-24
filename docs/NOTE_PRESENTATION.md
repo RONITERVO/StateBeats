@@ -65,8 +65,10 @@ samples support gradual tapering. At most 290 points are emitted per path. A red
 motion renderer can omit decorative movement without changing the visible route.
 
 `observe()` includes separate `resolvedEntities`. These cannot be hit and are excluded
-from target selection and `describeObservation().targets`. The session reconstructs their
-effects from simulation transitions, including same-tick spawn/hit and director spawns,
+from target selection and `describeObservation().targets`. The core transition returns
+detached `resolvedEntities` containing the final interaction state after evaluation; this
+additive output does not change world state, events, scoring or recording identity. The SDK
+uses these exact states for release effects, including same-tick spawn/hit and director spawns,
 regardless of how often anyone observes. Restoring a checkpoint reconstructs them from
 its verified command timeline. A maximum of 256 releases is retained, oldest first
 discarded if that cosmetic budget is exceeded. Resolution stops future-path revelation;
@@ -105,13 +107,24 @@ Map JSON never loads executable code. Its returned `TargetAppearance` can now su
   `applyPresence` supplies a default opacity envelope for ordinary materials;
 - the existing `update` and `dispose` methods.
 
-The scene owns and disposes the guide separately; an appearance's `dispose` must only
-dispose its own artwork. Materials should be owned per appearance instance when using
-the default opacity envelope. Custom shaders should interpret lifecycle data themselves.
+The scene owns and disposes the guide separately, including a supplied guide suppressed
+by the map's `guide: "none"` policy. Suppressed guides are neither attached nor updated.
+An appearance's `dispose` must only dispose its own artwork.
+
+The default envelope supports mesh, sprite, line and particle materials, including material
+arrays. The scene restores each material's unfaded opacity before the adapter's `update`,
+then multiplies the updated opacity by visibility. This preserves animated opacity and
+recovers correctly from zero visibility. Standalone adapters can use
+`applyPresence(object, visibility, update)` for the same ordering. The two-argument form
+supports static opacity; put opacity animation in the callback to avoid ambiguous writes
+that happen to equal the previous faded value. Materials should be owned per appearance
+instance. Custom shaders should interpret lifecycle data themselves.
+
 `createPathGuide(color, radius?)` is a reusable bounded, tapered tube following the exact
 sampled geometry, with no random jitter or frame-time state. It also supports high contrast.
-Semantic hand/hold/hazard cues remain available alongside the artwork. Unknown appearance
-IDs retain a generic visible target. Completion hides actionable rings and labels.
+Semantic hand/hold/hazard cues follow the same visibility envelope alongside the artwork.
+Labels share textures but have independent material opacity per target. Unknown appearance
+IDs retain a generic visible target. Completion hides actionable rings, cores and labels.
 
 Event Horizon demonstrates travelling arcs with 0.75 beat anticipation and a 0.5 beat
 tail, plus stationary crystals that assemble at their contact positions. Its motion

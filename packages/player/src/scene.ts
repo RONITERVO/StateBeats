@@ -52,7 +52,9 @@ export class OrbitScene {
       material = new THREE.SpriteMaterial({ map, depthTest: false });
       this.labelMaterials.set(text, material);
     }
-    const sprite = new THREE.Sprite(material);
+    // Share the texture, but not opacity: simultaneous notes may have different lifecycles.
+    const sprite = new THREE.Sprite(material.clone());
+    sprite.name = 'requirement';
     sprite.scale.set(0.15, 0.15, 1);
     sprite.position.y = 0.24;
     sprite.renderOrder = 5;
@@ -201,6 +203,7 @@ export class OrbitScene {
     }
     this.targets.remove(object);
     object.traverse((child) => {
+      if (child instanceof THREE.Sprite) child.material.dispose();
       if (child instanceof THREE.Mesh || child instanceof THREE.Line) {
         if (child instanceof THREE.InstancedMesh) child.dispose();
         if (child.geometry !== this.torus && child.geometry !== this.sphere)
@@ -275,7 +278,10 @@ export class OrbitScene {
         );
         ring.name = 'timing';
         group.add(ring);
-        const core = new THREE.Mesh(this.sphere, new THREE.MeshBasicMaterial({ color }));
+        const core = new THREE.Mesh(
+          this.sphere,
+          new THREE.MeshBasicMaterial({ color, transparent: true }),
+        );
         core.scale.setScalar(0.3);
         core.name = 'core';
         group.add(core);
@@ -300,28 +306,31 @@ export class OrbitScene {
           group.add(appearance.object);
         }
         const guide =
-          appearance?.guide === false || entity.presentation?.guide === 'none'
-            ? undefined
-            : (appearance?.guide ?? createPathGuide(color));
+          appearance?.guide ??
+          (entity.presentation?.guide === 'none' ? undefined : createPathGuide(color));
         if (guide) {
+          // Even a suppressed custom guide belongs to the scene for eventual cleanup.
           this.guides.set(group, guide);
-          group.add(guide.object);
+          if (entity.presentation?.guide !== 'none') group.add(guide.object);
         }
         this.targets.add(group);
         this.objects.set(entity.id, group);
       }
       group.position.fromArray(entity.position);
       group.quaternion.fromArray(entity.orientation);
-      this.guides.get(group)?.update(entity, view, this.theme.preferences);
+      if (entity.presentation?.guide !== 'none')
+        this.guides.get(group)?.update(entity, view, this.theme.preferences);
       const cue = entity.presentation;
       const visibility = cue?.visibility ?? 1;
       const resolved = cue?.phase === 'resolved';
       group.visible = visibility > 0;
-      for (const child of group.children)
-        if (child instanceof THREE.Sprite) child.visible = !resolved;
+      const requirement = group.getObjectByName('requirement') as THREE.Sprite;
+      requirement.visible = !resolved;
+      requirement.material.opacity = visibility;
       const remain = (entity.hitTick - view.tick) / view.tickRate;
       const timing = group.getObjectByName('timing') as THREE.Mesh;
       timing.visible = !resolved;
+      (timing.material as THREE.MeshBasicMaterial).opacity = 0.8 * visibility;
       timing.scale.setScalar(1 + Math.max(0, Math.min(2, remain)) * 2);
       timing.quaternion.copy(
         this.renderer.xr.isPresenting
@@ -331,6 +340,7 @@ export class OrbitScene {
       timing.quaternion.premultiply(group.quaternion.clone().invert());
       const core = group.getObjectByName('core')!;
       core.visible = !resolved;
+      ((core as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity = visibility;
       core.scale.setScalar(
         entity.kind === 'hold'
           ? 0.3 + (0.5 * entity.hold) / entity.holdTicks
@@ -350,8 +360,11 @@ export class OrbitScene {
             : 0.72;
       material.opacity *= visibility;
       const appearance = this.appearances.get(group);
-      appearance?.update?.(entity, view, this.theme.preferences);
-      if (appearance && !appearance.handlesPresence) applyPresence(appearance.object, visibility);
+      if (appearance) {
+        const update = () => appearance.update?.(entity, view, this.theme.preferences);
+        if (appearance.handlesPresence) update();
+        else applyPresence(appearance.object, visibility, update);
+      }
     }
   }
   idle(seconds: number) {
