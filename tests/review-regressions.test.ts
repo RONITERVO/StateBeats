@@ -14,6 +14,7 @@ import {
   beatValue,
   EngineService,
   scriptedCommands,
+  inspectChoreography,
 } from '@statebeats/sdk';
 import type { MusicTimeline, MapInput, Observation } from '@statebeats/sdk';
 import { assistedTargetPoint } from '../packages/player/src/desktop-input.js';
@@ -61,6 +62,65 @@ const holdMap = (): MapInput => ({
 });
 
 describe('review regressions and expert settings', () => {
+  it('inspects late hold motion and reserves the full authored lifetime', () => {
+    const map = holdMap();
+    map.notes[0].motion![0].position = [-2, 1.4, -0.4];
+    map.notes.push({ id: 'too-soon', beat: 6, preset: 'left', position: [-0.2, 1.3, -0.4] });
+    const codes = inspectChoreography(map).issues.map((issue) => issue.code);
+    expect(codes).toContain('reach');
+    expect(codes).toContain('rail-speed');
+    expect(codes).toContain('hand-conflict');
+  });
+  it('checks explicit hold durations against the recovery interval', () => {
+    expect(() =>
+      generateChoreography(
+        music(),
+        {},
+        {
+          composer: {
+            id: 'test/long-lifetime',
+            compose: ({ phrase, place }) => [
+              {
+                id: `hold-${phrase.index}`,
+                beat: phrase.beat + 5,
+                preset: 'hold',
+                holdMs: 100,
+                durationBeats: 2,
+                position: place(-0.2, 0),
+                slots: [{ semantic: 'left' }],
+              },
+            ],
+          },
+        },
+      ),
+    ).toThrow('recovery and turning');
+  });
+  it('supports ten-minute high-tempo continuous turns without an arbitrary yaw ceiling', () => {
+    const { map, report } = generateChoreography(music(596), {
+      bpm: 240,
+      turnMode: 'full',
+      turnStyle: 'continuous',
+      turnDegrees: 180,
+      maxTurnSpeed: 120,
+      rails: false,
+      pairs: false,
+    });
+    expect(report.phrases.at(-1)!.heading).toBeGreaterThan(36000);
+    expect(map.notes.length).toBeGreaterThan(1000);
+    expect(report.issues).toEqual([]);
+  });
+  it('does not interpret unrelated third-party provenance as a player profile', () => {
+    const map = compile(holdMap()).map;
+    map.generation = { version: 1, algorithm: 'third-party/custom', settings: { playerHeight: 1 } };
+    expect(fitMapToPlayer(map).notes.map((n) => n.position)).toEqual(
+      map.notes.map((n) => n.position),
+    );
+    map.playerProfile = { height: 1, roomScale: 1 };
+    expect(cartesian(fitMapToPlayer(map).notes[0].position)[1]).toBeCloseTo(1.3 * 1.65);
+    delete map.playerProfile;
+    map.generation.algorithm = 'statebeats/choreography-v1';
+    expect(cartesian(fitMapToPlayer(map).notes[0].position)[1]).toBeCloseTo(1.3 * 1.65);
+  });
   it('preserves phrase emitter holds for a six-minute high-tempo song without decimation', () => {
     const { map, report } = generateChoreography(music(360), {
       bpm: 180,

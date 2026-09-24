@@ -53,6 +53,11 @@ The map stores `generation.version`, `generation.algorithm` and `generation.sett
 
 ## Tools and perception
 
+Inspection reserves holds through `endTick`, including late or interrupted contact, and
+checks every authored waypoint in that lifetime. Custom `durationBeats` also participates
+in the phrase recovery cutoff. Full-turn validation allows the unwrapped yaw needed by the
+supported song duration and angular budget, instead of failing at an arbitrary number of laps.
+
 CLI JSON-lines and MCP expose `music.compose` with `{ music, options }`, returning `{ map, report }` and storing the map. It is an administrator operation and supports request-ID retry semantics. Existing `music.generate` returns the map alone. `choreography.inspect` accepts `{ map, options }` or `{ mapId, options }`, is read-only, and never advances simulation time.
 
 ```json
@@ -79,6 +84,8 @@ high/low gestures. Existing maps retain their authored timing and choreography.
 baking positions into standard data and recording `playerProfile`. Applying the same profile
 twice is idempotent. Saved replays therefore contain the adapted geometry and dimensions;
 future leaderboards must distinguish differing profiles and assistance settings.
+Authored height comes from explicit `playerProfile`, a recognized StateBeats choreography
+recipe, or the standard 1.65 m baseline. Arbitrary provenance is not interpreted as calibration.
 Hosts with custom rules can pass interaction policies and rule extensions as the third and
 fourth arguments, just as they do when compiling their maps.
 

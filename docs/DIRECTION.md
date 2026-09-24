@@ -8,6 +8,10 @@ The local Synth Riders study examined 25 underlying charts, not the proprietary 
 
 ## Implemented foundation
 
+[Event Horizon — Master](EVENT_HORIZON.md) is the complete reference composition: bundled
+original music, score-aligned expert choreography, continuous turns, independent rails and
+head avoidance. Its stage, soundtrack loader and map remain separate from simulation.
+
 - One deterministic interaction kernel, explicit time, replay/checkpoint contracts and common human/bot/agent commands.
 - Offline PCM features and persisted music timelines; author-supplied BPM and beat offset.
 - Replaceable musical selector, phrase composer and facing planner. Saved generator identity/settings and a separate explanation report.

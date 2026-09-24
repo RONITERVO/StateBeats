@@ -45,6 +45,37 @@ const star: AppearanceFactory = (entity, color) => {
 };
 registerAppearance('statebeats/star', star);
 registerAppearance('statebeats/firefly', star);
+registerAppearance('statebeats/prism', (entity, color) => {
+  const object = new THREE.Group();
+  const radius = entity.shape.kind === 'sphere' ? entity.shape.radius : 0.115;
+  const crystalGeometry = new THREE.OctahedronGeometry(radius * 0.86);
+  const material = new THREE.MeshBasicMaterial({ color });
+  const crystal = new THREE.Mesh(crystalGeometry, material);
+  const haloGeometry = new THREE.TorusGeometry(radius * 1.18, 0.008, 4, 24);
+  const haloMaterial = new THREE.MeshBasicMaterial({
+    color,
+    transparent: true,
+    opacity: 0.65,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const halo = new THREE.Mesh(haloGeometry, haloMaterial);
+  object.add(crystal, halo);
+  return {
+    object,
+    update(_entity, view, preferences) {
+      crystal.rotation.y = preferences.reducedMotion ? 0 : (view.tick / view.tickRate) * 1.4;
+      halo.rotation.x = Math.PI / 3;
+      halo.rotation.y = preferences.reducedMotion ? 0 : (-view.tick / view.tickRate) * 0.6;
+    },
+    dispose() {
+      crystalGeometry.dispose();
+      haloGeometry.dispose();
+      material.dispose();
+      haloMaterial.dispose();
+    },
+  };
+});
 registerAppearance('statebeats/bird', () => {
   const object = new THREE.Group();
   const material = new THREE.MeshBasicMaterial({ color: 0xf3babb, side: THREE.DoubleSide });

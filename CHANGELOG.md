@@ -2,6 +2,16 @@
 
 ## 0.3.0 — musical choreography (development release candidate)
 
+Adds Event Horizon — Master: a bundled original 150 BPM/2:40 electronic score, 620 scoring
+targets, 52 moving holds, 84 linked chords, seven duck/lean passages and a replaceable orbital
+stage. Its soundtrack loads automatically through a trusted, hashed asset registry and keeps
+the tick-based pause/resume transport. Adds a steadier desktop spectator viewpoint,
+map selection links, reproducible synthesis source and headless/production tests.
+
+Follow-up authoring fixes inspect the full hold lifetime, enforce explicit duration during
+phrase recovery, allow supported long-song full turns, associate reports with their chart,
+and distinguish recognized player-height recipes from arbitrary provenance.
+
 Review follow-up fixes long-song emitter holds, stationary rail starts, late-path previews,
 post-expiry motion validation, saved recipe restoration and shape-aware desktop aiming.
 Adds Beginner/Normal/Hard/Master quick setups, continuous turns with incoming notes, wider

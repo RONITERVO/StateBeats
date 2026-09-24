@@ -15,7 +15,7 @@ export class RhythmAudio {
   private lastPulse = -1;
   private beatTicks: { tick: number; accent: boolean; index: number }[] = [];
   private base: { tick: number; time: number } | undefined;
-  private song?: { buffer: AudioBuffer; startTick: number };
+  private song?: { buffer: AudioBuffer; startTick: number; volume: number; cueVolume: number };
   private songSource?: AudioBufferSourceNode;
   private songGain?: GainNode;
   speed = 1;
@@ -55,9 +55,16 @@ export class RhythmAudio {
     this.initialize();
     return this.context!.decodeAudioData(data);
   }
-  setSong(buffer: AudioBuffer, startTick: number) {
+  setSong(
+    buffer: AudioBuffer,
+    startTick: number,
+    mix: { volume?: number; cueVolume?: number } = {},
+  ) {
+    for (const value of [mix.volume ?? 0.45, mix.cueVolume ?? 1])
+      if (!Number.isFinite(value) || value < 0 || value > 1)
+        throw new RangeError('Song mix must be between zero and one.');
     this.rebase();
-    this.song = { buffer, startTick };
+    this.song = { buffer, startTick, volume: mix.volume ?? 0.45, cueVolume: mix.cueVolume ?? 1 };
   }
   rebase() {
     this.stop();
@@ -121,6 +128,7 @@ export class RhythmAudio {
     const when = c.currentTime + Math.max(0, delay + this.offsetMs / 1000),
       osc = c.createOscillator(),
       env = c.createGain();
+    if (channel === 'cue') volume *= this.song?.cueVolume ?? 1;
     osc.type = type;
     osc.frequency.setValueAtTime(frequency, when);
     if (endFrequency) osc.frequency.exponentialRampToValueAtTime(endFrequency, when + duration);
@@ -178,7 +186,7 @@ export class RhythmAudio {
           gain = c.createGain();
         source.buffer = this.song.buffer;
         source.playbackRate.value = this.speed;
-        gain.gain.value = 0.45;
+        gain.gain.value = this.song.volume;
         source.connect(gain);
         gain.connect(this.gain);
         source.start(

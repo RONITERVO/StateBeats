@@ -2,7 +2,7 @@ import './style.css';
 import * as THREE from 'three';
 import { controllerSamples } from './xr-input.js';
 import type { TrackedController } from './xr-input.js';
-import { sampleMaps, sampleMap } from '@statebeats/content';
+import { sampleMaps, sampleMap, EVENT_HORIZON_ID } from '@statebeats/content';
 import {
   beatToTick,
   beatValue,
@@ -26,6 +26,7 @@ import { OrbitScene, sceneVector } from './scene.js';
 import { RhythmAudio } from './audio.js';
 import { readPreferences, storePreferences } from './preferences.js';
 import { assistedTargetPoint } from './desktop-input.js';
+import { bundledSong, bundledSoundtracks } from './soundtracks.js';
 
 const el = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const button = (id: string, fn: () => void) => el(id).addEventListener('click', fn);
@@ -42,6 +43,10 @@ let personalHeight = 1.65,
 let activeHeight = 1.65;
 let importedSong: { buffer: AudioBuffer; sha256: string } | undefined;
 let analysisWorker: Worker | undefined;
+let audioMap: MapDefinition | undefined;
+let preparingStart = false;
+let startSequence = 0;
+let connectedSong: string | undefined;
 const maps = () => (importedMap ? [...sampleMaps, importedMap] : sampleMaps);
 const mapFor = (id: string) => (importedMap?.id === id ? importedMap : sampleMap(id));
 let captions = true;
@@ -52,6 +57,7 @@ let selected = 'tutorial',
   autoplay = false,
   view: Observation | undefined,
   loadStarting = false;
+let startOnReady = false;
 let desktopYaw = 0,
   swap = false,
   hideTargets = false,
@@ -81,6 +87,8 @@ function notify(message: string) {
 }
 function selectMap(id: string) {
   selected = id;
+  el<HTMLButtonElement>('save-generation-report').disabled =
+    !generationReport || importedMap?.id !== id;
   for (const card of el('maps').children) {
     card.classList.toggle('selected', (card as HTMLElement).dataset.map === id);
     card.setAttribute('aria-pressed', String((card as HTMLElement).dataset.map === id));
@@ -93,6 +101,7 @@ function addMapCard(map: MapDefinition, index: number) {
   const card = document.createElement('button');
   card.className = 'map-card';
   card.dataset.map = map.id;
+  if (map.id === EVENT_HORIZON_ID) card.classList.add('featured-map');
   card.setAttribute('aria-label', map.title);
   card.setAttribute('aria-pressed', String(index === 0));
   const seconds = beatToTick(map.durationBeats, map) / map.tickRate;
@@ -101,11 +110,13 @@ function addMapCard(map: MapDefinition, index: number) {
   card.querySelector('.map-art')!.textContent = symbols[index] ?? '♫';
   card.querySelector('.map-title')!.textContent = map.title;
   card.querySelector('.map-meta')!.textContent =
-    `${index === 0 ? 'TUTORIAL' : index === 2 ? 'COOPERATIVE' : index >= 4 ? 'LIVING SCENE' : '360° SEQUENCE'} · ${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}`;
+    `${map.id === EVENT_HORIZON_ID ? 'MASTER · ORIGINAL SOUNDTRACK' : index === 0 ? 'TUTORIAL' : index === 2 ? 'COOPERATIVE' : index >= 4 ? 'LIVING SCENE' : '360° SEQUENCE'} · ${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}`;
   card.onclick = () => selectMap(map.id);
   el('maps').append(card);
 }
 sampleMaps.forEach(addMapCard);
+const featuredCard = el('maps').querySelector(`[data-map="${EVENT_HORIZON_ID}"]`);
+if (featuredCard) el('maps').insertBefore(featuredCard, el('maps').children[1]);
 
 const menuCanvas = document.createElement('canvas');
 menuCanvas.width = 1024;
@@ -262,33 +273,62 @@ async function prepareAudio() {
   if (!audio.enabled) return;
   try {
     await audio.unlock();
+    const map = audioMap,
+      hash = map?.music?.source?.sha256;
+    if (map && hash && hash !== connectedSong && bundledSoundtracks.has(hash)) {
+      const song = await bundledSong(hash, (bytes) => audio.decodeSong(bytes));
+      if (song && audioMap === map) {
+        audio.setSong(song.buffer, map.music?.frames[0]?.tick ?? 0, {
+          volume: song.asset.musicVolume,
+          cueVolume: song.asset.cueVolume,
+        });
+        connectedSong = hash;
+      }
+    }
   } catch {
-    notify('Audio is unavailable. Visual and text controls remain available.');
+    notify(
+      'Audio could not load. Visual and text controls remain available; restart to retry the soundtrack.',
+    );
   }
 }
 async function start(bot: boolean) {
-  await prepareAudio();
+  if (preparingStart) return;
+  const request = ++startSequence;
+  const mapId = selected;
+  if (running) pause();
   audio.reset();
   let map: MapDefinition;
   try {
-    map = fitMapToPlayer(mapFor(selected), { height: personalHeight, roomScale });
+    map = fitMapToPlayer(mapFor(mapId), { height: personalHeight, roomScale });
   } catch (error) {
     notify(`This map could not use the selected height/scale: ${String(error)}`);
     return;
   }
   activeHeight = personalHeight;
   audio.setScore(map);
+  audioMap = map;
+  connectedSong = undefined;
   if (map.music?.source && importedSong?.sha256 === map.music.source.sha256)
     audio.setSong(importedSong.buffer, map.music.frames[0]?.tick ?? 0);
-  else if (map.music?.source)
+  else if (map.music?.source && !bundledSoundtracks.has(map.music.source.sha256))
     notify(
       `Choose the matching audio file (${map.music.source.name}) to hear its soundtrack. The saved chart and cues can play now.`,
     );
+  preparingStart = true;
+  el<HTMLButtonElement>('play').disabled = true;
+  el<HTMLButtonElement>('watch').disabled = true;
+  el('engine-status').textContent = bundledSoundtracks.has(map.music?.source?.sha256 ?? '')
+    ? 'Loading original soundtrack…'
+    : 'Preparing sequence…';
+  await prepareAudio();
+  if (request !== startSequence) return;
+  preparingStart = false;
   autoplay = bot;
   playing = true;
   running = false;
   loadStarting = true;
-  activeMap = selected;
+  startOnReady = true;
+  activeMap = mapId;
   lastPhase = 'loading';
   view = undefined;
   desktopYaw = 0;
@@ -316,10 +356,11 @@ async function start(bot: boolean) {
   }
   desktopHeld = [false, false];
   handTargets = [new THREE.Vector3(-0.3, 1.1, -0.2), new THREE.Vector3(0.3, 1.1, -0.2)];
-  send({ type: 'load', mapId: selected, map, autoplay: bot, stage: stagePose() });
+  send({ type: 'load', mapId, map, autoplay: bot, stage: stagePose() });
 }
 function pause(stalled = false) {
   if (!playing) return;
+  startOnReady = false;
   running = false;
   send({ type: 'pause' });
   audio.stop();
@@ -334,18 +375,27 @@ function pause(stalled = false) {
 }
 function resume() {
   if (!playing) return;
+  startOnReady = true;
   void prepareAudio();
   audio.rebase();
   el('pause-panel').hidden = true;
   menu.visible = false;
-  running = true;
-  send({ type: 'start' });
+  running = !loadStarting;
+  if (running) send({ type: 'start' });
 }
 function home() {
+  startSequence++;
+  startOnReady = false;
+  loadStarting = false;
+  preparingStart = false;
+  el<HTMLButtonElement>('play').disabled = false;
+  el<HTMLButtonElement>('watch').disabled = false;
   running = false;
   playing = false;
   send({ type: 'pause' });
   audio.reset();
+  audioMap = undefined;
+  connectedSong = undefined;
   orbit.clear();
   orbit.setPlaying(false);
   el('hud').hidden = true;
@@ -398,10 +448,33 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
     el<HTMLButtonElement>('play').disabled = false;
     el<HTMLButtonElement>('watch').disabled = false;
     if (loadStarting) {
-      loadStarting = false;
-      send({ type: 'speed', value: speed });
-      running = true;
-      send({ type: 'start' });
+      const request = startSequence,
+        readyGeneration = generation;
+      orbit.update(message.view, hideTargets);
+      // Compile/upload a newly selected theme before real-time simulation begins.
+      // A slow first GPU frame must not consume the song's opening or its timing budget.
+      void orbit.renderer
+        .compileAsync(orbit.scene, orbit.camera)
+        .then(() => {
+          if (
+            request !== startSequence ||
+            readyGeneration !== generation ||
+            !loadStarting ||
+            !playing
+          )
+            return;
+          orbit.render();
+          loadStarting = false;
+          send({ type: 'speed', value: speed });
+          running = startOnReady;
+          if (running) send({ type: 'start' });
+        })
+        .catch((error) => {
+          if (request !== startSequence || readyGeneration !== generation) return;
+          loadStarting = false;
+          pause();
+          notify(`The stage could not be prepared: ${String(error)}`);
+        });
     }
     return;
   }
@@ -685,7 +758,8 @@ for (const [id, set, low, high] of [
   };
 button('save-map', () => downloadJson(mapFor(selected), `statebeats-${selected}.json`));
 button('save-generation-report', () => {
-  if (generationReport) downloadJson(generationReport, `statebeats-${selected}-generation.json`);
+  if (generationReport && importedMap?.id === selected)
+    downloadJson(generationReport, `statebeats-${importedMap.id}-generation.json`);
 });
 function songOptions(): MusicGenerationOptions {
   const number = (id: string) => Number(el<HTMLInputElement>(id).value);
@@ -846,13 +920,16 @@ document.addEventListener('visibilitychange', () => {
 orbit.renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
 let activeDesktopHand = 0;
 let desktopPitch = 0;
+// A held gesture begun during preparation must still be held when playback starts.
+const acceptsDesktopInput = () =>
+  playing && !autoplay && (running || (loadStarting && startOnReady));
 orbit.renderer.domElement.addEventListener('pointermove', (e) => {
   targetMouse.set((e.clientX / innerWidth) * 2 - 1, (-e.clientY / innerHeight) * 2 + 1);
-  if (playing && running && !autoplay && desktopHeld[activeDesktopHand])
+  if (acceptsDesktopInput() && desktopHeld[activeDesktopHand])
     handTargets[activeDesktopHand].copy(desktopAim(activeDesktopHand));
 });
 orbit.renderer.domElement.addEventListener('pointerdown', (e) => {
-  if (!playing || !running || autoplay) return;
+  if (!acceptsDesktopInput()) return;
   void prepareAudio();
   if (e.button !== 0 && e.button !== 2) return;
   const hand = (e.button === 0 ? 0 : 1) ^ (swap ? 1 : 0);
@@ -1018,15 +1095,24 @@ orbit.renderer.setAnimationLoop((time) => {
         .filter((e) => e.kind !== 'hazard' && e.endTick >= view!.tick)
         .sort((a, b) => a.hitTick - b.hitTick)[0];
       if (target) {
-        const position = target.targetPosition ?? target.position;
+        const together = view.entities.filter(
+          (entity) => entity.kind !== 'hazard' && Math.abs(entity.hitTick - target.hitTick) <= 1,
+        );
+        const position = together.reduce(
+          (sum, entity) => {
+            const p = entity.targetPosition ?? entity.position;
+            return [
+              sum[0] + p[0] / together.length,
+              sum[1] + p[1] / together.length,
+              sum[2] + p[2] / together.length,
+            ];
+          },
+          [0, 0, 0],
+        );
         const yaw = Math.atan2(-position[0], -position[2]);
         const delta = Math.atan2(Math.sin(yaw - desktopYaw), Math.cos(yaw - desktopYaw));
         desktopYaw += delta * Math.min(1, dt * 4);
-        const pitch = Math.atan2(
-          position[1] - orbit.camera.position.y,
-          Math.hypot(position[0], position[2]),
-        );
-        desktopPitch += (pitch - desktopPitch) * Math.min(1, dt * 3);
+        desktopPitch += (-0.12 - desktopPitch) * Math.min(1, dt * 3);
       }
     }
     desktopYaw += ((keys.has('KeyQ') ? 1 : 0) - (keys.has('KeyE') ? 1 : 0)) * dt * 1.5;
@@ -1036,7 +1122,14 @@ orbit.renderer.setAnimationLoop((time) => {
       1.2,
     );
     orbit.camera.rotation.set(desktopPitch, desktopYaw, 0, 'YXZ');
-    orbit.camera.position.y = keys.has('KeyC') ? activeHeight * 0.61 : activeHeight;
+    if (autoplay) {
+      // Spectator framing shows both hands and the stage; it never alters actor poses.
+      orbit.camera.position.set(
+        Math.sin(desktopYaw) * 0.85,
+        activeHeight + 0.12,
+        Math.cos(desktopYaw) * 0.85,
+      );
+    } else orbit.camera.position.y = keys.has('KeyC') ? activeHeight * 0.61 : activeHeight;
     orbit.aim.visible = running && !autoplay;
     orbit.aim.position.copy(desktopAim());
     orbit.aim.quaternion.copy(orbit.camera.quaternion);
@@ -1202,7 +1295,8 @@ document.addEventListener('change', (event) => {
   if ((event.target as HTMLElement).closest('#settings-panel')) savePreferences();
 });
 el<HTMLSelectElement>('song-preset').dispatchEvent(new Event('change'));
-selectMap('tutorial');
+const requestedMap = new URLSearchParams(location.search).get('map');
+selectMap(sampleMaps.some((map) => map.id === requestedMap) ? requestedMap! : 'tutorial');
 el<HTMLButtonElement>('play').disabled = true;
 el<HTMLButtonElement>('watch').disabled = true;
 send({ type: 'load', mapId: 'tutorial', autoplay: false });

@@ -125,7 +125,7 @@ export function inspectChoreography(input: unknown, profile: MusicGenerationOpti
   )) {
     if (entity.kind === 'hazard') continue;
     const start = entity.hitTick;
-    const end = entity.kind === 'hold' ? start + entity.holdTicks : start;
+    const end = entity.kind === 'hold' ? entity.endTick : start;
     const points = [
       { tick: start, position: positionAt(entity, start) },
       ...entity.motion.filter((k) => k.tick > start && k.tick < end),
@@ -384,7 +384,7 @@ export function generateChoreography(
     headings.some(
       (h, i) =>
         !Number.isFinite(h) ||
-        Math.abs(h) > 36000 ||
+        Math.abs(h) > 36000 + s.maxTurnSpeed * endSeconds ||
         (mode === 'forward' && h !== 0) ||
         (mode === 'bounded' && Math.abs(h) > 60) ||
         (i > 0 &&
@@ -522,13 +522,13 @@ export function generateChoreography(
         phrase.endBeat,
         phrase.beat + (s.turnStyle === 'continuous' ? 8 : 6),
       );
-      if (
-        beat < phrase.beat ||
-        beat >= interactionEnd ||
-        beat +
-          ((note.preset === 'hold' ? (note.holdMs ?? 500) : 0) + lateMs) / 1000 / secondsPerBeat >
-          interactionEnd
-      )
+      const lifetimeBeats =
+        note.preset === 'hold' || note.preset === 'hazard'
+          ? note.durationBeats !== undefined
+            ? beatValue(note.durationBeats)
+            : ((note.holdMs ?? 500) + lateMs) / 1000 / secondsPerBeat
+          : lateMs / 1000 / secondsPerBeat;
+      if (beat < phrase.beat || beat >= interactionEnd || beat + lifetimeBeats > interactionEnd)
         throw new EngineError(
           'CHOREOGRAPHY_INVALID',
           'Composer must respect the selected phrase interval and recovery and turning budget.',

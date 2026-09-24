@@ -2,6 +2,7 @@ import { compile, generateMap } from '@statebeats/sdk';
 import type { MapDefinition, MapInput, NoteInput } from '@statebeats/sdk';
 import { sunlitJourney } from './journey.js';
 import { choreographyJourney } from './choreography.js';
+import { eventHorizonMaster } from './event-horizon.js';
 const p = (azimuth: number, radius = 0.8, elevation = 0) => ({
   azimuth,
   elevation,
@@ -168,6 +169,7 @@ const raw = [
   sunlitJourney(),
   sunlitJourney(true),
   choreographyJourney(),
+  eventHorizonMaster(),
 ];
 export const sampleMaps: MapDefinition[] = raw.map((map) => compile(map).map);
 export function sampleMap(id: string): MapDefinition {
@@ -178,3 +180,10 @@ export function sampleMap(id: string): MapDefinition {
 export { generateMap };
 export { sunlitJourney };
 export { choreographyJourney };
+export {
+  eventHorizonMaster,
+  eventHorizonHeading,
+  eventHorizonSoundtrack,
+  eventHorizonSections,
+  EVENT_HORIZON_ID,
+} from './event-horizon.js';
