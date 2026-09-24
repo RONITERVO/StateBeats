@@ -920,13 +920,16 @@ document.addEventListener('visibilitychange', () => {
 orbit.renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
 let activeDesktopHand = 0;
 let desktopPitch = 0;
+// A held gesture begun during preparation must still be held when playback starts.
+const acceptsDesktopInput = () =>
+  playing && !autoplay && (running || (loadStarting && startOnReady));
 orbit.renderer.domElement.addEventListener('pointermove', (e) => {
   targetMouse.set((e.clientX / innerWidth) * 2 - 1, (-e.clientY / innerHeight) * 2 + 1);
-  if (playing && running && !autoplay && desktopHeld[activeDesktopHand])
+  if (acceptsDesktopInput() && desktopHeld[activeDesktopHand])
     handTargets[activeDesktopHand].copy(desktopAim(activeDesktopHand));
 });
 orbit.renderer.domElement.addEventListener('pointerdown', (e) => {
-  if (!playing || !running || autoplay) return;
+  if (!acceptsDesktopInput()) return;
   void prepareAudio();
   if (e.button !== 0 && e.button !== 2) return;
   const hand = (e.button === 0 ? 0 : 1) ^ (swap ? 1 : 0);

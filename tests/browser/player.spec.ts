@@ -76,6 +76,25 @@ test('browser worker plays, pauses, exports a verified replay and restarts', asy
   expect(errors).toEqual([]);
 });
 test('desktop mouse input earns a hit and finishes a real sequence', async ({ page }) => {
+  // Hold input during a slow real-worker load. It must survive until the clock starts.
+  await page.addInitScript(() => {
+    const NativeWorker = window.Worker;
+    window.Worker = class extends NativeWorker {
+      constructor(url: string | URL, options?: WorkerOptions) {
+        super(url, options);
+        let readyCount = 0;
+        this.addEventListener('message', (event) => {
+          if (event.data.type === 'ready' && ++readyCount === 2) {
+            event.stopImmediatePropagation();
+            setTimeout(
+              () => this.dispatchEvent(new MessageEvent('message', { data: event.data })),
+              1000,
+            );
+          }
+        });
+      }
+    };
+  });
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto('/');
   await expect(page.locator('#play')).toBeEnabled();

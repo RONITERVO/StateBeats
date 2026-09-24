@@ -26,6 +26,9 @@ All nine desktop/experience browser cases also passed after that startup change.
 installation of all six package archives resolves and verifies the bundled audio. A clean
 source archive passed all 86 tests, the full build/check and CLI/examples, including the
 complete Event Horizon headless replay (620 hits, zero misses).
+Linux CI exposed a desktop gesture begun before stage preparation finished being dropped.
+A delayed real-worker regression reproduced it; retaining held input through preparation
+fixed it, and all three desktop gameplay tests passed again without weakening score checks.
 Hardware Quest performance and human musical/readability judgments remain unmeasured.
 
 ## Choreography verification on Windows, 2026-09-24
