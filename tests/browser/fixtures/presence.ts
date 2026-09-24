@@ -77,3 +77,37 @@ export function exercisePresence(frames: Observation[]) {
   remove();
   return { samples, independentLabels, sharedTexture, afterRemoval, afterDisposal: { ...counts } };
 }
+
+export function exerciseLegacyGuides(view: Observation) {
+  let customUpdates = 0,
+    customDisposals = 0;
+  const unregister = registerAppearance('test/legacy-guide', () => ({
+    object: new THREE.Group(),
+    guide: {
+      object: new THREE.Group(),
+      update() {
+        customUpdates++;
+      },
+      dispose() {
+        customDisposals++;
+      },
+    },
+    dispose() {},
+  }));
+  const scene = new OrbitScene(document.body);
+  const countFallbacks = () =>
+    scene.targets.children.filter((g) => g.getObjectByName('trajectory-guide')).length;
+  scene.update({
+    ...view,
+    entities: view.entities.map(({ presentation: _, ...entity }) => entity),
+  });
+  scene.render();
+  const legacyFallbacks = countFallbacks();
+  scene.clear();
+  scene.update(view);
+  scene.render();
+  const currentFallbacks = countFallbacks();
+  scene.dispose();
+  unregister();
+  return { legacyFallbacks, currentFallbacks, customUpdates, customDisposals };
+}

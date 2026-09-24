@@ -20,6 +20,48 @@ const note: NoteInput = {
   earlyMs: 0,
 };
 
+it.each(['hit', 'missed', 'expired'] as const)(
+  'finishing a session clears both earlier tails and a terminal %s release',
+  async (outcome) => {
+    const s = await Session.create(
+      {
+        ...map(note),
+        durationBeats: 2,
+        notes: [
+          { ...note, id: 'earlier', beat: 1, lateMs: 0, presentation: { releaseMs: 2000 } },
+          {
+            ...note,
+            id: 'last',
+            beat: 2,
+            lateMs: 0,
+            ...(outcome === 'expired' ? { preset: 'hazard', durationBeats: 1 } : {}),
+            presentation: { releaseMs: 2000 },
+          },
+        ],
+      },
+      [standardActor()],
+    );
+    if (outcome === 'hit') s.submit(admin, 'poses', scriptedCommands(s.program));
+    s.advance(s.program.durationTicks - 1);
+    expect(s.observe(admin).resolvedEntities!.some((e) => e.id === 'earlier')).toBe(true);
+    const events = s.advance(1);
+    expect(events.some((e) => e.type === 'session.ended')).toBe(true);
+    if (outcome !== 'expired')
+      expect(events.some((e) => e.entityId === 'last' && e.type === `interaction.${outcome}`)).toBe(
+        true,
+      );
+    else expect(s.snapshot().resolvedCount).toBe(2);
+    const view = s.observe(admin);
+    expect(view.finished).toBe(true);
+    expect(view.entities).toEqual([]);
+    expect(view.resolvedEntities).toHaveLength(0);
+    s.advance(500);
+    expect(s.observe(admin)).toEqual(view);
+    expect((await Session.restore(s.client(admin).checkpoint())).observe(admin)).toEqual(view);
+    expect((await Session.verifyReplay(await s.client(admin).replay())).verified).toBe(true);
+  },
+);
+
 it.each([0, 1000])(
   'released strikes contain their completing slots with %i ms lead',
   async (leadMs) => {

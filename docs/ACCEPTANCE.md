@@ -4,6 +4,28 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Additional presentation review fixes, 2026-09-24
+
+Three further PR #4 findings were reproduced with failing regression tests, then corrected.
+Finished sessions clear earlier release tails and targets resolved on the terminal tick;
+hit, miss, hazard expiry, checkpoint restore and repeated post-finish advances are covered.
+The browser test keeps rendering the results scene and verifies that no target remains.
+Legacy observations allocate no fallback guide buffers, while explicitly supplied custom
+guides still update and dispose normally.
+
+Shared trajectory lookup now uses binary search with the original interpolation arithmetic.
+Property tests compare exact values against the prior sequential algorithm at keys, between
+keys, outside the motion interval and in reverse query order. A legal 256-key full guide
+producing 288 points fell from 39,037 to 4,724 motion-key reads per sample. A deterministic
+read-count limit guards the scaling independently of machine timing; this is not an FPS claim.
+The pre-fix 19,200-tick Event Horizon recording still verifies with identical state/event hashes.
+
+`npm run check` passed **117 tests in 19 files**, strict types, formatting, core boundaries and
+the production build. All **seven targeted browser cases** passed: four Chromium presentation
+cases and three Node/Chromium/Firefox/WebKit conformance cases. All **three production Pages
+cases** passed, including complete bundled soundtrack playback and verified zero-miss replay.
+The previous commit's GitHub CI was green; subsequent commits require their own remote checks.
+
 ## Note presentation review fixes, 2026-09-24
 
 All five PR #4 findings were reproduced and corrected. Core transitions now expose detached

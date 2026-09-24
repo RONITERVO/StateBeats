@@ -307,7 +307,9 @@ export class OrbitScene {
         }
         const guide =
           appearance?.guide ??
-          (entity.presentation?.guide === 'none' ? undefined : createPathGuide(color));
+          (entity.presentation && entity.presentation.guide !== 'none'
+            ? createPathGuide(color)
+            : undefined);
         if (guide) {
           // Even a suppressed custom guide belongs to the scene for eventual cleanup.
           this.guides.set(group, guide);

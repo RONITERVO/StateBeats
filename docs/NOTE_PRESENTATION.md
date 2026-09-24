@@ -49,6 +49,9 @@ are never automatically connected into a path that might imply a required hold.
 entity's stage transform captured at spawn. It needs no clock, random number, render
 history or wall-time animation. Author actual curved gestures through motion keys;
 do not render a smoothed shortcut that differs from the scored route.
+The shared position lookup uses binary search over validated, increasing motion keys.
+Each lookup takes logarithmic work and retains the original interpolation arithmetic,
+including exact key boundaries; wide guides do not rescan every key for every point.
 
 Every session target has `presentation` containing:
 
@@ -73,7 +76,9 @@ regardless of how often anyone observes. Restoring a checkpoint reconstructs the
 its verified command timeline. A maximum of 256 releases is retained, oldest first
 discarded if that cosmetic budget is exceeded. Resolution stops future-path revelation;
 only the already travelled tail remains while it fades. At session end simulation time
-stops; hosts normally replace the scene with their results view.
+stops, so the SDK clears all release effects, including those created on the terminal tick.
+Finished observations contain no release artwork that could freeze behind a results view.
+Pause/manual stepping still freezes ordinary releases at their current simulation tick.
 
 `describeObservation()` carries the same presentation in each semantic target cue;
 audio, speech, haptic and agent adapters can interpret it without importing Three.js.
@@ -93,7 +98,8 @@ Observations expose that hash and `presentationVersion` (`statebeats/note-presen
 Hosts comparing scores should identify both the collision program and the presentation
 policy/version, plus any host-provided assistance. Do not silently increase lookahead
 when changing artwork. Older observations without presentation metadata remain usable;
-the new reference guide omits the legacy full route rather than guessing its timing.
+the scene allocates no fallback guide without a presentation cue and never guesses the
+timing of a legacy full route. An explicitly supplied custom guide is still supported.
 
 ## Reference player extension
 

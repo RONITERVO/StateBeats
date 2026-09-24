@@ -14,6 +14,8 @@ Presentation review fixes preserve the final interaction state in release effect
 an additive core transition result, with unchanged scoring and recording identity. The
 reference player fades semantic cues and particles, composes adapter opacity animation
 with lifecycle visibility, and disposes custom guides even when the map suppresses them.
+Finished sessions finalize every remaining release effect. Dense trajectories use exact
+binary position lookup, and legacy observations allocate no unused fallback guide buffers.
 
 Adds reusable musical turn planning with versioned tracks, explicit sweeps/continuations/answers,
 quintic easing, peak speed/acceleration and directional-travel limits, explanation reports and

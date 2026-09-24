@@ -4,6 +4,76 @@ import { sampleMap } from '@statebeats/content';
 import type { Observation } from '@statebeats/sdk';
 import { resolve } from 'node:path';
 
+test('legacy observations allocate no fallback guides while explicit custom guides remain supported', async ({
+  page,
+}) => {
+  const session = await Session.create({
+    version: 1,
+    id: 'legacy-guides',
+    title: 'Legacy guides',
+    durationBeats: 4,
+    tempo: [{ beat: 0, bpm: 120 }],
+    notes: ['strike', 'hold', 'custom'].map((id) => ({
+      id,
+      beat: 2,
+      preset: id === 'strike' ? 'left' : 'hold',
+      position: [0, 1, -1],
+      leadMs: 1000,
+      ...(id === 'custom' ? { appearance: 'test/legacy-guide' } : {}),
+    })),
+  });
+  session.advance(60);
+  await page.goto('/conformance.html');
+  const result = await page.evaluate(
+    async ({ view, path }) => {
+      const { exerciseLegacyGuides } = await import(path);
+      return exerciseLegacyGuides(view);
+    },
+    {
+      view: session.observe({ role: 'admin' }),
+      path: '/@fs/' + resolve('tests/browser/fixtures/presence.ts').replaceAll('\\', '/'),
+    },
+  );
+  expect(result).toEqual({
+    legacyFallbacks: 0,
+    currentFallbacks: 1,
+    customUpdates: 2,
+    customDisposals: 2,
+  });
+});
+
+test('a terminal miss removes artwork from the still-rendering results scene', async ({ page }) => {
+  const session = await Session.create({
+    version: 1,
+    id: 'terminal-release',
+    title: 'Terminal release',
+    durationBeats: 1,
+    tempo: [{ beat: 0, bpm: 120 }],
+    notes: [{ id: 'last', preset: 'left', beat: 1, lateMs: 0, position: [0, 1, -1] }],
+  });
+  session.advance(59);
+  const frames = [session.observe({ role: 'admin' })];
+  session.advance(1);
+  frames.push(session.observe({ role: 'admin' }));
+  session.advance(100);
+  frames.push(session.observe({ role: 'admin' }));
+  expect(frames[1].finished).toBe(true);
+  await page.goto('/conformance.html');
+  const counts = await page.evaluate(async (frames) => {
+    const modulePath = '/src/scene.ts';
+    const { OrbitScene } = await import(modulePath);
+    const scene = new OrbitScene(document.body);
+    const counts = frames.map((frame) => {
+      scene.update(frame);
+      scene.render();
+      return scene.targets.children.length;
+    });
+    scene.dispose();
+    return counts;
+  }, frames);
+  expect(counts).toEqual([1, 0, 0]);
+});
+
 test('moving guides render the shared window, survive restore, and dispose with the target', async ({
   page,
 }) => {

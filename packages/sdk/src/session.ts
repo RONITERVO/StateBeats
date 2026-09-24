@@ -441,6 +441,11 @@ export class Session {
   }
   /** Derived SDK state only. Reconstructed by the accepted timeline, never scored or checkpoint-trusted. */
   private rememberReleases(removed: LiveEntity[], events: DomainEvent[]) {
+    // A finished world will never advance again: finalize all cosmetic tails as well.
+    if (this.world.finished) {
+      this.releases = [];
+      return;
+    }
     this.releases = this.releases.filter(
       ({ entity, resolution }) =>
         this.tick < resolution.tick + this.presenter.releaseTicks(entity.spec.id, entity.spec.kind),
