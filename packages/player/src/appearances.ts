@@ -1,9 +1,15 @@
 import * as THREE from 'three';
 import type { Observation } from '@statebeats/sdk';
 import type { ThemePreferences } from './themes.js';
+import { createPathGuide } from './target-guide.js';
+import type { TargetGuide } from './target-guide.js';
 
 export interface TargetAppearance {
   object: THREE.Object3D;
+  /** Own the complete guide; undefined uses the reference guide, false deliberately omits it. */
+  guide?: TargetGuide | false;
+  /** The adapter interprets lifecycle progress itself instead of using the default opacity envelope. */
+  handlesPresence?: boolean;
   update?(
     entity: Observation['entities'][number],
     view: Observation,
@@ -16,7 +22,7 @@ export type AppearanceFactory = (
   color: number,
 ) => TargetAppearance;
 const registry = new Map<string, AppearanceFactory>();
-/** Trusted renderer extension. Geometry, labels, timing and authoritative state stay independent. */
+/** Trusted renderer extension. Artwork, guide and transitions never alter authoritative movement. */
 export function registerAppearance(id: string, factory: AppearanceFactory): () => void {
   if (registry.has(id)) throw new Error(`Appearance already registered: ${id}`);
   registry.set(id, factory);
@@ -49,7 +55,7 @@ registerAppearance('statebeats/prism', (entity, color) => {
   const object = new THREE.Group();
   const radius = entity.shape.kind === 'sphere' ? entity.shape.radius : 0.115;
   const crystalGeometry = new THREE.OctahedronGeometry(radius * 0.86);
-  const material = new THREE.MeshBasicMaterial({ color });
+  const material = new THREE.MeshBasicMaterial({ color, transparent: true });
   const crystal = new THREE.Mesh(crystalGeometry, material);
   const haloGeometry = new THREE.TorusGeometry(radius * 1.18, 0.008, 4, 24);
   const haloMaterial = new THREE.MeshBasicMaterial({
@@ -63,7 +69,19 @@ registerAppearance('statebeats/prism', (entity, color) => {
   object.add(crystal, halo);
   return {
     object,
-    update(_entity, view, preferences) {
+    guide: entity.presentation?.guide === 'none' ? false : createPathGuide(color),
+    handlesPresence: true,
+    update(entity, view, preferences) {
+      const cue = entity.presentation;
+      const visibility = cue?.visibility ?? 1;
+      material.opacity = visibility;
+      haloMaterial.opacity = 0.65 * visibility;
+      // Emergence is artistic: this reference crystal assembles at its authored location.
+      const emergence =
+        cue?.presence === 'emerge' && !preferences.reducedMotion
+          ? 0.35 + 0.65 * cue.appearanceProgress
+          : 1;
+      object.scale.setScalar(emergence * (1 - (cue?.releaseProgress ?? 0) * 0.35));
       crystal.rotation.y = preferences.reducedMotion ? 0 : (view.tick / view.tickRate) * 1.4;
       halo.rotation.x = Math.PI / 3;
       halo.rotation.y = preferences.reducedMotion ? 0 : (-view.tick / view.tickRate) * 0.6;
@@ -76,6 +94,25 @@ registerAppearance('statebeats/prism', (entity, color) => {
     },
   };
 });
+
+/** Default lifecycle envelope for existing adapters; material baselines are retained per instance. */
+const baseOpacity = new WeakMap<THREE.Material, number>();
+export function applyPresence(object: THREE.Object3D, visibility: number) {
+  object.traverse((child) => {
+    if (
+      !(child instanceof THREE.Mesh || child instanceof THREE.Sprite || child instanceof THREE.Line)
+    )
+      return;
+    for (const material of Array.isArray(child.material) ? child.material : [child.material]) {
+      if (!baseOpacity.has(material)) baseOpacity.set(material, material.opacity);
+      if (!material.transparent) {
+        material.transparent = true;
+        material.needsUpdate = true;
+      }
+      material.opacity = baseOpacity.get(material)! * visibility;
+    }
+  });
+}
 registerAppearance('statebeats/bird', () => {
   const object = new THREE.Group();
   const material = new THREE.MeshBasicMaterial({ color: 0xf3babb, side: THREE.DoubleSide });

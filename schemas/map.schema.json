@@ -540,6 +540,126 @@
             "type": "string",
             "pattern": "^[\\w./:-]{1,100}$"
           },
+          "presentation": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "default": 1,
+                "type": "number",
+                "const": 1
+              },
+              "presence": {
+                "default": "fade",
+                "type": "string",
+                "enum": [
+                  "instant",
+                  "fade",
+                  "emerge"
+                ]
+              },
+              "appearMs": {
+                "default": 160,
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2000
+              },
+              "releaseMs": {
+                "default": 240,
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2000
+              },
+              "guide": {
+                "default": "window",
+                "type": "string",
+                "enum": [
+                  "window",
+                  "none",
+                  "full"
+                ]
+              },
+              "ahead": {
+                "default": {
+                  "ms": 350
+                },
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "ms": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 5000
+                      }
+                    },
+                    "required": [
+                      "ms"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "beats": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 8
+                      }
+                    },
+                    "required": [
+                      "beats"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "behind": {
+                "default": {
+                  "ms": 180
+                },
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "ms": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 5000
+                      }
+                    },
+                    "required": [
+                      "ms"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "beats": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 8
+                      }
+                    },
+                    "required": [
+                      "beats"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "version",
+              "presence",
+              "appearMs",
+              "releaseMs",
+              "guide",
+              "ahead",
+              "behind"
+            ],
+            "additionalProperties": false
+          },
           "label": {
             "type": "string",
             "minLength": 1,

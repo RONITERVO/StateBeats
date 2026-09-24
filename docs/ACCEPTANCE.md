@@ -4,6 +4,32 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Note presentation revision, 2026-09-24
+
+The SDK projects authoritative trajectories into versioned appearance, arrival, reveal and
+release cues. Event Horizon's holds use a 0.75-beat leading window and 0.5-beat trail, with
+stationary emergence and 65 authored motion samples. The core remains unchanged. Full-route
+previews remain available to authoring capabilities; player cues use the map's reveal policy.
+
+The clean source archive passed **106 tests in 16 files**, strict type checking, formatting,
+kernel boundaries, production build and CLI/examples. Target-presentation coverage includes
+tempo changes, exact transformed trajectory alignment, no pre-spawn revelation, dense paths,
+zero-length timing at rounded offsets, appearance before contact, release/restore/replay,
+same-tick director spawns, metadata integrity and bounded disposable guide geometry.
+
+All **18 browser cases** passed, including Node/Chromium/Firefox/WebKit presentation and replay
+conformance and actual WebGL guide rendering/disposal. All **three production Pages cases**
+passed across the suite and one isolated rerun. The first 4x Event Horizon run entered the
+timing-resync pause while package preparation was also running; the unchanged isolated run
+completed, decoded its bundled MP3, resumed in sync and exported a verified zero-miss replay.
+No timing guard or scoring assertion was weakened. All six package archives installed in a
+fresh project and exercised the new presentation API. The clean source's full Event Horizon
+example recorded 620 hits and zero misses; tracked-head clearance remains covered by the suite.
+
+These are desktop software checks. Quest 3 frame timing, human reaction/readability and the
+preferred musical lookahead still require headset playtesting. Contracts and migration notes
+are in [NOTE_PRESENTATION.md](NOTE_PRESENTATION.md).
+
 ## Musical turn revision, 2026-09-24
 
 The shared turn planner replaces Event Horizon's long section rotations with 82 turn events

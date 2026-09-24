@@ -372,6 +372,16 @@ export function presentationIdentity(map: MapDefinition): Promise<string> {
     labels: map.notes
       .filter((note) => note.label || note.appearance)
       .map((note) => ({ id: note.id, label: note.label, appearance: note.appearance })),
+    ...(map.notes.some((note) => note.presentation)
+      ? {
+          notePresentation: map.notes
+            .filter((note) => note.presentation)
+            .map((note) => ({
+              id: note.id,
+              presentation: note.presentation,
+            })),
+        }
+      : {}),
   });
 }
 function validateCapacity(entities: readonly EntitySpec[], limit: number): void {

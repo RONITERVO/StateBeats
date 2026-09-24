@@ -2,6 +2,7 @@ import { inverseRotate, sub, quaternion } from '@statebeats/core';
 import type { DomainEvent, Quat, Vec3 } from '@statebeats/core';
 import type { Observation, PerceptionSink } from './session.js';
 import { EngineError, parsed, quatSchema, vecSchema } from './schema.js';
+import type { TargetPresentation } from './presentation.js';
 
 export interface TargetCue {
   id: string;
@@ -18,6 +19,7 @@ export interface TargetCue {
   secondsUntil: number;
   holdSeconds: number;
   text: string;
+  presentation?: TargetPresentation;
 }
 export interface PerceptionDescription {
   version: 1;
@@ -59,7 +61,11 @@ export function describeObservation(
     (a, b) => a.hitTick - b.hitTick || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
   );
   const targets = entities.slice(0, limit).map((entity) => {
-    const position = [...(entity.targetPosition ?? entity.position)] as Vec3;
+    const position = [
+      ...(entity.kind === 'hold' && view.tick >= entity.hitTick
+        ? entity.position
+        : (entity.targetPosition ?? entity.position)),
+    ] as Vec3;
     const relative = inverseRotate(sub(position, origin), orientation);
     const distanceMetres = Math.hypot(...relative);
     const horizontal = Math.hypot(relative[0], relative[2]);
@@ -89,6 +95,7 @@ export function describeObservation(
       dueTick: entity.hitTick,
       secondsUntil,
       holdSeconds,
+      ...(entity.presentation ? { presentation: entity.presentation } : {}),
       text: `${action === 'avoid' ? 'Avoid' : action === 'hold' ? 'Hold' : 'Reach'} ${label}; ${needs}; ${distanceMetres < 0.1 ? 'at your position' : `${clockPosition} o'clock ${height}`}; ${distanceMetres.toFixed(2)} metres; ${when}${holdSeconds ? `; hold ${holdSeconds.toFixed(2)} seconds` : ''}.`,
     } satisfies TargetCue;
   });

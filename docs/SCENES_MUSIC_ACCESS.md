@@ -1,5 +1,8 @@
 # Scenes, music and perception
 
+For timed note emergence, moving path windows, release effects and complete target/guide
+adapters, see [Note presentation](NOTE_PRESENTATION.md).
+
 These are SDK capabilities. The browser, text player, CLI and MCP share the same compiled
 gameplay and observations. No renderer, audio device, FFT callback or screen reader awards hits.
 Packages use `@statebeats/*` at version 0.2.0. The pure kernel recording version remains
