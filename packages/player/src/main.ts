@@ -1,210 +1,58 @@
 import './style.css';
 import * as THREE from 'three';
-import { controllerSamples } from './xr-input.js';
-import type { TrackedController } from './xr-input.js';
-import { sampleMaps, sampleMap, EVENT_HORIZON_ID, AUDIO_TUTORIAL_ID } from '@statebeats/content';
+import { createXRControls } from './xr-controls.js';
+import { sampleMaps, EVENT_HORIZON_ID, AUDIO_TUTORIAL_ID } from '@statebeats/content';
 import { INK_BATTLE_ID } from '@statebeats/ink-battle';
 import {
   beatToTick,
   beatValue,
-  compile,
   describeObservation,
   describeHandGuidance,
   fitMapToPlayer,
-  musicGenerationSchema,
-  CHOREOGRAPHY_VERSION,
-  TURN_PLANNER_VERSION,
 } from '@statebeats/sdk';
-import type {
-  Observation,
-  Replay,
-  MapDefinition,
-  ChoreographyReport,
-  MusicGenerationOptions,
-  MusicTimeline,
-} from '@statebeats/sdk';
+import type { Observation, Replay, MapDefinition } from '@statebeats/sdk';
 import type { Vec3, Quat } from '@statebeats/core';
 import type { FromWorker, ToWorker, HandSample } from './protocol.js';
 import { OrbitScene, sceneVector } from './scene.js';
 import { RhythmAudio } from './audio.js';
 import { readPreferences, storePreferences } from './preferences.js';
-import { assistedTargetPoint } from './desktop-input.js';
+import { createDesktopControls } from './desktop-controls.js';
 import { bundledSong, bundledSoundtracks } from './soundtracks.js';
 import { handGuidanceText } from './hand-audio.js';
-import type { HandBeaconMode } from './hand-audio.js';
 import { HapticPlanner } from './haptics.js';
-import { Narrator, SpokenMenu, AUDIO_LESSON } from './spoken-controls.js';
+import { createAccessibility } from './accessibility.js';
 
-const el = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
-const button = (id: string, fn: () => void) => el(id).addEventListener('click', fn);
+import { el, button } from './dom.js';
+import { createAuthoring } from './authoring.js';
+import { Playback } from './playback.js';
+import { TrackingGuard } from './xr-tracking.js';
+const playback = new Playback();
 const orbit = new OrbitScene(el('stage')),
   audio = new RhythmAudio(),
   worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
 const send = (message: ToWorker) => worker.postMessage(message);
-const narrator = new Narrator(el('spoken-status'));
-const haptics = new HapticPlanner();
-const spoken = new SpokenMenu((text) => {
-  el('spoken-choice').textContent = text;
-  announce(text);
-});
-function announce(text: string) {
-  narrator.muted = !audio.enabled;
-  narrator.speak(text);
-}
-function closeAudioDialogs() {
-  for (const id of ['audio-setup', 'spoken-menu']) el<HTMLDialogElement>(id).close();
-}
-function stopHaptics() {
-  haptics.reset();
-  for (const source of xrSources)
-    void source?.gamepad?.hapticActuators?.[0]?.pulse(0, 0).catch(() => {});
-}
-function measureHeight() {
-  if (!orbit.renderer.xr.isPresenting) {
-    announce(
-      'Enter immersive VR, stand upright, then choose measure height. You can also enter height in Settings.',
-    );
-    return;
-  }
-  const height = headPose().position.y;
-  if (!Number.isFinite(height) || height < 1 || height > 2.3) {
-    announce('Headset floor height is unavailable. Enter your height in Settings.');
-    return;
-  }
-  personalHeight = Math.round(height * 100) / 100;
-  el<HTMLInputElement>('player-height').value = String(personalHeight);
-  savePreferences();
-  announce(
-    `Headset eye height is ${Math.round(height * 100)} centimetres. This sets target height on your next start. Face forward when starting to set the centre.`,
-  );
-}
-function refreshSpokenMenu() {
-  spoken.set([
-    {
-      id: 'play',
-      label:
-        playing && !view?.finished && selected === activeMap
-          ? 'Resume sequence'
-          : `Play ${mapFor(selected).title}`,
-      run: () => {
-        if (playing && !view?.finished && selected === activeMap) resume();
-        else void start(false);
-      },
-    },
-    {
-      id: 'restart',
-      label: 'Face forward, recenter and restart selected sequence',
-      run: () => void start(false),
-    },
-    { id: 'height', label: 'Measure headset eye height for target height', run: measureHeight },
-    {
-      id: 'scale-down',
-      label: `Smaller reach. Room scale ${roomScale.toFixed(1)}`,
-      run: () => adjustReach(-0.1),
-    },
-    {
-      id: 'scale-up',
-      label: `Larger reach. Room scale ${roomScale.toFixed(1)}`,
-      run: () => adjustReach(0.1),
-    },
-    { id: 'learn', label: 'Explain sounds and controls', run: () => announce(AUDIO_LESSON) },
-    ...maps().map((map) => ({
-      id: map.id,
-      label: `Select ${map.title}`,
-      run: () => {
-        selectMap(map.id);
-        refreshSpokenMenu();
-        announce(
-          `${map.title} selected. ${map.id === AUDIO_TUTORIAL_ID ? 'Sparse targets, no turns or hazards.' : 'This map was not designed or tested for nonvisual play.'} Choose Play to start.`,
-        );
-      },
-    })),
-    { id: 'home', label: 'Return to library', run: home },
-    {
-      id: 'exit',
-      label: 'Exit immersive VR',
-      run: () => {
-        void orbit.renderer.xr.getSession()?.end();
-      },
-    },
-  ]);
-}
-function adjustReach(delta: number) {
-  roomScale = Math.round(Math.max(0.5, Math.min(1.75, roomScale + delta)) * 100) / 100;
-  el<HTMLInputElement>('room-scale').value = String(roomScale);
-  savePreferences();
-  refreshSpokenMenu();
-  drawMenu();
-  announce(`Room scale ${roomScale.toFixed(1)}. Applies on your next start.`);
-}
-function showSpokenMenu() {
-  closeAudioDialogs();
-  refreshSpokenMenu();
-  if (orbit.renderer.xr.isPresenting) {
-    menu.visible = true;
-    placeMenu();
-  } else {
-    el<HTMLDialogElement>('spoken-menu').showModal();
-    el('spoken-choice').focus();
-  }
-  spoken.read();
-}
-function openSpokenMenu() {
-  if (running) {
-    pause();
-    if (audio.nonvisualEnabled) return;
-  }
-  showSpokenMenu();
-}
-function moveSpoken(direction: number) {
-  spoken.move(direction);
-  drawMenu();
-}
-let importedMap: MapDefinition | undefined;
-let generationReport: ChoreographyReport | undefined;
-let generationBaseline: MusicGenerationOptions = {};
-let rebuildSupported = false;
 let personalHeight = 1.65,
   roomScale = 1;
 let activeHeight = 1.65;
-let importedSong: { buffer: AudioBuffer; sha256: string } | undefined;
-let analysisWorker: Worker | undefined;
 let audioMap: MapDefinition | undefined;
-let preparingStart = false;
-let startSequence = 0;
 let connectedSong: string | undefined;
-const maps = () => (importedMap ? [...sampleMaps, importedMap] : sampleMaps);
-const mapFor = (id: string) => (importedMap?.id === id ? importedMap : sampleMap(id));
 let captions = true;
-let selected = 'tutorial',
-  activeMap = '',
-  playing = false,
-  running = false,
-  autoplay = false,
-  view: Observation | undefined,
-  loadStarting = false;
-let startOnReady = false;
-let desktopYaw = 0,
-  swap = false,
+let selected = 'tutorial';
+let view: Observation | undefined;
+let swap = false,
   hideTargets = false,
   showPerf = false,
   frameTimes: number[] = [],
   lastFrame = 0,
   speed = 1;
-let targetMouse = new THREE.Vector2(0, 0),
-  desktopHeld = [false, false],
-  handTargets = [new THREE.Vector3(-0.3, 1.1, -0.2), new THREE.Vector3(0.3, 1.1, -0.2)];
 let lastFeedback = 0,
   generation = 0,
-  lastPhase = '',
+  lastClockPhase = '',
   exportSequence = 0;
 const pendingExports = new Map<number, (replay: Replay) => void>();
-const raycaster = new THREE.Raycaster(),
-  worldCamera = new THREE.Vector3(),
+const worldCamera = new THREE.Vector3(),
   worldQuaternion = new THREE.Quaternion(),
   forward = new THREE.Vector3();
-const xrSources: (XRInputSource | undefined)[] = [];
-const controllerLines: THREE.Line[] = [];
 
 function notify(message: string) {
   el('error').textContent = message;
@@ -213,8 +61,7 @@ function notify(message: string) {
 }
 function selectMap(id: string) {
   selected = id;
-  el<HTMLButtonElement>('save-generation-report').disabled =
-    !generationReport || importedMap?.id !== id;
+  authoring.selectionChanged(id);
   for (const card of el('maps').children) {
     card.classList.toggle('selected', (card as HTMLElement).dataset.map === id);
     card.setAttribute('aria-pressed', String((card as HTMLElement).dataset.map === id));
@@ -240,6 +87,71 @@ function addMapCard(map: MapDefinition, index: number) {
   card.onclick = () => selectMap(map.id);
   el('maps').append(card);
 }
+const authoring = createAuthoring({
+  selected: () => selected,
+  pause: () => {
+    if (playback.canPause) pause();
+  },
+  notify,
+  decodeSong: (bytes) => audio.decodeSong(bytes),
+  installed: (map) => {
+    addMapCard(map, 6);
+    el('maps').lastElementChild!.setAttribute('data-imported', 'true');
+    selectMap(map.id);
+  },
+});
+const maps = authoring.maps,
+  mapFor = authoring.mapFor;
+const haptics = new HapticPlanner();
+function stopHaptics() {
+  haptics.reset();
+  xr.stopHaptics();
+}
+
+const {
+  narrator,
+  spoken,
+  announce,
+  closeAudioDialogs,
+  refreshSpokenMenu,
+  showSpokenMenu,
+  openSpokenMenu,
+  moveSpoken,
+} = createAccessibility({
+  audio,
+  immersive: () => orbit.renderer.xr.isPresenting,
+  canPause: () => playback.canPause,
+  canResume: () => playback.resumable && selected === playback.mapId,
+  selection: () => mapFor(selected),
+  maps,
+  selectMap,
+  start: () => {
+    void start(false);
+  },
+  resume,
+  pause,
+  home,
+  headHeight: () => headPose().position.y,
+  roomScale: () => roomScale,
+  setHeight: (value) => {
+    personalHeight = value;
+    el<HTMLInputElement>('player-height').value = String(value);
+  },
+  setRoomScale: (value) => {
+    roomScale = value;
+    el<HTMLInputElement>('room-scale').value = String(value);
+  },
+  savePreferences,
+  prepareAudio,
+  showVRMenu: () => {
+    menu.visible = true;
+    placeMenu();
+  },
+  redraw: drawMenu,
+  exitVR: () => {
+    void orbit.renderer.xr.getSession()?.end();
+  },
+});
 sampleMaps.forEach(addMapCard);
 const featuredCard = el('maps').querySelector(`[data-map="${EVENT_HORIZON_ID}"]`);
 if (featuredCard) el('maps').insertBefore(featuredCard, el('maps').children[1]);
@@ -299,7 +211,7 @@ function drawMenu() {
   c.fillText(
     view?.finished
       ? `Complete · ${score?.points ?? 0} points · ${score?.hits ?? 0} hits`
-      : playing
+      : playback.playing
         ? 'Paused · your timeline is held'
         : 'Choose a sequence. Reach on the beat.',
     56,
@@ -347,12 +259,12 @@ function drawMenu() {
     ),
   );
   row(
-    playing && !view?.finished && selected === activeMap
+    playback.resumable && selected === playback.mapId
       ? 'Resume sequence'
       : 'Play selected sequence',
     536,
     () => {
-      if (playing && !view?.finished && selected === activeMap) resume();
+      if (playback.resumable && selected === playback.mapId) resume();
       else void start(false);
     },
     true,
@@ -433,10 +345,9 @@ async function prepareAudio() {
   }
 }
 async function start(bot: boolean) {
-  if (preparingStart) return;
-  const request = ++startSequence;
+  if (playback.state.phase === 'loading' && playback.state.stage === 'audio') return;
   const mapId = selected;
-  if (running) pause();
+  if (playback.canPause) pause();
   closeAudioDialogs();
   narrator.stop();
   stopHaptics();
@@ -452,31 +363,23 @@ async function start(bot: boolean) {
   audio.setScore(map);
   audioMap = map;
   connectedSong = undefined;
-  if (map.music?.source && importedSong?.sha256 === map.music.source.sha256)
-    audio.setSong(importedSong.buffer, map.music.frames[0]?.tick ?? 0);
+  if (map.music?.source && authoring.song?.sha256 === map.music.source.sha256)
+    audio.setSong(authoring.song!.buffer, map.music.frames[0]?.tick ?? 0);
   else if (map.music?.source && !bundledSoundtracks.has(map.music.source.sha256))
     notify(
       `Choose the matching audio file (${map.music.source.name}) to hear its soundtrack. The saved chart and cues can play now.`,
     );
-  preparingStart = true;
+  const request = playback.begin(mapId, bot);
   el<HTMLButtonElement>('play').disabled = true;
   el<HTMLButtonElement>('watch').disabled = true;
   el('engine-status').textContent = bundledSoundtracks.has(map.music?.source?.sha256 ?? '')
     ? 'Loading original soundtrack…'
     : 'Preparing sequence…';
   await prepareAudio();
-  if (request !== startSequence) return;
-  preparingStart = false;
-  autoplay = bot;
-  playing = true;
-  running = false;
-  loadStarting = true;
-  startOnReady = true;
-  activeMap = mapId;
-  lastPhase = 'loading';
+  if (!playback.audioReady(request)) return;
+  lastClockPhase = 'loading';
   view = undefined;
-  desktopYaw = 0;
-  desktopPitch = 0;
+  desktop.reset();
   el('lobby').hidden = true;
   el('pause-panel').hidden = true;
   el('results').hidden = true;
@@ -498,14 +401,12 @@ async function start(bot: boolean) {
     orbit.camera.position.set(0, 1.65, 0);
     orbit.camera.rotation.set(0, 0, 0);
   }
-  desktopHeld = [false, false];
-  handTargets = [new THREE.Vector3(-0.3, 1.1, -0.2), new THREE.Vector3(0.3, 1.1, -0.2)];
-  send({ type: 'load', mapId, map, autoplay: bot, stage: stagePose() });
+  send({ type: 'load', loadId: request, mapId, map, autoplay: bot, stage: stagePose() });
+  if (playback.state.phase === 'loading' && playback.state.intent === 'pause') pause();
 }
 function pause(stalled = false) {
-  if (!playing) return;
-  startOnReady = false;
-  running = false;
+  if (!playback.playing && !playback.loading) return;
+  playback.pause();
   send({ type: 'pause' });
   audio.stop();
   stopHaptics();
@@ -513,6 +414,7 @@ function pause(stalled = false) {
   el('pause-description').textContent = stalled
     ? 'Tracking or timing was interrupted. Resume when you are ready; the soundtrack will restart from this simulation tick.'
     : 'The sequence and its soundtrack are paused together.';
+  el<HTMLButtonElement>('resume').disabled = !playback.resumable;
   if (audio.nonvisualEnabled) {
     if (!orbit.renderer.xr.isPresenting) el('pause-panel').hidden = false;
     showSpokenMenu();
@@ -525,30 +427,24 @@ function pause(stalled = false) {
   } else el('pause-panel').hidden = false;
 }
 function resume() {
-  if (!playing) return;
+  if (!playback.resumable) return;
   closeAudioDialogs();
   narrator.stop();
   stopHaptics();
-  startOnReady = true;
+  playback.resume();
   void prepareAudio();
   audio.rebase();
   el('pause-panel').hidden = true;
   menu.visible = false;
-  running = !loadStarting;
-  if (running) send({ type: 'start' });
+  if (playback.running) send({ type: 'start' });
 }
 function home() {
   closeAudioDialogs();
   narrator.stop();
   stopHaptics();
-  startSequence++;
-  startOnReady = false;
-  loadStarting = false;
-  preparingStart = false;
+  playback.home();
   el<HTMLButtonElement>('play').disabled = false;
   el<HTMLButtonElement>('watch').disabled = false;
-  running = false;
-  playing = false;
   send({ type: 'pause' });
   audio.reset();
   audioMap = undefined;
@@ -576,7 +472,6 @@ function home() {
   }
 }
 function showResults() {
-  running = false;
   audio.stop();
   stopHaptics();
   const s = view?.scores.find((s) => s.actorId === 'player');
@@ -584,7 +479,7 @@ function showResults() {
   el('result-stats').innerHTML =
     `<div><strong>${s.points.toLocaleString()}</strong><small>POINTS</small></div><div><strong>${s.bestCombo}</strong><small>BEST COMBO</small></div><div><strong>${s.hits}</strong><small>HITS</small></div>`;
   el('result-detail').textContent =
-    `${s.misses} missed · ${s.hazards} hazard contacts. ${autoplay ? 'Played by the scripted actor through the same SDK.' : 'Every result came from the simulation engine.'}`;
+    `${s.misses} missed · ${s.hazards} hazard contacts. ${playback.autoplay ? 'Played by the scripted actor through the same SDK.' : 'Every result came from the simulation engine.'}`;
   if (!orbit.renderer.xr.isPresenting) el('results').hidden = false;
   if (audio.nonvisualEnabled) {
     showSpokenMenu();
@@ -596,14 +491,24 @@ function showResults() {
     placeMenu();
   } else el('results').hidden = false;
 }
+function showFailure(loadId: number, message: string) {
+  if (loadId !== playback.request) return;
+  const initial = loadId === 0 && playback.request === 0;
+  if (!playback.fail(loadId) && !initial) return;
+  audio.stop();
+  stopHaptics();
+  el<HTMLButtonElement>('play').disabled = false;
+  el<HTMLButtonElement>('watch').disabled = false;
+  if (playback.playing) pause(true);
+  el('pause-title').textContent = 'Could not continue.';
+  el('pause-description').textContent = `${message} Restart the sequence or return to the library.`;
+  notify(message);
+  announce(`${message} Restart the sequence or return to the library.`);
+}
 worker.onmessage = (event: MessageEvent<FromWorker>) => {
   const message = event.data;
   if (message.type === 'error') {
-    notify(message.message);
-    running = false;
-    audio.stop();
-    stopHaptics();
-    announce(message.message);
+    showFailure(message.loadId, message.message);
     return;
   }
   if (message.type === 'replay') {
@@ -612,50 +517,45 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
     return;
   }
   if (message.type === 'ready') {
+    const initial = message.loadId === 0 && playback.request === 0;
+    if (!initial && !playback.workerReady(message.loadId)) return;
     generation = message.generation;
     view = message.view;
     el('engine-status').textContent = 'Engine ready · 120 Hz';
     el<HTMLButtonElement>('play').disabled = false;
     el<HTMLButtonElement>('watch').disabled = false;
-    if (loadStarting) {
-      const request = startSequence,
-        readyGeneration = generation;
+    if (!initial) {
       orbit.update(message.view, hideTargets);
-      // Compile/upload a newly selected theme before real-time simulation begins.
-      // A slow first GPU frame must not consume the song's opening or its timing budget.
+      // Resource completion is tied to this load, so Home/restart can invalidate it.
       void orbit.renderer
         .compileAsync(orbit.scene, orbit.camera)
         .then(() => {
-          if (
-            request !== startSequence ||
-            readyGeneration !== generation ||
-            !loadStarting ||
-            !playing
-          )
-            return;
+          if (!playback.sceneReady(message.loadId)) return;
           orbit.render();
-          loadStarting = false;
           send({ type: 'speed', value: speed });
-          running = startOnReady;
-          if (running) send({ type: 'start' });
+          if (playback.running) send({ type: 'start' });
         })
         .catch((error) => {
-          if (request !== startSequence || readyGeneration !== generation) return;
-          loadStarting = false;
-          pause();
-          notify(`The stage could not be prepared: ${String(error)}`);
+          showFailure(message.loadId, 'The stage could not be prepared: ' + String(error));
         });
     }
     return;
   }
   send({ type: 'frame-ack', generation: message.generation });
-  if (message.generation !== generation || loadStarting) return;
+  if (
+    message.loadId !== playback.request ||
+    message.generation !== generation ||
+    playback.loading ||
+    playback.state.phase === 'error' ||
+    !playback.playing
+  )
+    return;
   if (message.overflow)
     notify(
       'Presentation caught up from the current engine state. Older cue events are in the replay.',
     );
   view = message.view;
-  if (playing) {
+  if (playback.playing) {
     orbit.update(view, hideTargets);
     const head = headPose();
     const description = describeObservation(view, {
@@ -671,22 +571,25 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
           )
           .join('     |     ')
       : '';
-    el('captions').hidden = !captions || !running;
+    el('captions').hidden = !captions || !playback.running;
     const s = view.scores.find((s) => s.actorId === 'player');
     el('score').textContent = (s?.points ?? 0).toLocaleString();
     el('combo').textContent = String(s?.combo ?? 0);
     el('progress').style.width = `${Math.min(100, (view.tick / view.durationTicks) * 100)}%`;
-    const live = running && message.clock.phase === 'running';
+    const live = playback.running && message.clock.phase === 'running';
     const hands = audio.nonvisualEnabled ? describeHandGuidance(view) : undefined;
     audio.update(view, message.events, live, hands);
     el('hand-guidance-status').textContent = hands
       ? hands.hands.map(handGuidanceText).join('. ') +
         (hands.unsupported.length ? '. Some mechanics need a custom guidance adapter.' : '')
       : '';
-    for (const cue of haptics.update(hands, message.events, view.tickRate, live && !autoplay)) {
-      const actuator = xrSources.find((source) => source?.handedness === cue.hand)?.gamepad
-        ?.hapticActuators?.[0];
-      void actuator?.pulse(cue.intensity, cue.milliseconds).catch(() => {});
+    for (const cue of haptics.update(
+      hands,
+      message.events,
+      view.tickRate,
+      live && !playback.autoplay,
+    )) {
+      xr.pulse(cue.hand, cue.intensity, cue.milliseconds);
     }
     for (const e of message.events) {
       if (e.type === 'interaction.hit') {
@@ -704,10 +607,11 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
         lastFeedback = performance.now();
       }
     }
-    if (message.clock.phase === 'stalled' && lastPhase !== 'stalled') pause(true);
-    if (message.clock.phase === 'paused' && running && lastPhase === 'running') pause(true);
-    if (view.finished && lastPhase !== 'ended') showResults();
-    lastPhase = message.clock.phase;
+    if (message.clock.phase === 'stalled' && lastClockPhase !== 'stalled') pause(true);
+    if (message.clock.phase === 'paused' && playback.running && lastClockPhase === 'running')
+      pause(true);
+    if (view.finished && playback.finish(message.loadId)) showResults();
+    lastClockPhase = message.clock.phase;
     const c = hudCanvas.getContext('2d')!;
     c.clearRect(0, 0, 1024, 160);
     c.fillStyle = '#08111de0';
@@ -723,7 +627,7 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
     c.fillStyle = '#72f4df';
     c.fillRect(0, 153, (1024 * view.tick) / view.durationTicks, 4);
     hudTexture.needsUpdate = true;
-    if (autoplay) {
+    if (playback.autoplay) {
       const actor = view.actors.find((a) => a.id === 'player');
       for (let i = 0; i < 2; i++) {
         const hand = actor?.effectors.find((e) => e.id === (i ? 'right' : 'left'));
@@ -741,8 +645,8 @@ button('play', () => void start(false));
 button('watch', () => void start(true));
 button('pause', () => pause());
 button('resume', resume);
-button('restart', () => void start(autoplay));
-button('again', () => void start(autoplay));
+button('restart', () => void start(playback.autoplay));
+button('again', () => void start(playback.autoplay));
 button('home', home);
 button('results-home', home);
 button('sound', () => {
@@ -755,87 +659,14 @@ button('sound', () => {
   el('sound').textContent = audio.enabled ? 'Sound on' : 'Sound off';
   drawMenu();
 });
-button('audio-setup-open', () => {
-  if (running) pause();
-  closeAudioDialogs();
-  el<HTMLDialogElement>('audio-setup').showModal();
-  el('audio-enable').focus();
-  el('speech-support').textContent = narrator.available
-    ? 'Browser speech is available. Voice support in immersive VR varies. Blind-player and headset listening tests are still needed.'
-    : 'This browser has no speech synthesis. Use a screen reader for the HTML controls; spoken controls inside VR require browser speech.';
-});
-button('audio-enable', () => {
-  audio.enabled = audio.cuesEnabled = audio.nonvisualEnabled = narrator.enabled = true;
-  for (const id of ['nonvisual-enabled', 'narration-enabled', 'cues-enabled'])
-    el<HTMLInputElement>(id).checked = true;
-  el('sound').textContent = 'Sound on';
-  void prepareAudio();
-  savePreferences();
-  announce(
-    'Audio-led guidance enabled. Choose Explain sounds and controls before playing. Press Alt M for the spoken menu. In VR, grip opens the menu.',
-  );
-});
-button('audio-learn', () => announce(AUDIO_LESSON));
-button('audio-tutorial', () => {
-  selectMap(AUDIO_TUTORIAL_ID);
-  announce(
-    'Finding the pulse selected. Choose Done, then Play; or enter immersive VR. Face forward when starting.',
-  );
-});
-button('audio-measure', measureHeight);
-button('audio-enter-vr', () => {
-  if (el<HTMLButtonElement>('enter-vr').disabled)
-    announce('Immersive VR is unavailable. Open this page in your headset browser.');
-  else el('enter-vr').click();
-});
-button('audio-setup-close', () => {
-  closeAudioDialogs();
-  narrator.stop();
-});
-button('spoken-previous', () => moveSpoken(-1));
-button('spoken-next', () => moveSpoken(1));
-button('spoken-activate', () => spoken.activate());
-button('spoken-repeat', () => spoken.read());
-button('spoken-close', () => {
-  closeAudioDialogs();
-  narrator.stop();
-});
-el('spoken-menu').addEventListener('keydown', (event) => {
-  const e = event as KeyboardEvent;
-  if (['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'].includes(e.code)) {
-    e.preventDefault();
-    moveSpoken(['ArrowLeft', 'ArrowUp'].includes(e.code) ? -1 : 1);
-  } else if (e.code === 'Enter' && e.target === el('spoken-choice')) {
-    e.preventDefault();
-    spoken.activate();
-  } else if (e.code === 'KeyR') {
-    e.preventDefault();
-    spoken.read();
-  }
-});
-for (const id of ['audio-setup', 'spoken-menu'])
-  el(id).addEventListener('cancel', () => narrator.stop());
-el<HTMLInputElement>('nonvisual-enabled').onchange = () => {
-  audio.nonvisualEnabled = el<HTMLInputElement>('nonvisual-enabled').checked;
-  audio.rebase();
-};
-el<HTMLInputElement>('narration-enabled').onchange = () => {
-  narrator.enabled = el<HTMLInputElement>('narration-enabled').checked;
-  if (!narrator.enabled) narrator.stop();
-  else announce('Spoken controls enabled. Alt M opens the menu.');
-};
-el<HTMLSelectElement>('hand-beacons').onchange = () => {
-  audio.handBeacons = el<HTMLSelectElement>('hand-beacons').value as HandBeaconMode;
-  audio.rebase();
-};
 button('help', () => {
-  if (running) pause();
+  if (playback.canPause) pause();
   closeAudioDialogs();
   el('help-panel').hidden = false;
 });
 button('close-help', () => (el('help-panel').hidden = true));
 button('settings', () => {
-  if (running) pause();
+  if (playback.canPause) pause();
   closeAudioDialogs();
   el('settings-panel').hidden = false;
 });
@@ -893,112 +724,6 @@ for (const channel of ['music', 'guidance', 'effects'] as const) {
   };
 }
 
-function downloadJson(data: unknown, filename: string) {
-  const url = URL.createObjectURL(
-    new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }),
-  );
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-function installMap(map: MapDefinition, report?: ChoreographyReport) {
-  for (const card of el('maps').querySelectorAll('[data-imported]')) card.remove();
-  importedMap = map;
-  generationReport = report;
-  const restored = [CHOREOGRAPHY_VERSION, 'statebeats/choreography-v1'].includes(
-    map.generation?.algorithm ?? '',
-  )
-    ? musicGenerationSchema.strip().safeParse(map.generation!.settings)
-    : undefined;
-  const recipe = map.generation?.settings as Record<string, unknown> | undefined;
-  const supported =
-    !map.generation ||
-    (restored?.success &&
-      recipe?.composer === 'statebeats/dance-phrases-v1' &&
-      recipe?.facing ===
-        (restored.data.turnStyle === 'musical'
-          ? TURN_PLANNER_VERSION
-          : 'statebeats/phrase-facing-v1') &&
-      recipe?.selector === 'statebeats/phrase-rhythm-v1');
-  generationBaseline = restored?.success
-    ? restored.data
-    : { bpm: Math.max(40, Math.min(240, map.tempo[0].bpm)) };
-  restoreSongControls(generationBaseline);
-  rebuildSupported =
-    !!map.music &&
-    !!supported &&
-    map.tempo.length === 1 &&
-    map.tempo[0].bpm >= 40 &&
-    map.tempo[0].bpm <= 240;
-  el<HTMLButtonElement>('regenerate-map').disabled = !rebuildSupported;
-  el<HTMLButtonElement>('save-generation-report').disabled = !report;
-  el('generation-summary').textContent = report
-    ? `${report.summary.heads} notes · ${report.summary.rails} held paths · ${report.summary.pairs} paired moments · ${report.summary.hazards} obstacles.${report.turns ? ` ${report.turns.summary.events} musical turns, ${report.turns.summary.reversals} direction changes.` : ''} ${report.omitted.length} candidates omitted for musical selection or movement limits. ${report.issues.length ? `${report.issues.length} hand movement issues need review.` : 'Hand movement checks passed.'} Preview with a bot, then start gently on your headset.`
-    : '';
-  addMapCard(map, 6);
-  el('maps').lastElementChild!.setAttribute('data-imported', 'true');
-  selectMap(map.id);
-  el('import-status').textContent =
-    `${map.title} is ready. ${map.notes.length} interactions. Save the map to keep its generated sequence.${supported && map.tempo.length === 1 ? '' : ' This recipe requires its original generator or tempo editor to rebuild.'}`;
-}
-function restoreSongControls(options: MusicGenerationOptions) {
-  const settings = musicGenerationSchema.parse(options);
-  const values = {
-    'song-bpm': settings.bpm,
-    'song-difficulty': settings.difficulty,
-    'song-turning': settings.turnMode ?? (settings.turning ? 'full' : 'forward'),
-    'song-turn-style': settings.turnStyle,
-    'song-range': settings.movementRange,
-    'song-turn-degrees': settings.turnDegrees,
-    'song-turn-speed': settings.maxTurnSpeed,
-    'song-turn-acceleration': settings.maxTurnAcceleration,
-    'song-turn-travel': settings.maxDirectionalTravel,
-    'song-hand-speed': settings.maxHandSpeed,
-    'song-style': settings.style,
-    'song-rhythm': settings.rhythm,
-    'song-beat-offset': settings.beatOffsetSeconds,
-    'song-height': settings.playerHeight,
-    'song-reach': settings.reach,
-    'song-lead': settings.leadSeconds,
-    'song-distance': settings.spawnDistance,
-    'song-seed': settings.seed,
-  };
-  for (const [id, value] of Object.entries(values)) el<HTMLInputElement>(id).value = String(value);
-  for (const [id, value] of Object.entries({
-    'song-rails': settings.rails,
-    'song-pairs': settings.pairs,
-    'song-crossovers': settings.crossovers,
-    'song-duck': settings.obstacles === 'duck',
-  }))
-    el<HTMLInputElement>(id).checked = value;
-  el<HTMLSelectElement>('song-preset').value = 'custom';
-}
-el<HTMLSelectElement>('song-preset').onchange = () => {
-  const preset = el<HTMLSelectElement>('song-preset').value;
-  if (preset === 'custom') return;
-  const master = preset === 'master',
-    beginner = preset === 'beginner';
-  restoreSongControls({
-    ...songOptions(),
-    difficulty: master ? 'master' : preset === 'hard' ? 'busy' : beginner ? 'gentle' : 'flow',
-    turnMode: beginner ? 'forward' : preset === 'normal' ? 'bounded' : 'full',
-    turnStyle: beginner ? 'rests' : 'musical',
-    movementRange: master || preset === 'hard' ? 'wide' : 'compact',
-    turnDegrees: master ? 120 : 30,
-    maxTurnSpeed: master ? 60 : 30,
-    maxTurnAcceleration: master ? 240 : 120,
-    maxDirectionalTravel: master ? 360 : 180,
-    maxHandSpeed: master ? 6 : 3,
-    rails: !beginner,
-    pairs: !beginner,
-    crossovers: master || preset === 'hard',
-    obstacles: 'none',
-    rhythm: master ? 'steady' : 'hybrid',
-  });
-  el<HTMLSelectElement>('song-preset').value = preset;
-};
 for (const [id, set, low, high] of [
   [
     'player-height',
@@ -1024,153 +749,6 @@ for (const [id, set, low, high] of [
     input.value = String(valid);
     set(valid);
   };
-button('save-map', () => downloadJson(mapFor(selected), `statebeats-${selected}.json`));
-button('save-generation-report', () => {
-  if (generationReport && importedMap?.id === selected)
-    downloadJson(generationReport, `statebeats-${importedMap.id}-generation.json`);
-});
-function songOptions(): MusicGenerationOptions {
-  const number = (id: string) => Number(el<HTMLInputElement>(id).value);
-  return {
-    ...generationBaseline,
-    bpm: number('song-bpm'),
-    difficulty: el<HTMLSelectElement>('song-difficulty')
-      .value as MusicGenerationOptions['difficulty'],
-    turnMode: el<HTMLSelectElement>('song-turning').value as MusicGenerationOptions['turnMode'],
-    turnStyle: el<HTMLSelectElement>('song-turn-style')
-      .value as MusicGenerationOptions['turnStyle'],
-    movementRange: el<HTMLSelectElement>('song-range')
-      .value as MusicGenerationOptions['movementRange'],
-    turnDegrees: number('song-turn-degrees'),
-    maxTurnSpeed: number('song-turn-speed'),
-    maxTurnAcceleration: number('song-turn-acceleration'),
-    maxDirectionalTravel: number('song-turn-travel'),
-    maxHandSpeed: number('song-hand-speed'),
-    style: el<HTMLSelectElement>('song-style').value as MusicGenerationOptions['style'],
-    rhythm: el<HTMLSelectElement>('song-rhythm').value as MusicGenerationOptions['rhythm'],
-    beatOffsetSeconds: number('song-beat-offset'),
-    playerHeight: number('song-height'),
-    reach: number('song-reach'),
-    leadSeconds: number('song-lead'),
-    spawnDistance: number('song-distance'),
-    seed: number('song-seed'),
-    rails: el<HTMLInputElement>('song-rails').checked,
-    pairs: el<HTMLInputElement>('song-pairs').checked,
-    crossovers: el<HTMLInputElement>('song-crossovers').checked,
-    obstacles: el<HTMLInputElement>('song-duck').checked ? 'duck' : 'none',
-  };
-}
-async function composeSong(payload: {
-  music?: MusicTimeline;
-  samples?: Float32Array;
-  sampleRate?: number;
-  source?: MusicTimeline['source'];
-}) {
-  el('import-status').textContent = 'Composing musical phrases and checking movement…';
-  for (const id of ['song-file', 'map-file', 'regenerate-map'])
-    el<HTMLInputElement>(id).disabled = true;
-  analysisWorker?.terminate();
-  const current = new Worker(new URL('./import-worker.ts', import.meta.url), { type: 'module' });
-  analysisWorker = current;
-  try {
-    return await new Promise<{ map: MapDefinition; report: ChoreographyReport }>(
-      (resolve, reject) => {
-        current.onmessage = (
-          event: MessageEvent<{ map?: MapDefinition; report?: ChoreographyReport; error?: string }>,
-        ) => {
-          if (event.data.error || !event.data.map || !event.data.report)
-            reject(new Error(event.data.error ?? 'Composition failed'));
-          else resolve({ map: event.data.map, report: event.data.report });
-        };
-        current.onerror = (event) => reject(new Error(event.message));
-        current.postMessage(
-          { ...payload, options: songOptions() },
-          payload.samples ? [payload.samples.buffer] : [],
-        );
-      },
-    );
-  } finally {
-    current.terminate();
-    if (analysisWorker === current) analysisWorker = undefined;
-    el<HTMLInputElement>('song-file').disabled = false;
-    el<HTMLInputElement>('map-file').disabled = false;
-    el<HTMLButtonElement>('regenerate-map').disabled = !rebuildSupported;
-  }
-}
-button('regenerate-map', () => {
-  void (async () => {
-    if (!importedMap?.music) return;
-    if (running) pause();
-    try {
-      const { map, report } = await composeSong({ music: importedMap.music });
-      installMap(map, report);
-    } catch (error) {
-      el('import-status').textContent = String(error);
-    }
-  })();
-});
-el<HTMLInputElement>('map-file').onchange = () => {
-  void (async () => {
-    try {
-      const file = el<HTMLInputElement>('map-file').files?.[0];
-      if (!file) return;
-      if (running) pause();
-      if (file.size > 16_000_000) throw new Error('Map files must be smaller than 16 MB.');
-      installMap(compile(JSON.parse(await file.text())).map);
-    } catch (error) {
-      notify(String(error));
-    }
-  })();
-};
-el<HTMLInputElement>('song-file').onchange = () => {
-  void (async () => {
-    const input = el<HTMLInputElement>('song-file');
-    try {
-      const file = input.files?.[0];
-      if (!file) return;
-      if (running) pause();
-      input.disabled = true;
-      if (file.size > 40_000_000) throw new Error('Choose an audio file smaller than 40 MB.');
-      el('import-status').textContent = 'Decoding your song locally…';
-      const bytes = await file.arrayBuffer();
-      const hash = await crypto.subtle.digest('SHA-256', bytes);
-      const sha256 = Array.from(new Uint8Array(hash), (value) =>
-        value.toString(16).padStart(2, '0'),
-      ).join('');
-      const buffer = await audio.decodeSong(bytes);
-      if (buffer.duration > 600)
-        throw new Error(
-          'The reference player accepts songs up to ten minutes. The SDK can handle longer feature timelines.',
-        );
-      const preparedSong = { buffer, sha256 };
-      if (importedMap?.music?.source?.sha256 === sha256) {
-        importedSong = preparedSong;
-        el('import-status').textContent = `Matching soundtrack loaded for ${importedMap.title}.`;
-        return;
-      }
-      const samples = new Float32Array(buffer.length);
-      for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-        const data = buffer.getChannelData(channel);
-        for (let i = 0; i < data.length; i++) samples[i] += data[i] / buffer.numberOfChannels;
-      }
-      for (let i = 0; i < samples.length; i++) samples[i] = Math.max(-1, Math.min(1, samples[i]));
-      const { map, report } = await composeSong({
-        samples,
-        sampleRate: buffer.sampleRate,
-        source: { name: file.name, sha256, durationSeconds: buffer.duration },
-      });
-      importedSong = preparedSong;
-      installMap(map, report);
-    } catch (error) {
-      notify(String(error));
-      el('import-status').textContent = 'Song import did not complete.';
-    } finally {
-      input.disabled = false;
-      analysisWorker?.terminate();
-      analysisWorker = undefined;
-    }
-  })();
-};
 button('export-replay', () => {
   const id = ++exportSequence;
   pendingExports.set(id, (replay) => {
@@ -1178,204 +756,63 @@ button('export-replay', () => {
       url = URL.createObjectURL(blob),
       a = document.createElement('a');
     a.href = url;
-    a.download = `statebeats-${activeMap}-replay.json`;
+    a.download = `statebeats-${replay.map.id}-replay.json`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
   send({ type: 'export', requestId: id });
 });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && running) pause();
+  if (document.hidden && playback.canPause) pause();
 });
-orbit.renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
-let activeDesktopHand = 0;
-let desktopPitch = 0;
-// A held gesture begun during preparation must still be held when playback starts.
-const acceptsDesktopInput = () =>
-  playing && !autoplay && (running || (loadStarting && startOnReady));
-orbit.renderer.domElement.addEventListener('pointermove', (e) => {
-  targetMouse.set((e.clientX / innerWidth) * 2 - 1, (-e.clientY / innerHeight) * 2 + 1);
-  if (acceptsDesktopInput() && desktopHeld[activeDesktopHand])
-    handTargets[activeDesktopHand].copy(desktopAim(activeDesktopHand));
+const desktop = createDesktopControls({
+  orbit,
+  playback,
+  view: () => view,
+  swap: () => swap,
+  height: () => activeHeight,
+  prepareAudio,
+  pause,
+  resume,
+  openSpokenMenu,
 });
-orbit.renderer.domElement.addEventListener('pointerdown', (e) => {
-  if (!acceptsDesktopInput()) return;
-  void prepareAudio();
-  if (e.button !== 0 && e.button !== 2) return;
-  const hand = (e.button === 0 ? 0 : 1) ^ (swap ? 1 : 0);
-  desktopHeld[hand] = true;
-  activeDesktopHand = hand;
-  const target = desktopAim(hand);
-  handTargets[hand].copy(target);
-  orbit.hands[hand].position.copy(target);
-});
-window.addEventListener('pointerup', (e) => {
-  if (e.button !== 0 && e.button !== 2) return;
-  desktopHeld[(e.button === 0 ? 0 : 1) ^ (swap ? 1 : 0)] = false;
-});
-const keys = new Set<string>();
-window.addEventListener('keydown', (e) => {
-  if (e.altKey && e.code === 'KeyM') {
-    e.preventDefault();
-    openSpokenMenu();
-    return;
-  }
-  if ((e.target as HTMLElement).closest('dialog[open]')) return;
-  if ((e.target as HTMLElement).matches('input,select')) return;
-  keys.add(e.code);
-  if (playing && (e.code === 'ArrowUp' || e.code === 'ArrowDown')) e.preventDefault();
-  if (e.code === 'Escape') {
-    if (running) pause();
-    else if (playing && !view?.finished) resume();
-  }
-  if (e.code === 'Space' && !e.repeat && playing) {
-    e.preventDefault();
-    desktopHeld = [true, true];
-    const target = desktopAim();
-    handTargets.forEach((v) => v.copy(target));
-    orbit.hands.forEach((h) => h.position.copy(target));
-  }
-});
-window.addEventListener('keyup', (e) => {
-  keys.delete(e.code);
-  if (e.code === 'Space') desktopHeld = [false, false];
-});
-function desktopAim(hand?: number) {
-  raycaster.setFromCamera(targetMouse, orbit.camera);
-  let depth = 0.85;
-  // Pointer depth assistance is an input adapter, never a hit/scoring shortcut.
-  // The last dragged hand follows the pointer; the other keeps its stored position.
-  const semantic = hand === undefined ? undefined : hand === 0 ? 'left' : 'right';
-  const candidates =
-    view?.entities.filter(
-      (entity) =>
-        entity.kind !== 'hazard' &&
-        (!semantic || entity.slots.some((slot) => !slot.semantic || slot.semantic === semantic)),
-    ) ?? [];
-  candidates.sort(
-    (a, b) => Math.max(0, a.hitTick - view!.tick) - Math.max(0, b.hitTick - view!.tick),
-  );
-  for (const entity of candidates) {
-    const point = assistedTargetPoint(raycaster.ray, entity, view!.tick);
-    if (point) return point;
-  }
-  const point = raycaster.ray.origin
-    .clone()
-    .add(raycaster.ray.direction.clone().multiplyScalar(depth));
-  return point;
-}
-
-for (let i = 0; i < 2; i++) {
-  const controller = orbit.renderer.xr.getController(i),
-    grip = orbit.renderer.xr.getControllerGrip(i);
-  orbit.scene.add(controller, grip);
-  const line = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, -2),
-    ]),
-    new THREE.LineBasicMaterial({
-      color: i ? 0xff9b79 : 0x72f4df,
-      transparent: true,
-      opacity: 0.8,
-    }),
-  );
-  controller.add(line);
-  controllerLines.push(line);
-  const gripSphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.035, 12, 8),
-    new THREE.MeshBasicMaterial({ color: i ? 0xff9b79 : 0x72f4df }),
-  );
-  grip.add(gripSphere);
-  controller.addEventListener('connected', (event) => {
-    xrSources[i] = event.data as XRInputSource;
-  });
-  controller.addEventListener('disconnected', () => (xrSources[i] = undefined));
-  controller.addEventListener('squeezestart', () => {
-    if (audio.nonvisualEnabled) {
-      if (menu.visible) spoken.activate();
-      else openSpokenMenu();
-      return;
-    }
-    if (menu.visible && playing && !view?.finished) resume();
-    else if (playing) pause();
-    else {
-      menu.visible = true;
-      placeMenu();
-    }
-  });
-  controller.addEventListener('selectstart', () => {
-    if (!menu.visible) return;
-    if (audio.nonvisualEnabled) {
-      const hand = xrSources[i]?.handedness;
-      if (hand === 'left' || hand === 'right') moveSpoken(hand === 'left' ? -1 : 1);
-      return;
-    }
-    const matrix = new THREE.Matrix4().extractRotation(controller.matrixWorld);
-    raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
-    raycaster.ray.direction.set(0, 0, -1).applyMatrix4(matrix);
-    const hit = raycaster.intersectObject(menu)[0];
+const xr = createXRControls({
+  orbit,
+  canPause: () => playback.canPause,
+  hasSession: () => playback.playing || playback.loading,
+  canResume: () => playback.resumable,
+  pause,
+  resume,
+  home,
+  spokenEnabled: () => audio.nonvisualEnabled,
+  activateSpoken: () => spoken.activate(),
+  openSpokenMenu,
+  moveSpoken,
+  readSpokenMenu: () => {
+    refreshSpokenMenu();
+    spoken.read();
+  },
+  closeDialogs: closeAudioDialogs,
+  menuVisible: () => menu.visible,
+  showMenu: () => {
+    menu.visible = true;
+  },
+  hideMenu: () => {
+    menu.visible = false;
+  },
+  placeMenu,
+  pointMenu: (ray) => {
+    const hit = ray.intersectObject(menu)[0];
     if (!hit?.uv) return;
     const x = hit.uv.x * 1024,
       y = (1 - hit.uv.y) * 1024;
     menuRects.find((r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h)?.action();
-  });
-}
-const vrButton = el<HTMLButtonElement>('enter-vr');
-if (navigator.xr) {
-  void navigator.xr
-    .isSessionSupported('immersive-vr')
-    .then((supported) => {
-      vrButton.disabled = !supported;
-      vrButton.textContent = supported ? 'Enter immersive VR ↗' : 'Open this page in your Quest';
-    })
-    .catch(() => {
-      vrButton.textContent = 'VR unavailable in this browser';
-    });
-} else {
-  vrButton.textContent = 'Open this page in your Quest';
-  el('vr-note').textContent = isSecureContext
-    ? 'Immersive WebXR runs in a compatible headset browser.'
-    : 'Quest VR requires HTTPS or a trusted localhost connection.';
-}
-button('enter-vr', () => {
-  void (async () => {
-    try {
-      // Request XR during the gesture; audio availability must not block entry.
-      void prepareAudio();
-      const session = await navigator.xr!.requestSession('immersive-vr', {
-        optionalFeatures: ['local-floor', 'bounded-floor'],
-      });
-      orbit.camera.position.set(0, 0, 0);
-      orbit.camera.rotation.set(0, 0, 0);
-      await orbit.renderer.xr.setSession(session);
-      closeAudioDialogs();
-      document.body.classList.add('xr');
-      if (playing) pause();
-      menu.visible = true;
-      if (audio.nonvisualEnabled) {
-        refreshSpokenMenu();
-        spoken.read();
-      }
-      setTimeout(placeMenu, 300);
-      session.addEventListener('visibilitychange', () => {
-        if (session.visibilityState !== 'visible' && running) pause(true);
-      });
-      session.addEventListener('end', () => {
-        document.body.classList.remove('xr');
-        menu.visible = false;
-        hudMesh.visible = false;
-        cueMesh.visible = false;
-        home();
-      });
-    } catch (error) {
-      notify(String(error));
-    }
-  })();
+  },
+  prepareAudio,
+  notify,
 });
-
 let lastCue = '';
-let trackingLostAt: number | undefined;
+const tracking = new TrackingGuard();
 orbit.renderer.setAnimationLoop((time, frame) => {
   const dt = lastFrame ? Math.min(0.05, (time - lastFrame) / 1000) : 0.016;
   if (lastFrame) {
@@ -1384,112 +821,23 @@ orbit.renderer.setAnimationLoop((time, frame) => {
   }
   lastFrame = time;
   orbit.idle(time / 1000);
-  if (playing && !orbit.renderer.xr.isPresenting) {
-    if (autoplay && view) {
-      const target = view.entities
-        .filter(
-          (e) =>
-            e.kind !== 'hazard' &&
-            e.endTick >= view!.tick &&
-            e.presentation?.readiness?.phase !== 'hidden',
-        )
-        .sort((a, b) => a.hitTick - b.hitTick)[0];
-      if (target) {
-        const together = view.entities.filter(
-          (entity) =>
-            entity.kind !== 'hazard' &&
-            entity.presentation?.readiness?.phase !== 'hidden' &&
-            Math.abs(entity.hitTick - target.hitTick) <= 1,
-        );
-        const position = together.reduce(
-          (sum, entity) => {
-            const p = entity.targetPosition ?? entity.position;
-            return [
-              sum[0] + p[0] / together.length,
-              sum[1] + p[1] / together.length,
-              sum[2] + p[2] / together.length,
-            ];
-          },
-          [0, 0, 0],
-        );
-        const yaw = Math.atan2(-position[0], -position[2]);
-        const delta = Math.atan2(Math.sin(yaw - desktopYaw), Math.cos(yaw - desktopYaw));
-        desktopYaw += delta * Math.min(1, dt * 4);
-        desktopPitch += (-0.12 - desktopPitch) * Math.min(1, dt * 3);
-      }
-    }
-    desktopYaw += ((keys.has('KeyQ') ? 1 : 0) - (keys.has('KeyE') ? 1 : 0)) * dt * 1.5;
-    desktopPitch = THREE.MathUtils.clamp(
-      desktopPitch + ((keys.has('ArrowUp') ? 1 : 0) - (keys.has('ArrowDown') ? 1 : 0)) * dt,
-      -1.2,
-      1.2,
-    );
-    orbit.camera.rotation.set(desktopPitch, desktopYaw, 0, 'YXZ');
-    if (autoplay) {
-      // Spectator framing shows both hands and the stage; it never alters actor poses.
-      orbit.camera.position.set(
-        Math.sin(desktopYaw) * 0.85,
-        activeHeight + 0.12,
-        Math.cos(desktopYaw) * 0.85,
-      );
-    } else orbit.camera.position.y = keys.has('KeyC') ? activeHeight * 0.61 : activeHeight;
-    orbit.aim.visible = running && !autoplay;
-    orbit.aim.position.copy(desktopAim());
-    orbit.aim.quaternion.copy(orbit.camera.quaternion);
-  } else orbit.aim.visible = false;
+  desktop.updateCamera(dt);
   const head = headPose();
   audio.pose(sceneVector(head.position), sceneVector(head.forward));
-  if (playing && running && !autoplay) {
+  if (playback.playing && playback.running && !playback.autoplay) {
     const samples: HandSample[] = [];
     if (orbit.renderer.xr.isPresenting) {
-      const tracked: TrackedController[] = [];
-      for (let i = 0; i < 2; i++) {
-        const source = xrSources[i];
-        if (!source || source.handedness === 'none') continue;
-        const grip = orbit.renderer.xr.getControllerGrip(i),
-          position = new THREE.Vector3(),
-          q = new THREE.Quaternion();
-        grip.getWorldPosition(position);
-        grip.getWorldQuaternion(q);
-        tracked.push({
-          handedness: source.handedness,
-          position: sceneVector(position),
-          orientation: q.toArray() as Quat,
-          tracked: grip.visible,
-        });
-        const index = source.handedness === 'left' ? 0 : 1;
-        orbit.hands[index].position.copy(position);
-      }
-      samples.push(...controllerSamples(tracked));
+      samples.push(...xr.sampleHands());
       if (audio.nonvisualEnabled) {
         const space = orbit.renderer.xr.getReferenceSpace();
         const trackedHead = !!(frame && space && frame.getViewerPose(space));
-        if (trackedHead && samples.every((sample) => sample.tracked)) trackingLostAt = undefined;
-        else {
-          trackingLostAt ??= time;
-          if (time - trackingLostAt > 250) {
-            pause(true);
-            trackingLostAt = undefined;
-          }
+        if (tracking.interrupted(time, trackedHead, samples)) {
+          pause(true);
+          tracking.reset();
         }
       }
     } else {
-      for (let i = 0; i < 2; i++) {
-        if (!desktopHeld[i]) {
-          const park = new THREE.Vector3(i ? 0.3 : -0.3, 1.1, -0.2).applyAxisAngle(
-            new THREE.Vector3(0, 1, 0),
-            desktopYaw,
-          );
-          orbit.hands[i].position.lerp(park, Math.min(1, dt * 8));
-        } else orbit.hands[i].position.copy(handTargets[i]);
-        samples.push({
-          id: i ? 'right' : 'left',
-          position: sceneVector(orbit.hands[i].position),
-          orientation: [0, 0, 0, 1],
-          tracked: true,
-          active: desktopHeld[i],
-        });
-      }
+      samples.push(...desktop.sampleHands(dt));
     }
     samples.push({
       id: 'head',
@@ -1498,10 +846,10 @@ orbit.renderer.setAnimationLoop((time, frame) => {
       tracked: true,
       active: true,
     });
-    if (running)
+    if (playback.running)
       send({ type: 'poses', samples, sentAt: performance.timeOrigin + performance.now() });
-  } else trackingLostAt = undefined;
-  if (view && playing) {
+  } else tracking.reset();
+  if (view && playback.playing) {
     const next = view.entities
       .filter((e) => e.endTick >= view!.tick && e.presentation?.readiness?.phase !== 'hidden')
       .sort((a, b) => a.hitTick - b.hitTick)[0];
@@ -1530,7 +878,7 @@ orbit.renderer.setAnimationLoop((time, frame) => {
           .join('\n');
     }
     el('direction-cue').textContent = cue;
-    el('direction-cue').hidden = !cue || !running;
+    el('direction-cue').hidden = !cue || !playback.running;
     if (cue !== lastCue) {
       lastCue = cue;
       const c = cueCanvas.getContext('2d')!;
@@ -1544,7 +892,7 @@ orbit.renderer.setAnimationLoop((time, frame) => {
         .forEach((line, index) => c.fillText(line, 512, 48 + index * 48));
       cueTexture.needsUpdate = true;
     }
-    cueMesh.visible = orbit.renderer.xr.isPresenting && running && !!cue;
+    cueMesh.visible = orbit.renderer.xr.isPresenting && playback.running && !!cue;
     hudMesh.visible = orbit.renderer.xr.isPresenting && !menu.visible;
     for (const [mesh, y] of [
       [hudMesh, 0.48],
@@ -1556,7 +904,7 @@ orbit.renderer.setAnimationLoop((time, frame) => {
     }
   }
   el('judgement').style.opacity = performance.now() - lastFeedback < 650 ? '1' : '0';
-  controllerLines.forEach((l) => (l.visible = menu.visible));
+  xr.showRays(menu.visible);
   orbit.render();
 });
 function savePreferences() {
@@ -1635,16 +983,15 @@ document.body.classList.toggle('high-contrast', preferences.highContrast);
 document.addEventListener('change', (event) => {
   if ((event.target as HTMLElement).closest('#settings-panel')) savePreferences();
 });
-el<HTMLSelectElement>('song-preset').dispatchEvent(new Event('change'));
 const requestedMap = new URLSearchParams(location.search).get('map');
 selectMap(sampleMaps.some((map) => map.id === requestedMap) ? requestedMap! : 'tutorial');
 el<HTMLButtonElement>('play').disabled = true;
 el<HTMLButtonElement>('watch').disabled = true;
-send({ type: 'load', mapId: 'tutorial', autoplay: false });
+send({ type: 'load', loadId: 0, mapId: 'tutorial', autoplay: false });
 addEventListener('pagehide', () => {
   narrator.stop();
   stopHaptics();
-  analysisWorker?.terminate();
+  authoring.dispose();
   worker.terminate();
   void audio.dispose();
   orbit.dispose();

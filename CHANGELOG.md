@@ -2,6 +2,11 @@
 
 ## 0.3.0 — musical choreography (development release candidate)
 
+Reference-player authoring, accessibility, desktop input and XR controls now have separate
+ownership boundaries. Explicit playback states and load IDs protect paused/cancelled startup
+from stale worker/GPU completion. Enabling audio-led guidance restores a saved zero guidance
+level; tracking-loss regression tests cover missing controllers and head tracking.
+
 Adds shared geometry-aware hand guidance (`describeHandGuidance` / `perception.hands`),
 audible hand/target pairs, hand-specific hit and hold feedback, spoken menus and calibration,
 and the asset-free Finding the pulse tutorial. Text play can follow moving holds using explicit

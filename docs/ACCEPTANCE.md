@@ -4,6 +4,28 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Player ownership and PR #8 review, 2026-09-25
+
+Authoring, accessibility and device input now own their state in separate adapters. A pure
+application playback state machine replaces independent transport flags; load IDs reject
+obsolete worker/GPU completions and errors. Pause intent survives soundtrack, worker and
+scene preparation. Replay exports retain their recording's identity after Home.
+
+The saved-zero guidance-volume finding was reproduced and fixed. Both zero and nonzero saved
+levels are checked through the actual setup UI. The missing-controller finding's premise did
+not match the existing adapter, which already supplies two samples with explicit untracked
+missing hands. Regression tests verify that normalization and an explicit both-hands/head
+tracking guard, including grace-period expiry and recovery.
+
+`npm run check` passed **175 tests in 26 files**, strict types, formatting, boundaries and
+production build. The **42-case browser suite** passed across Chromium, Firefox and WebKit;
+the final **nine-case player/accessibility regression run** also covers pausing during a held
+soundtrack fetch and completing an export after Home (**43 distinct browser cases overall**).
+All **five production Pages cases** passed, including both showcases, the audio-led tutorial
+and authoring under `/StateBeats/`. Seven packed npm artifacts installed and passed SDK/CLI
+smoke checks. See [player architecture](PLAYER_ARCHITECTURE.md) for ownership and lifecycle
+contracts. Physical headset and blind-player validation remain pending as described below.
+
 ## Shared hand guidance and audio-led tutorial, 2026-09-25
 
 Added the pure `describeHandGuidance` / `perception.hands` contract, endpoint geometry and

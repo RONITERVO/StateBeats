@@ -39,6 +39,9 @@ contact policy, requires claimed player slots, and advances at most 10,000 ticks
 
 ## Portable SDK contract
 
+The reference player's [module ownership and playback states](PLAYER_ARCHITECTURE.md) describe
+how browser controls compose these contracts without shared transport flags.
+
 ```js
 import { describeHandGuidance } from '@statebeats/sdk';
 const frame = describeHandGuidance(client.observe(), {

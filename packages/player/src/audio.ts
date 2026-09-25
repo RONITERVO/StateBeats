@@ -11,6 +11,11 @@ export interface AudioMix {
   guidance: number;
   effects: number;
 }
+export const DEFAULT_AUDIO_MIX: Readonly<AudioMix> = Object.freeze({
+  music: 1,
+  guidance: 0.35,
+  effects: 0.75,
+});
 /** Real audio perception: spatial target cues, front/back rhythm, height pitch and outcomes. */
 export class RhythmAudio {
   private context?: AudioContext | OfflineAudioContext;
@@ -29,7 +34,7 @@ export class RhythmAudio {
   get activeHandVoices() {
     return this.handAudio?.activeVoices ?? 0;
   }
-  private levels: AudioMix = { music: 1, guidance: 0.35, effects: 0.75 };
+  private levels: AudioMix = { ...DEFAULT_AUDIO_MIX };
   private duckUntil = 0;
   get mix(): AudioMix {
     return { ...this.levels };

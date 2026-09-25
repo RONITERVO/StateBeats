@@ -1,4 +1,28 @@
 import { test, expect } from '@playwright/test';
+
+for (const savedVolume of [0, 0.22]) {
+  test(`enabling audio guidance restores silence but preserves an audible saved mix (${savedVolume})`, async ({
+    page,
+  }) => {
+    await page.addInitScript((guidanceVolume) => {
+      localStorage.setItem('statebeats/preferences/v1', JSON.stringify({ guidanceVolume }));
+      Object.defineProperty(window, 'speechSynthesis', { value: undefined, configurable: true });
+    }, savedVolume);
+    await page.goto('/');
+    await page.locator('#audio-setup-open').click();
+    await page.locator('#audio-enable').click();
+    await page.locator('#audio-setup-close').click();
+    await page.locator('#settings').click();
+    const expected = savedVolume === 0 ? 35 : 22;
+    await expect(page.locator('#guidance-volume')).toHaveValue(String(expected));
+    await expect(page.locator('#guidance-volume-value')).toHaveText(`${expected}%`);
+    expect(
+      await page.evaluate(
+        () => JSON.parse(localStorage.getItem('statebeats/preferences/v1')!).guidanceVolume,
+      ),
+    ).toBe(expected / 100);
+  });
+}
 test('audio-led setup selects the shared tutorial, persists preferences, and offers keyboard-only menu control', async ({
   page,
 }) => {
