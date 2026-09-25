@@ -346,6 +346,25 @@
       ><label><input id="audio-only" type="checkbox" />Audio practice · hide targets</label
       ><label><input id="music-enabled" type="checkbox" checked />Music</label
       ><label><input id="cues-enabled" type="checkbox" checked />Spatial interaction sounds</label
+      ><label><input id="effects-enabled" type="checkbox" checked />World sound effects</label
+      ><label
+        >Music volume
+        <input id="music-volume" type="range" min="0" max="100" step="1" value="100" /><output
+          id="music-volume-value"
+          >100%</output
+        ></label
+      ><label
+        >Guidance volume
+        <input id="guidance-volume" type="range" min="0" max="100" step="1" value="35" /><output
+          id="guidance-volume-value"
+          >35%</output
+        ></label
+      ><label
+        >World effects volume
+        <input id="effects-volume" type="range" min="0" max="100" step="1" value="75" /><output
+          id="effects-volume-value"
+          >75%</output
+        ></label
       ><label
         ><input id="captions-enabled" type="checkbox" checked />Text cues for location, hand and
         timing</label
@@ -353,6 +372,10 @@
       ><label><input id="high-contrast" type="checkbox" />Higher target contrast</label
       ><label><input id="performance" type="checkbox" />Show performance counters</label>
       <p>Timing offsets adjust sound presentation. They never change authoritative scores.</p>
+      <p>
+        Guidance tells you where and when to act. World effects follow moving targets and soften
+        while guidance sounds play. All three volumes are saved on this device.
+      </p>
       <button id="close-settings" class="primary">Done</button>
     </section>
     <div id="perf" hidden></div>

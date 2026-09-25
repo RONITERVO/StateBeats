@@ -2,6 +2,10 @@ export interface PlayerPreferences {
   sound: boolean;
   music: boolean;
   cues: boolean;
+  effects: boolean;
+  musicVolume: number;
+  guidanceVolume: number;
+  effectsVolume: number;
   captions: boolean;
   reducedMotion: boolean;
   highContrast: boolean;
@@ -18,6 +22,10 @@ export function readPreferences(): PlayerPreferences {
     sound: true,
     music: true,
     cues: true,
+    effects: true,
+    musicVolume: 1,
+    guidanceVolume: 0.35,
+    effectsVolume: 0.75,
     captions: true,
     reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
     highContrast: matchMedia('(prefers-contrast: more)').matches,
@@ -35,6 +43,7 @@ export function readPreferences(): PlayerPreferences {
       'sound',
       'music',
       'cues',
+      'effects',
       'captions',
       'reducedMotion',
       'highContrast',
@@ -53,6 +62,9 @@ export function readPreferences(): PlayerPreferences {
     for (const [name, low, high] of [
       ['playerHeight', 1, 2.3],
       ['roomScale', 0.5, 1.75],
+      ['musicVolume', 0, 1],
+      ['guidanceVolume', 0, 1],
+      ['effectsVolume', 0, 1],
     ] as const)
       if (
         typeof stored[name] === 'number' &&

@@ -128,6 +128,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Clubman — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -249,6 +253,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -372,6 +380,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -493,6 +505,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -616,6 +632,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -737,6 +757,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -860,6 +884,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Clubman — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -981,6 +1009,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -1104,6 +1136,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -1225,6 +1261,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -1348,6 +1388,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -1469,6 +1513,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -1592,6 +1640,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Clubman — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -1713,6 +1765,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -1836,6 +1892,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -1957,6 +2017,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -2080,6 +2144,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -2201,6 +2269,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -2324,6 +2396,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Clubman — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -2445,6 +2521,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -2568,6 +2648,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -2689,6 +2773,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -2812,6 +2900,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -2933,6 +3025,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -3056,6 +3152,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Clubman — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -3177,6 +3277,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -3300,6 +3404,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -3421,6 +3529,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -3544,6 +3656,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -3665,6 +3781,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -3788,6 +3908,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Clubman — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -3909,6 +4033,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -4032,6 +4160,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -4153,6 +4285,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -4276,6 +4412,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -4397,6 +4537,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -4520,6 +4664,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Meteor Shower — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -4641,6 +4789,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Meteor Shower — block the falling shot",
       "earlyMs": 110,
@@ -4764,6 +4916,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Meteor Shower — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -4885,6 +5041,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Meteor Shower — block the falling shot",
       "earlyMs": 110,
@@ -5008,6 +5168,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Meteor Shower — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -5129,6 +5293,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Meteor Shower — block the falling shot",
       "earlyMs": 110,
@@ -5252,6 +5420,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Clubman — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -5373,6 +5545,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -5496,6 +5672,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -5617,6 +5797,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -5740,6 +5924,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -5861,6 +6049,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
       },
       "label": "Swordsman — touch the marked head with either hand",
       "earlyMs": 110,
@@ -5984,6 +6176,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -6105,6 +6301,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -6228,6 +6428,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -6349,6 +6553,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -6472,6 +6680,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -6593,6 +6805,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
       },
       "label": "Swordsman — touch the marked head with either hand",
       "earlyMs": 110,
@@ -6716,6 +6932,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -6837,6 +7057,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -6960,6 +7184,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -7081,6 +7309,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -7204,6 +7436,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -7325,6 +7561,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
       },
       "label": "Swordsman — touch the marked head with either hand",
       "earlyMs": 110,
@@ -7448,6 +7688,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -7569,6 +7813,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -7692,6 +7940,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -7813,6 +8065,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -7936,6 +8192,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -8057,6 +8317,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
       },
       "label": "Swordsman — touch the marked head with either hand",
       "earlyMs": 110,
@@ -8180,6 +8444,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -8301,6 +8569,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -8424,6 +8696,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -8545,6 +8821,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -8668,6 +8948,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -8789,6 +9073,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
       },
       "label": "Swordsman — touch the marked head with either hand",
       "earlyMs": 110,
@@ -8912,6 +9200,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -9033,6 +9325,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -9156,6 +9452,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -9277,6 +9577,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -9400,6 +9704,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -9521,6 +9829,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
       },
       "label": "Swordsman — touch the marked head with either hand",
       "earlyMs": 110,
@@ -9644,6 +9956,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -9765,6 +10081,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -9888,6 +10208,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -10009,6 +10333,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -10132,6 +10460,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -10253,6 +10585,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Arrow Volley — block the falling shot",
       "earlyMs": 110,
@@ -10376,6 +10712,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Arrow Volley — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -10497,6 +10837,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Arrow Volley — block the falling shot",
       "earlyMs": 110,
@@ -10620,6 +10964,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Arrow Volley — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -10741,6 +11089,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Arrow Volley — block the falling shot",
       "earlyMs": 110,
@@ -10864,6 +11216,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Arrow Volley — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -10985,6 +11341,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
       },
       "label": "Swordsman — touch the marked head with either hand",
       "earlyMs": 110,
@@ -11108,6 +11468,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -11229,6 +11593,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -11352,6 +11720,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -11473,6 +11845,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -11596,6 +11972,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Halberdier — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -11717,6 +12097,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -11840,6 +12224,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -11961,6 +12349,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -12084,6 +12476,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -12205,6 +12601,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -12328,6 +12728,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -12449,6 +12853,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -12572,6 +12980,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Halberdier — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -12693,6 +13105,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -12816,6 +13232,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -12937,6 +13357,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -13060,6 +13484,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -13181,6 +13609,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -13304,6 +13736,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -13425,6 +13861,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -13548,6 +13988,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Halberdier — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -13669,6 +14113,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -13792,6 +14240,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -13913,6 +14365,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -14036,6 +14492,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -14157,6 +14617,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -14280,6 +14744,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -14401,6 +14869,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -14524,6 +14996,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Halberdier — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -14645,6 +15121,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -14768,6 +15248,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -14889,6 +15373,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -15012,6 +15500,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -15133,6 +15625,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -15256,6 +15752,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -15377,6 +15877,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -15500,6 +16004,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Halberdier — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -15621,6 +16129,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -15744,6 +16256,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -15865,6 +16381,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -15988,6 +16508,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -16109,6 +16633,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -16232,6 +16760,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -16353,6 +16885,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -16476,6 +17012,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Halberdier — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -16597,6 +17137,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -16720,6 +17264,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -16841,6 +17389,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -16964,6 +17516,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -17085,6 +17641,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -17208,6 +17768,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -17329,6 +17893,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -17452,6 +18020,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Cannon Barrage — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -17573,6 +18145,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Cannon Barrage — block the falling shot",
       "earlyMs": 110,
@@ -17696,6 +18272,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Cannon Barrage — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -17817,6 +18397,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Cannon Barrage — block the falling shot",
       "earlyMs": 110,
@@ -17940,6 +18524,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Cannon Barrage — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -18061,6 +18649,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Cannon Barrage — block the falling shot",
       "earlyMs": 110,
@@ -18184,6 +18776,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Cannon Barrage — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -18305,6 +18901,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Cannon Barrage — block the falling shot",
       "earlyMs": 110,
@@ -18428,6 +19028,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Halberdier — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -18549,6 +19153,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -18672,6 +19280,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -18793,6 +19405,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -18916,6 +19532,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -19037,6 +19657,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -19160,6 +19784,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Infantry — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -19281,6 +19909,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -19404,6 +20036,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -19525,6 +20161,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -19648,6 +20288,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -19769,6 +20413,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -19892,6 +20540,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -20013,6 +20665,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -20136,6 +20792,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Infantry — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -20257,6 +20917,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -20380,6 +21044,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -20501,6 +21169,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -20624,6 +21296,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -20745,6 +21421,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -20868,6 +21548,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -20989,6 +21673,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -21112,6 +21800,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Infantry — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -21233,6 +21925,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -21356,6 +22052,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -21477,6 +22177,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -21600,6 +22304,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -21721,6 +22429,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -21844,6 +22556,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -21965,6 +22681,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -22088,6 +22808,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Infantry — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -22209,6 +22933,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -22332,6 +23060,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -22453,6 +23185,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -22576,6 +23312,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -22697,6 +23437,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -22820,6 +23564,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -22941,6 +23689,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -23064,6 +23816,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Infantry — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -23185,6 +23941,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -23308,6 +24068,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -23429,6 +24193,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -23552,6 +24320,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -23673,6 +24445,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -23796,6 +24572,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -23917,6 +24697,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -24040,6 +24824,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Infantry — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -24161,6 +24949,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -24284,6 +25076,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -24405,6 +25201,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -24528,6 +25328,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -24649,6 +25453,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -24772,6 +25580,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -24893,6 +25705,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -25016,6 +25832,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Airstrike — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -25137,6 +25957,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Airstrike — block the falling shot",
       "earlyMs": 110,
@@ -25260,6 +26084,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Airstrike — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -25381,6 +26209,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Airstrike — block the falling shot",
       "earlyMs": 110,
@@ -25504,6 +26336,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Airstrike — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -25625,6 +26461,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Airstrike — block the falling shot",
       "earlyMs": 110,
@@ -25748,6 +26588,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
+      },
       "label": "Airstrike — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -25869,6 +26713,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/meteor",
+        "gain": 1
       },
       "label": "Airstrike — block the falling shot",
       "earlyMs": 110,
@@ -25992,6 +26840,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Infantry — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -26113,6 +26965,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -26236,6 +27092,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -26357,6 +27217,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -26480,6 +27344,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/whistle",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -26601,6 +27469,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -26724,6 +27596,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Energy Blade — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -26845,6 +27721,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -26968,6 +27848,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -27089,6 +27973,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -27212,6 +28100,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -27333,6 +28225,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -27456,6 +28352,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -27577,6 +28477,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -27700,6 +28604,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Energy Blade — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -27821,6 +28729,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -27944,6 +28856,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -28065,6 +28981,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -28188,6 +29108,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -28309,6 +29233,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -28432,6 +29360,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -28553,6 +29485,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -28676,6 +29612,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -28797,6 +29737,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -28920,6 +29864,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Energy Blade — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -29041,6 +29989,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -29164,6 +30116,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -29285,6 +30241,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -29408,6 +30368,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -29529,6 +30493,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -29652,6 +30620,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -29773,6 +30745,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -29896,6 +30872,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Energy Blade — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -30017,6 +30997,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -30140,6 +31124,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -30261,6 +31249,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -30384,6 +31376,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -30505,6 +31501,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -30628,6 +31628,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -30749,6 +31753,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -30872,6 +31880,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -30993,6 +32005,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -31116,6 +32132,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Energy Blade — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -31237,6 +32257,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -31360,6 +32384,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -31481,6 +32509,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -31604,6 +32636,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -31725,6 +32761,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -31848,6 +32888,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -31969,6 +33013,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -32092,6 +33140,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Energy Blade — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -32213,6 +33265,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -32336,6 +33392,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -32457,6 +33517,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -32580,6 +33644,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -32701,6 +33769,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -32824,6 +33896,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -32945,6 +34021,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -33068,6 +34148,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -33189,6 +34273,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -33312,6 +34400,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Orbital Laser — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -33433,6 +34525,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Orbital Laser — block the falling shot",
       "earlyMs": 110,
@@ -33556,6 +34652,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Orbital Laser — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -33677,6 +34777,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Orbital Laser — block the falling shot",
       "earlyMs": 110,
@@ -33800,6 +34904,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Orbital Laser — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -33921,6 +35029,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Orbital Laser — block the falling shot",
       "earlyMs": 110,
@@ -34044,6 +35156,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Orbital Laser — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -34165,6 +35281,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Orbital Laser — block the falling shot",
       "earlyMs": 110,
@@ -34288,6 +35408,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Energy Blade — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -34409,6 +35533,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -34532,6 +35660,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -34653,6 +35785,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -34776,6 +35912,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -34897,6 +36037,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -35020,6 +36164,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -35141,6 +36289,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -35264,6 +36416,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Hover Drone — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -35385,6 +36541,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -35508,6 +36668,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -35629,6 +36793,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -35752,6 +36920,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -35873,6 +37045,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -35996,6 +37172,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -36117,6 +37297,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -36240,6 +37424,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Hover Drone — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -36361,6 +37549,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -36484,6 +37676,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -36605,6 +37801,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -36728,6 +37928,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -36849,6 +38053,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -36972,6 +38180,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -37093,6 +38305,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -37216,6 +38432,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -37337,6 +38557,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -37460,6 +38684,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Hover Drone — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -37581,6 +38809,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -37704,6 +38936,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -37825,6 +39061,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -37948,6 +39188,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -38069,6 +39313,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -38192,6 +39440,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -38313,6 +39565,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -38436,6 +39692,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Hover Drone — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -38557,6 +39817,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -38680,6 +39944,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -38801,6 +40069,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -38924,6 +40196,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -39045,6 +40321,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -39168,6 +40448,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -39289,6 +40573,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -39412,6 +40700,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -39533,6 +40825,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -39656,6 +40952,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Hover Drone — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -39777,6 +41077,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -39900,6 +41204,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -40021,6 +41329,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -40144,6 +41456,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -40265,6 +41581,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -40388,6 +41708,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -40509,6 +41833,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -40632,6 +41960,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Hover Drone — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -40753,6 +42085,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -40876,6 +42212,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -40997,6 +42337,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -41120,6 +42464,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -41241,6 +42589,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -41364,6 +42716,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -41485,6 +42841,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
       },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
@@ -41608,6 +42968,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -41729,6 +43093,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -41852,6 +43220,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Void Rift — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -41973,6 +43345,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Void Rift — block the falling shot",
       "earlyMs": 110,
@@ -42096,6 +43472,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Void Rift — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -42217,6 +43597,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Void Rift — block the falling shot",
       "earlyMs": 110,
@@ -42340,6 +43724,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Void Rift — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -42461,6 +43849,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Void Rift — block the falling shot",
       "earlyMs": 110,
@@ -42584,6 +43976,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Void Rift — block the falling shot",
       "earlyMs": 110,
       "lateMs": 150,
@@ -42705,6 +44101,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Void Rift — block the falling shot",
       "earlyMs": 110,
@@ -42828,6 +44228,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/steps",
+        "gain": 1
+      },
       "label": "Hover Drone — touch the marked head with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -42949,6 +44353,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -43072,6 +44480,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -43193,6 +44605,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -43316,6 +44732,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -43437,6 +44857,10 @@
         "behind": {
           "ms": 180
         }
+      },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
       },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
@@ -43560,6 +44984,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/energy",
+        "gain": 1
+      },
       "label": "Crossfire — block with either hand",
       "earlyMs": 110,
       "lateMs": 150,
@@ -43682,6 +45110,10 @@
           "ms": 180
         }
       },
+      "sound": {
+        "effect": "ink-battle/heavy",
+        "gain": 1
+      },
       "label": "Heavy fire — block with both hands",
       "earlyMs": 110,
       "lateMs": 150,
@@ -43761,6 +45193,10 @@
         "react": []
       }
     ]
+  },
+  "audio": {
+    "version": 1,
+    "theme": "ink-battle/battlefield-v1"
   },
   "turns": {
     "version": 1,

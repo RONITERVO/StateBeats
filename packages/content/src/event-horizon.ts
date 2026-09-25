@@ -144,6 +144,7 @@ export function eventHorizonMaster() {
     tickRate: 120,
     playerProfile: { height: 1.65, roomScale: 1 },
     music,
+    audio: { version: 1, theme: 'statebeats/orbital-v1' },
     turns: clone(turnPlan.track),
     notes: [],
     groups: [],

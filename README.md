@@ -145,6 +145,8 @@ Scene objects, motion/emitter tracks, appearance identifiers and music features 
 SDK contracts. A [community mole appearance](examples/community-appearance.ts) demonstrates
 adding a ground-level creature without changing gameplay code. See the
 [scene, music and access guide](docs/SCENES_MUSIC_ACCESS.md) for limits and interfaces.
+Reusable [spatial sound themes](docs/SPATIAL_AUDIO.md) add moving effects independently of
+visual art, with saved music, guidance and world-effect mix controls.
 
 ```mermaid
 flowchart LR

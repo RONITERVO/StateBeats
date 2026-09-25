@@ -111,6 +111,15 @@ test('perception preferences survive a reload and do not require audio to play',
   await page.locator('#settings').click();
   await page.locator('#music-enabled').uncheck();
   await page.locator('#cues-enabled').uncheck();
+  await page.locator('#effects-enabled').uncheck();
+  for (const [id, value] of [
+    ['music', '62'],
+    ['guidance', '91'],
+    ['effects', '28'],
+  ]) {
+    await page.locator(`#${id}-volume`).fill(value);
+    await page.locator(`#${id}-volume`).dispatchEvent('change');
+  }
   await page.locator('#reduced-motion').check();
   await page.locator('#high-contrast').check();
   await page.locator('#speed').selectOption('0.5');
@@ -120,6 +129,10 @@ test('perception preferences survive a reload and do not require audio to play',
   await page.locator('#settings').click();
   await expect(page.locator('#music-enabled')).not.toBeChecked();
   await expect(page.locator('#cues-enabled')).not.toBeChecked();
+  await expect(page.locator('#effects-enabled')).not.toBeChecked();
+  await expect(page.locator('#music-volume')).toHaveValue('62');
+  await expect(page.locator('#guidance-volume')).toHaveValue('91');
+  await expect(page.locator('#effects-volume')).toHaveValue('28');
   await expect(page.locator('#captions-enabled')).toBeChecked();
   await expect(page.locator('#reduced-motion')).toBeChecked();
   await expect(page.locator('#high-contrast')).toBeChecked();

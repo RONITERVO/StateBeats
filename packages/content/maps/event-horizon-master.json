@@ -71465,6 +71465,10 @@
       }
     ]
   },
+  "audio": {
+    "version": 1,
+    "theme": "statebeats/orbital-v1"
+  },
   "turns": {
     "version": 1,
     "planner": "statebeats/musical-turns-v1",

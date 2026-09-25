@@ -34,6 +34,11 @@ continuity; it affects subsequent spawns and does not drag already spawned targe
 
 ## Map authoring and compilation
 
+Optional `audio` theme and per-note `sound` metadata drive the
+[spatial audio projection](SPATIAL_AUDIO.md). `MapBuilder.setAudio` and CLI/MCP `map.edit`
+share validation; `sampleSpatialAudio` / `perception.audio` return bounded, tick-derived
+sound sources. These fields affect presentation identity, never the core scoring program.
+
 `MapBuilder` imports, adds/replaces/removes notes, exports and compiles. Removing a group member
 removes the group and clears surviving references. `generateMap({seed,count,style,turning})` uses a
 seeded integer PRNG. Style is `anchored`, `approaching` or `mixed`. Edits create new map data; a running

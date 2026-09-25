@@ -23,6 +23,7 @@ import type {
   NoteInput,
   SceneInput,
   MusicTimeline,
+  AudioThemeInput,
 } from './schema.js';
 import { scenePositionAt } from './scene.js';
 import type { CompiledScene } from './scene.js';
@@ -367,6 +368,14 @@ export function presentationIdentity(map: MapDefinition): Promise<string> {
     offsetSeconds: map.offsetSeconds,
     scene: map.scene ?? null,
     music: map.music ?? null,
+    ...(map.audio ? { audio: map.audio } : {}),
+    ...(map.notes.some((note) => note.sound)
+      ? {
+          sounds: map.notes
+            .filter((note) => note.sound)
+            .map((note) => ({ id: note.id, sound: note.sound })),
+        }
+      : {}),
     ...(map.generation ? { generation: map.generation } : {}),
     ...(map.playerProfile ? { playerProfile: map.playerProfile } : {}),
     labels: map.notes
@@ -475,6 +484,10 @@ export class MapBuilder {
   }
   setMusic(music?: MusicTimeline): this {
     this.data = parsed(mapSchema, { ...this.data, music });
+    return this;
+  }
+  setAudio(audio?: AudioThemeInput): this {
+    this.data = parsed(mapSchema, { ...this.data, audio });
     return this;
   }
   export(): MapDefinition {

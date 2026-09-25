@@ -1,4 +1,28 @@
 import { test, expect } from '@playwright/test';
+test('moving effects pan with targets and head direction; mix, pause and resume stay independent', async ({
+  page,
+}) => {
+  await page.goto('/conformance.html');
+  await page.locator('#run-spatial').click();
+  await expect(page.locator('#spatial-result')).toContainText('stopped');
+  const results = JSON.parse((await page.locator('#spatial-result').textContent())!);
+  const get = (mode: string) => results.find((r: { mode: string }) => r.mode === mode);
+  const moving = get('moving');
+  expect(moving.first[0]).toBeGreaterThan(moving.first[1] * 1.2);
+  if (moving.dynamic) expect(moving.last[1]).toBeGreaterThan(moving.last[0] * 1.2);
+  expect(get('right').first[1]).toBeGreaterThan(get('right').first[0] * 1.2);
+  expect(get('rotated').first[1]).toBeGreaterThan(get('rotated').first[0] * 1.2);
+  expect(get('muted').first).toEqual([0, 0]);
+  expect(get('muted').last).toEqual([0, 0]);
+  expect(get('paused').last).toEqual([0, 0]);
+  expect(get('paused').later).toBe(0);
+  expect(get('resume').last[1]).toBeGreaterThan(get('resume').last[0] * 1.2);
+  expect(get('guidance').first[0] + get('guidance').first[1]).toBeGreaterThan(0.001);
+  expect(get('guidance').initial).toBe(0);
+  expect(get('dense').initial).toBe(8);
+  expect(get('dense').later).toBe(8);
+  expect(results.every((r: { stopped: number }) => r.stopped === 0)).toBe(true);
+});
 test('real Web Audio rendering produces non-silent spatial cues', async ({ page }) => {
   await page.goto('/conformance.html');
   await page.locator('#run-audio').click();

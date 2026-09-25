@@ -2,6 +2,13 @@
 
 ## 0.3.0 — musical choreography (development release candidate)
 
+Adds opt-in spatial sound themes and per-note effects, a pure SDK audio-frame projection
+and CLI/MCP `perception.audio`, independent saved mix controls, and a bounded Web Audio
+backend with head-relative moving sources. Ink-Battle and Event Horizon ship procedural
+sound themes. Waiting targets remain quiet; effects yield to guidance and stop with the
+transport. Audio metadata is protected by presentation identity without changing gameplay.
+See [spatial sound themes](docs/SPATIAL_AUDIO.md).
+
 Adds optional map-authored readiness cues: hidden, waiting, preparing and eligible, timed
 from the first valid contact tick. Event Horizon's stationary holds now use a short hollow
 preview and brighten into solid targets during the last beat before contact. The reference

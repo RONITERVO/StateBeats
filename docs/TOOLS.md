@@ -70,7 +70,7 @@ trusted local launch configuration, not network authentication.
 | `map.import`, `map.export` | Store `map`; return `map`/`mapId` source JSON (admin) |
 | `map.generate` | `seed`, `count`, `style`, `turning`; returns/stores reproducible map (admin) |
 | `music.generate` | Stored `music` timeline and `options:{bpm,difficulty,turning,seed}`; returns/stores an authored scene map (admin) |
-| `map.edit` | `mapId`/`map`, and `note`, `remove` ID, `scene`, or `music`; null removes scene/music (admin) |
+| `map.edit` | `mapId`/`map`, and `note`, `remove` ID, `scene`, `music`, or `audio`; null removes scene/music/audio (admin) |
 | `map.fit` | `mapId`/`map` and `options: { height, roomScale }`; stores the same baked personal layout used by the player (admin, retryable) |
 | `map.compile` | `mapId`/`map`; returns `{compiled,scene?,warnings}` with gameplay content hash (admin) |
 | `actor.register` | `tick`, `actor:{id,effectors}`; queues actor addition (admin) |
@@ -78,6 +78,7 @@ trusted local launch configuration, not network authentication.
 | `pose.trajectory` | `actorId`, `effectorId`, `startTick`, `endTick`, `from`, `to`; at most 1,001 poses |
 | `clock.advance` | `ticks`; returns from/to tick, event cursor and ended flag (delegated time/admin) |
 | `perception.describe` | Optional listener `position`, `orientation`, `maxTargets`; human-readable semantic cues without advancing time |
+| `perception.audio` | Optional `maxSources` (1–32, default 8); current moving sound sources and theme without advancing time |
 | `observe` | Current role-filtered observation, does not advance |
 | `events.since` | `since` cursor, optional `limit` 1–4,096; returns events, overflow and next cursor |
 | `snapshot.save` | Complete checkpoint including future input/retries (admin) |

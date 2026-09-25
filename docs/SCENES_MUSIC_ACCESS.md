@@ -2,6 +2,8 @@
 
 For timed note emergence, moving path windows, release effects and complete target/guide
 adapters, see [Note presentation](NOTE_PRESENTATION.md).
+For moving note sounds, independent mix controls and portable audio frames, see
+[Spatial sound themes](SPATIAL_AUDIO.md).
 
 These are SDK capabilities. The browser, text player, CLI and MCP share the same compiled
 gameplay and observations. No renderer, audio device, FFT callback or screen reader awards hits.
