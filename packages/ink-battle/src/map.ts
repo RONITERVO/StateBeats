@@ -226,6 +226,18 @@ export function inkBattleMap() {
     motion: e.motion,
     anchor: 'player',
     appearance: `ink-battle/${e.kind}/${e.age}/${e.team === 1 ? 'teal' : 'red'}/${e.projectile}`,
+    sound: {
+      effect:
+        e.kind === 'melee'
+          ? 'ink-battle/steps'
+          : e.kind === 'heavy'
+            ? 'ink-battle/heavy'
+            : ['laser', 'orb'].includes(e.projectile)
+              ? 'ink-battle/energy'
+              : e.projectile === 'meteor'
+                ? 'ink-battle/meteor'
+                : 'ink-battle/whistle',
+    },
     label:
       e.kind === 'melee'
         ? `${inkChapters[e.age].unitNames[0]} — touch the marked head with either hand`
@@ -252,6 +264,7 @@ export function inkBattleMap() {
     tempo: [{ beat: 0, bpm: 120 }],
     tickRate: 120,
     playerProfile: { height: 1.65, roomScale: 1 },
+    audio: { version: 1, theme: 'ink-battle/battlefield-v1' },
     notes,
     turns: clone(turns.track),
     music: {

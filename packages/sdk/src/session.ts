@@ -101,6 +101,7 @@ export interface Observation {
   durationTicks: number;
   scene?: SceneFrame;
   music?: MusicFeatures;
+  audio?: MapDefinition['audio'];
   /** Non-interactive, bounded release effects; never returned as active targets. */
   resolvedEntities?: Observation['entities'];
   entities: {
@@ -112,6 +113,7 @@ export interface Observation {
     contactPath?: { tick: number; position: Vec3 }[];
     label?: string;
     appearance?: string;
+    sound?: MapDefinition['notes'][number]['sound'];
     presentation?: TargetPresentation;
     orientation: [number, number, number, number];
     shape: EntitySpec['shape'];
@@ -171,7 +173,10 @@ export class Session {
   readonly map: MapDefinition;
   readonly initialActors: ActorSpec[];
   private readonly scene?: CompiledScene;
-  private readonly descriptions: Map<string, { label?: string; appearance?: string }>;
+  private readonly descriptions: Map<
+    string,
+    { label?: string; appearance?: string; sound?: MapDefinition['notes'][number]['sound'] }
+  >;
   private readonly presenter: ReturnType<typeof createNotePresenter>;
   private releases: { entity: LiveEntity; resolution: TargetResolution }[] = [];
   private world: WorldState;
@@ -204,6 +209,7 @@ export class Session {
         {
           ...(note.label ? { label: note.label } : {}),
           ...(note.appearance ? { appearance: note.appearance } : {}),
+          ...(note.sound ? { sound: note.sound } : {}),
         },
       ]),
     );
@@ -486,6 +492,7 @@ export class Session {
       tickRate: this.program.rules.tickRate,
       durationTicks: this.program.durationTicks,
       ...(music ? { music } : {}),
+      ...(this.map.audio ? { audio: this.map.audio } : {}),
       ...(this.scene
         ? {
             scene: sampleScene(

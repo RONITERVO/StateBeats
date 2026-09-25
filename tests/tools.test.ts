@@ -43,6 +43,7 @@ const requests: ServiceRequest[] = [
   { op: 'clock.advance', sessionId: 'parity', requestId: 'advance1', args: { ticks: 250 } },
   { op: 'observe', sessionId: 'parity' },
   { op: 'perception.describe', sessionId: 'parity', args: { maxTargets: 3 } },
+  { op: 'perception.audio', sessionId: 'parity', args: { maxSources: 3 } },
   {
     op: 'music.generate',
     requestId: 'music-fixture',

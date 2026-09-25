@@ -1,7 +1,13 @@
 import type { DomainEvent, Vec3 } from '@statebeats/core';
 import type { Observation } from '@statebeats/sdk';
-import { beatToTick, beatValue } from '@statebeats/sdk';
+import { beatToTick, beatValue, sampleSpatialAudio } from '@statebeats/sdk';
 import type { MapDefinition } from '@statebeats/sdk';
+import { SpatialSounds } from './spatial-sounds.js';
+export interface AudioMix {
+  music: number;
+  guidance: number;
+  effects: number;
+}
 /** Real audio perception: spatial target cues, front/back rhythm, height pitch and outcomes. */
 export class RhythmAudio {
   private context?: AudioContext | OfflineAudioContext;
@@ -10,6 +16,43 @@ export class RhythmAudio {
       new AudioContext({ latencyHint: 'interactive' }),
   ) {}
   private gain?: GainNode;
+  private musicBus?: GainNode;
+  private guidanceBus?: GainNode;
+  private effectsBus?: GainNode;
+  private spatial?: SpatialSounds;
+  private levels: AudioMix = { music: 1, guidance: 0.35, effects: 0.75 };
+  private duckUntil = 0;
+  get mix(): AudioMix {
+    return { ...this.levels };
+  }
+  get activeEffectVoices() {
+    return this.spatial?.activeVoices ?? 0;
+  }
+  setMix(mix: Partial<AudioMix>) {
+    const next = { ...this.levels, ...mix };
+    for (const value of Object.values(next))
+      if (!Number.isFinite(value) || value < 0 || value > 1)
+        throw new RangeError('Audio levels must be between zero and one.');
+    this.levels = next;
+    this.applyMix();
+    if (next.effects === 0) this.spatial?.stop();
+  }
+  private applyMix() {
+    if (!this.context) return;
+    const now = this.context.currentTime;
+    for (const [bus, value] of [
+      [this.musicBus, this.musicEnabled ? this.levels.music : 0],
+      [this.guidanceBus, this.cuesEnabled ? this.levels.guidance : 0],
+      [
+        this.effectsBus,
+        this.effectsEnabled ? this.levels.effects * (now < this.duckUntil ? 0.32 : 1) : 0,
+      ],
+    ] as const)
+      if (bus) {
+        bus.gain.cancelScheduledValues(now);
+        bus.gain.setTargetAtTime(value, now, 0.015);
+      }
+  }
   private voices = new Set<OscillatorNode>();
   private cued = new Set<string>();
   private lastPulse = -1;
@@ -22,6 +65,7 @@ export class RhythmAudio {
   enabled = true;
   musicEnabled = true;
   cuesEnabled = true;
+  effectsEnabled = true;
   offsetMs = 0;
   private listener: Vec3 = [0, 1.65, 0];
   private forward: Vec3 = [0, 0, -1];
@@ -31,6 +75,15 @@ export class RhythmAudio {
       this.gain = this.context.createGain();
       this.gain.gain.value = 0.6;
       this.gain.connect(this.context.destination);
+      this.musicBus = this.context.createGain();
+      this.guidanceBus = this.context.createGain();
+      this.effectsBus = this.context.createGain();
+      for (const bus of [this.musicBus, this.guidanceBus, this.effectsBus]) bus.connect(this.gain);
+      this.musicBus.gain.value = this.musicEnabled ? this.levels.music : 0;
+      this.guidanceBus.gain.value = this.cuesEnabled ? this.levels.guidance : 0;
+      this.effectsBus.gain.value = this.effectsEnabled ? this.levels.effects : 0;
+      this.spatial = new SpatialSounds(this.context, this.effectsBus);
+      this.pose(this.listener, this.forward);
     }
   }
   async unlock() {
@@ -78,6 +131,12 @@ export class RhythmAudio {
     const c = this.context;
     if (!c) return;
     const l = c.listener;
+    // Firefox exposes the legacy listener setters instead of these AudioParams.
+    if (!l.positionX) {
+      l.setPosition(...position);
+      l.setOrientation(...forward, 0, 1, 0);
+      return;
+    }
     l.positionX.value = position[0];
     l.positionY.value = position[1];
     l.positionZ.value = position[2];
@@ -92,6 +151,8 @@ export class RhythmAudio {
     this.rebase();
   }
   stop() {
+    this.spatial?.stop();
+    this.duckUntil = 0;
     if (this.songSource) {
       try {
         this.songSource.stop();
@@ -129,6 +190,9 @@ export class RhythmAudio {
       osc = c.createOscillator(),
       env = c.createGain();
     if (channel === 'cue') volume *= this.song?.cueVolume ?? 1;
+    if (channel === 'cue' && volume > 0 && this.levels.guidance > 0)
+      this.duckUntil = Math.max(this.duckUntil, when + duration + 0.08);
+    const bus = (channel === 'cue' ? this.guidanceBus : this.musicBus)!;
     osc.type = type;
     osc.frequency.setValueAtTime(frequency, when);
     if (endFrequency) osc.frequency.exponentialRampToValueAtTime(endFrequency, when + duration);
@@ -146,7 +210,7 @@ export class RhythmAudio {
       panner.positionY.value = position[1];
       panner.positionZ.value = position[2];
       env.connect(panner);
-      panner.connect(this.gain);
+      panner.connect(bus);
       osc.onended = () => {
         this.voices.delete(osc);
         osc.disconnect();
@@ -154,7 +218,7 @@ export class RhythmAudio {
         panner.disconnect();
       };
     } else {
-      env.connect(this.gain);
+      env.connect(bus);
       osc.onended = () => {
         this.voices.delete(osc);
         osc.disconnect();
@@ -188,7 +252,7 @@ export class RhythmAudio {
         source.playbackRate.value = this.speed;
         gain.gain.value = this.song.volume;
         source.connect(gain);
-        gain.connect(this.gain);
+        gain.connect(this.musicBus!);
         source.start(
           c.currentTime + Math.max(0, delayAt(this.song.startTick) + this.offsetMs / 1000),
           offset,
@@ -218,7 +282,7 @@ export class RhythmAudio {
         );
     }
     for (const entity of view.entities) {
-      if (entity.presentation?.readiness?.phase === 'hidden') continue;
+      if (['hidden', 'waiting'].includes(entity.presentation?.readiness?.phase ?? '')) continue;
       const remaining = (entity.hitTick - view.tick) / view.tickRate;
       if (remaining < -0.1 || remaining > 1.05) continue;
       const stage =
@@ -274,6 +338,10 @@ export class RhythmAudio {
         this.tone(990, 0.25, 0.04, undefined, 'sine', 0.06);
       }
     }
+    if (this.effectsEnabled && this.levels.effects > 0)
+      this.spatial?.update(sampleSpatialAudio(view));
+    else this.spatial?.stop();
+    this.applyMix();
   }
   async dispose() {
     this.stop();

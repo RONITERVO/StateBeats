@@ -724,6 +724,25 @@
             },
             "additionalProperties": false
           },
+          "sound": {
+            "type": "object",
+            "properties": {
+              "effect": {
+                "type": "string",
+                "pattern": "^[\\w./:-]{1,100}$"
+              },
+              "gain": {
+                "default": 1,
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "effect"
+            ],
+            "additionalProperties": false
+          },
           "label": {
             "type": "string",
             "minLength": 1,
@@ -1215,6 +1234,24 @@
         "version",
         "theme",
         "label"
+      ],
+      "additionalProperties": false
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "theme": {
+          "type": "string",
+          "pattern": "^[\\w./:-]{1,100}$"
+        }
+      },
+      "required": [
+        "version",
+        "theme"
       ],
       "additionalProperties": false
     },

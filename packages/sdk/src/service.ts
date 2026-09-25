@@ -11,7 +11,8 @@ import {
 } from './compiler.js';
 import { EngineError, parsed, actorSchema, idSchema } from './schema.js';
 import type { MapDefinition, MapInput } from './schema.js';
-import type { SceneInput, MusicTimeline } from './schema.js';
+import type { SceneInput, MusicTimeline, AudioThemeInput } from './schema.js';
+import { sampleSpatialAudio } from './spatial-audio.js';
 import { generateMusicMap } from './music.js';
 import { generateChoreography, inspectChoreography } from './choreography.js';
 import { fitMapToPlayer } from './player-profile.js';
@@ -75,6 +76,7 @@ export const operations = [
   'clock.advance',
   'observe',
   'perception.describe',
+  'perception.audio',
   'events.since',
   'snapshot.save',
   'snapshot.restore',
@@ -235,6 +237,8 @@ export class EngineService {
         const map = await findMap(),
           builder = new MapBuilder(map as MapInput);
         if ('scene' in a) builder.setScene(a.scene === null ? undefined : (a.scene as SceneInput));
+        else if ('audio' in a)
+          builder.setAudio(a.audio === null ? undefined : (a.audio as AudioThemeInput));
         else if ('music' in a)
           builder.setMusic(a.music === null ? undefined : (a.music as MusicTimeline));
         else if (a.remove) builder.remove(String(a.remove));
@@ -242,7 +246,7 @@ export class EngineService {
           const note = a.note as MapDefinition['notes'][number];
           if (builder.export().notes.some((n) => n.id === note.id)) builder.replace(note);
           else builder.add(note);
-        } else throw new EngineError('VALIDATION', 'Provide note, remove, scene or music');
+        } else throw new EngineError('VALIDATION', 'Provide note, remove, scene, music or audio');
         const result = builder.compile();
         await this.maps.put(result.map);
         return { map: result.map, warnings: result.warnings };
@@ -338,6 +342,11 @@ export class EngineService {
         return get().advanceRequest(cap, requestId(), Number(a.ticks));
       case 'observe':
         return get().observe(cap);
+      case 'perception.audio':
+        return sampleSpatialAudio(
+          get().observe(cap),
+          a as Parameters<typeof sampleSpatialAudio>[1],
+        );
       case 'perception.describe':
         return describeObservation(
           get().observe(cap),

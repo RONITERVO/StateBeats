@@ -284,7 +284,6 @@ async function prepareAudio() {
       if (song && audioMap === map) {
         audio.setSong(song.buffer, map.music?.frames[0]?.tick ?? 0, {
           volume: song.asset.musicVolume,
-          cueVolume: song.asset.cueVolume,
         });
         connectedSong = hash;
       }
@@ -636,6 +635,17 @@ el<HTMLInputElement>('cues-enabled').onchange = () => {
   audio.cuesEnabled = el<HTMLInputElement>('cues-enabled').checked;
   audio.rebase();
 };
+el<HTMLInputElement>('effects-enabled').onchange = () => {
+  audio.effectsEnabled = el<HTMLInputElement>('effects-enabled').checked;
+  audio.rebase();
+};
+for (const channel of ['music', 'guidance', 'effects'] as const) {
+  el<HTMLInputElement>(`${channel}-volume`).oninput = () => {
+    const value = Number(el<HTMLInputElement>(`${channel}-volume`).value);
+    audio.setMix({ [channel]: value / 100 });
+    el(`${channel}-volume-value`).textContent = `${value}%`;
+  };
+}
 
 function downloadJson(data: unknown, filename: string) {
   const url = URL.createObjectURL(
@@ -1270,6 +1280,10 @@ function savePreferences() {
     sound: audio.enabled,
     music: audio.musicEnabled,
     cues: audio.cuesEnabled,
+    effects: audio.effectsEnabled,
+    musicVolume: audio.mix.music,
+    guidanceVolume: audio.mix.guidance,
+    effectsVolume: audio.mix.effects,
     captions,
     reducedMotion: orbit.theme.preferences.reducedMotion,
     highContrast: orbit.theme.preferences.highContrast,
@@ -1289,6 +1303,17 @@ el<HTMLInputElement>('room-scale').value = String(roomScale);
 audio.enabled = preferences.sound;
 audio.musicEnabled = preferences.music;
 audio.cuesEnabled = preferences.cues;
+audio.effectsEnabled = preferences.effects;
+audio.setMix({
+  music: preferences.musicVolume,
+  guidance: preferences.guidanceVolume,
+  effects: preferences.effectsVolume,
+});
+for (const channel of ['music', 'guidance', 'effects'] as const) {
+  const value = Math.round(audio.mix[channel] * 100);
+  el<HTMLInputElement>(`${channel}-volume`).value = String(value);
+  el(`${channel}-volume-value`).textContent = `${value}%`;
+}
 audio.offsetMs = preferences.offsetMs;
 audio.speed = speed = preferences.speed;
 captions = preferences.captions;
@@ -1301,6 +1326,7 @@ orbit.theme.preferences = {
 for (const [id, checked] of Object.entries({
   'music-enabled': preferences.music,
   'cues-enabled': preferences.cues,
+  'effects-enabled': preferences.effects,
   'captions-enabled': captions,
   'reduced-motion': preferences.reducedMotion,
   'high-contrast': preferences.highContrast,

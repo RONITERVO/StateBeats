@@ -153,6 +153,16 @@ export const sceneSchema = z
   .strict();
 export type SceneDefinition = z.infer<typeof sceneSchema>;
 export type SceneInput = z.input<typeof sceneSchema>;
+/** Host-registered audio IDs only; maps never contain executable code or asset URLs. */
+export const audioThemeSchema = z.object({ version: z.literal(1), theme: idSchema }).strict();
+export const noteSoundSchema = z
+  .object({
+    effect: idSchema,
+    gain: num.min(0).max(1).default(1),
+  })
+  .strict();
+export type AudioThemeInput = z.input<typeof audioThemeSchema>;
+export type NoteSound = z.output<typeof noteSoundSchema>;
 export const playerProfileSchema = z
   .object({
     height: num.min(1).max(2.3).default(1.65),
@@ -173,6 +183,7 @@ export const noteSchema = z
     anchor: idSchema.optional(),
     appearance: idSchema.optional(),
     presentation: notePresentationSchema.optional(),
+    sound: noteSoundSchema.optional(),
     label: z.string().min(1).max(160).optional(),
     emission: z.object({ source: idSchema, beat: beatSchema }).strict().optional(),
     slots: z.array(slotSchema).min(1).max(4).optional(),
@@ -228,6 +239,7 @@ export const mapSchema = z
       .max(256),
     notes: z.array(noteSchema).max(10000),
     scene: sceneSchema.optional(),
+    audio: audioThemeSchema.optional(),
     turns: turnTrackSchema.optional(),
     music: musicSchema.optional(),
     playerProfile: playerProfileSchema.optional(),

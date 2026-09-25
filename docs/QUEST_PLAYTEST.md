@@ -43,6 +43,7 @@ follow head motion. The duet includes a partner bot for the second actor.
 | Turning | Rear cues make sense; complete a full turn without the stage drifting |
 | Recovery | Pause/resume, restart and recenter work; tracking loss does not create a false hit |
 | Sound | Pulse aligns with contact; rear double cue and hand timbres can be distinguished |
+| Spatial themes | In Ink-Battle and Event Horizon, try world effects alone, turn your head, then restore guidance/music; check that moving sounds agree with targets and dense sections remain clear |
 | Sun journey | Follow the traveling sun and trail through a full turn; reach stars and holds; duck beneath birds |
 | Imported music | Choose a local song before entering VR, set its BPM, generate a map and check pause/resume alignment |
 | Choreography | Play Phrases in orbit; verify both rail hands, paired notes, crossovers and recovery time before turns |
