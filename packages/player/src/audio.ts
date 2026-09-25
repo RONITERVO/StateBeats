@@ -1,6 +1,9 @@
 import type { DomainEvent, Vec3 } from '@statebeats/core';
 import type { Observation } from '@statebeats/sdk';
-import { beatToTick, beatValue, sampleSpatialAudio } from '@statebeats/sdk';
+import { beatToTick, beatValue, sampleSpatialAudio, describeHandGuidance } from '@statebeats/sdk';
+import type { HandGuidanceFrame } from '@statebeats/sdk';
+import { HandAudio } from './hand-audio.js';
+import type { HandBeaconMode } from './hand-audio.js';
 import type { MapDefinition } from '@statebeats/sdk';
 import { SpatialSounds } from './spatial-sounds.js';
 export interface AudioMix {
@@ -8,6 +11,11 @@ export interface AudioMix {
   guidance: number;
   effects: number;
 }
+export const DEFAULT_AUDIO_MIX: Readonly<AudioMix> = Object.freeze({
+  music: 1,
+  guidance: 0.35,
+  effects: 0.75,
+});
 /** Real audio perception: spatial target cues, front/back rhythm, height pitch and outcomes. */
 export class RhythmAudio {
   private context?: AudioContext | OfflineAudioContext;
@@ -20,7 +28,13 @@ export class RhythmAudio {
   private guidanceBus?: GainNode;
   private effectsBus?: GainNode;
   private spatial?: SpatialSounds;
-  private levels: AudioMix = { music: 1, guidance: 0.35, effects: 0.75 };
+  private handAudio?: HandAudio;
+  nonvisualEnabled = false;
+  handBeacons: HandBeaconMode = 'active';
+  get activeHandVoices() {
+    return this.handAudio?.activeVoices ?? 0;
+  }
+  private levels: AudioMix = { ...DEFAULT_AUDIO_MIX };
   private duckUntil = 0;
   get mix(): AudioMix {
     return { ...this.levels };
@@ -40,12 +54,16 @@ export class RhythmAudio {
   private applyMix() {
     if (!this.context) return;
     const now = this.context.currentTime;
+    const guidingHands =
+      this.cuesEnabled && this.levels.guidance > 0 && (this.handAudio?.activeVoices ?? 0) > 0;
     for (const [bus, value] of [
-      [this.musicBus, this.musicEnabled ? this.levels.music : 0],
+      [this.musicBus, this.musicEnabled ? this.levels.music * (guidingHands ? 0.65 : 1) : 0],
       [this.guidanceBus, this.cuesEnabled ? this.levels.guidance : 0],
       [
         this.effectsBus,
-        this.effectsEnabled ? this.levels.effects * (now < this.duckUntil ? 0.32 : 1) : 0,
+        this.effectsEnabled
+          ? this.levels.effects * (now < this.duckUntil || guidingHands ? 0.32 : 1)
+          : 0,
       ],
     ] as const)
       if (bus) {
@@ -83,6 +101,7 @@ export class RhythmAudio {
       this.guidanceBus.gain.value = this.cuesEnabled ? this.levels.guidance : 0;
       this.effectsBus.gain.value = this.effectsEnabled ? this.levels.effects : 0;
       this.spatial = new SpatialSounds(this.context, this.effectsBus);
+      this.handAudio = new HandAudio(this.context, this.guidanceBus);
       this.pose(this.listener, this.forward);
     }
   }
@@ -151,6 +170,7 @@ export class RhythmAudio {
     this.rebase();
   }
   stop() {
+    this.handAudio?.stop();
     this.spatial?.stop();
     this.duckUntil = 0;
     if (this.songSource) {
@@ -229,7 +249,7 @@ export class RhythmAudio {
     osc.start(when);
     osc.stop(when + duration + 0.02);
   }
-  update(view: Observation, events: DomainEvent[], running: boolean) {
+  update(view: Observation, events: DomainEvent[], running: boolean, hands?: HandGuidanceFrame) {
     if (!running || !this.enabled) {
       this.stop();
       this.base = undefined;
@@ -341,6 +361,9 @@ export class RhythmAudio {
     if (this.effectsEnabled && this.levels.effects > 0)
       this.spatial?.update(sampleSpatialAudio(view));
     else this.spatial?.stop();
+    if (this.nonvisualEnabled && this.cuesEnabled && this.levels.guidance > 0 && !view.finished)
+      this.handAudio?.update(hands ?? describeHandGuidance(view), view.tickRate, this.handBeacons);
+    else this.handAudio?.stop();
     this.applyMix();
   }
   async dispose() {

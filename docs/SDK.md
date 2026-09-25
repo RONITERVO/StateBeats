@@ -64,6 +64,10 @@ a replay is provenance only; the embedded compiled descriptor governs simulation
 
 ## Requirements, motion and policies
 
+`describeHandGuidance` / `perception.hands` project the same observations into per-hand contact
+guidance for sound, haptics, text and agents. Geometry, readiness and engine participant bindings
+are shared; sensory expression stays in adapters. See [the nonvisual contract](NONVISUAL_PLAY.md).
+
 Built-in presets are `left`, `right`, `any`, `combined`, `shared`, `hazard` and `hold`.
 Slots can bind a semantic, actor ID or effector ID; up to four slots are supported. `sameActor` and
 `distinctActors` are independent constraints. Combined needs two different effectors from one actor;

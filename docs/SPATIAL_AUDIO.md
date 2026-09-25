@@ -1,5 +1,8 @@
 # Spatial sound themes
 
+For audible hand position, alignment and spoken controls, see [audio-led play](NONVISUAL_PLAY.md).
+Those optional guidance adapters are independent of decorative map sound themes.
+
 StateBeats separates three audio layers: music, gameplay guidance, and world effects.
 The Settings panel has independent toggles and saved volume controls for each. Guidance
 announces contact destinations, required hands, height and timing. World effects follow

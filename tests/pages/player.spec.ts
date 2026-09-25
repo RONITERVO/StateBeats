@@ -3,6 +3,34 @@ import { readFile } from 'node:fs/promises';
 import { Session } from '@statebeats/sdk';
 import { sampleMaps } from '@statebeats/content';
 
+test('audio-led tutorial plays and replays on the production subpath without importing assets', async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('./?map=finding-the-pulse');
+  await expect(page.locator('#watch')).toBeEnabled();
+  await page.locator('#audio-setup-open').click();
+  await page.locator('#audio-enable').click();
+  await page.locator('#audio-setup-close').click();
+  await page.locator('#settings').click();
+  await page.locator('#narration-enabled').uncheck();
+  await page.locator('#speed').selectOption('4');
+  await page.locator('#close-settings').click();
+  await page.locator('#watch').click();
+  await expect(page.locator('#spoken-menu')).toBeVisible({ timeout: 25000 });
+  await expect(page.locator('#spoken-status')).toContainText('9 hits, 0 missed');
+  await page.locator('#spoken-close').click();
+  const download = page.waitForEvent('download');
+  await page.locator('#export-replay').click();
+  const file = await download;
+  const replay = JSON.parse(await readFile((await file.path())!, 'utf8'));
+  expect((await Session.verifyReplay(replay)).verified).toBe(true);
+  await page.goto('./text.html?map=finding-the-pulse');
+  await expect(page.locator('#map')).toHaveValue('finding-the-pulse');
+  expect(errors).toEqual([]);
+});
+
 for (const showcase of [
   { id: 'event-horizon-master', title: 'Event Horizon', seconds: 160 },
   { id: 'ink-battle-between-the-lines', title: 'Ink-Battle', seconds: 200 },

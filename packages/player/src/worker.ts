@@ -7,6 +7,7 @@ const ctx = self as unknown as DedicatedWorkerGlobalScope;
 let session: Session | undefined,
   clock: RealtimeClock | undefined,
   generation = 0,
+  loadId = 0,
   seq = 0,
   auto = false;
 let latest: HandSample[] = [],
@@ -20,10 +21,11 @@ let framePending = false,
 ctx.onmessage = (event: MessageEvent<ToWorker>) => {
   chain = chain
     .then(() => handle(event.data))
-    .catch((error) => send({ type: 'error', message: String(error) }));
+    .catch((error) => send({ type: 'error', message: String(error), loadId }));
 };
 async function handle(message: ToWorker) {
   if (message.type === 'load') {
+    loadId = message.loadId;
     clock?.pause();
     session?.close();
     session = undefined;
@@ -89,7 +91,7 @@ async function handle(message: ToWorker) {
       );
     }
     lastInput = performance.timeOrigin + performance.now();
-    send({ type: 'ready', view: session.observe({ role: 'admin' }), generation });
+    send({ type: 'ready', view: session.observe({ role: 'admin' }), generation, loadId });
     return;
   }
   if (!session || !clock) return;
@@ -162,9 +164,10 @@ setInterval(() => {
       clock: status,
       metrics: { pumpMs, maxPumpMs, inputAgeMs: Math.max(0, age) },
       generation,
+      loadId,
     });
   } catch (error) {
     clock?.pause();
-    send({ type: 'error', message: String(error) });
+    send({ type: 'error', message: String(error), loadId });
   }
 }, 8);

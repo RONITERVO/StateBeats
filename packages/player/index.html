@@ -11,6 +11,7 @@
     />
   </head>
   <body>
+    <p id="spoken-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
     <div id="stage" aria-label="Spatial rhythm playfield"></div>
     <header class="masthead">
       <a class="brand" href="./"
@@ -37,6 +38,7 @@
           <button id="enter-vr" class="primary" disabled>Checking VR support…</button
           ><span id="vr-note">Standalone Quest 3 · no PC required to play</span>
         </div>
+        <button id="audio-setup-open" class="secondary">Audio-led setup</button>
       </section>
       <section class="library" aria-label="Sequence library">
         <div class="library-heading">
@@ -302,9 +304,61 @@
       </div>
       <button id="close-help" class="primary">Got it</button>
     </section>
+    <dialog id="audio-setup" class="dialog" aria-labelledby="audio-setup-title">
+      <h2 id="audio-setup-title">Find your way through sound.</h2>
+      <p>
+        Enable hand and alignment sounds, spoken controls and the audio-led tutorial. This enables
+        sound. Visuals remain available; hide targets separately in Settings.
+      </p>
+      <button id="audio-enable" class="primary">Enable audio-led guidance</button>
+      <button id="audio-learn" class="secondary">Read the sound and controller guide</button>
+      <p>
+        Left hand: lower tone. Right: higher. Pulsing targets are upcoming. Hand and target tones
+        harmonize when aligned. The timing cue and hit vibration confirm when contact counts.
+      </p>
+      <p>
+        In the spoken VR menu: left trigger previous, right trigger next, either grip activate. Grip
+        pauses play. Keyboard: Alt+M opens the spoken menu; arrows navigate, Enter activates, R
+        repeats.
+      </p>
+      <button id="audio-tutorial" class="secondary">Select Finding the pulse tutorial</button>
+      <button id="audio-measure" class="secondary">Use current headset height</button>
+      <p id="audio-calibration">
+        Set your height and room scale in Settings. Face your intended forward direction before
+        starting; starting or recentering a map captures that direction.
+      </p>
+      <button id="audio-enter-vr" class="secondary">Enter VR</button>
+      <button id="audio-setup-close" class="primary">Done</button>
+      <p id="speech-support">
+        Spoken output depends on your browser's speech service. Text controls and announcements
+        remain available. Blind-player and Quest listening validation are pending.
+      </p>
+      <a href="./text.html?map=finding-the-pulse">Open the tutorial in the text player</a>
+    </dialog>
+    <dialog id="spoken-menu" class="dialog" aria-labelledby="spoken-menu-title">
+      <h2 id="spoken-menu-title">Spoken controls</h2>
+      <p id="spoken-choice" tabindex="0"></p>
+      <button id="spoken-previous">Previous choice</button
+      ><button id="spoken-next">Next choice</button>
+      <button id="spoken-activate" class="primary">Activate choice</button
+      ><button id="spoken-repeat">Repeat</button>
+      <button id="spoken-close">Close menu</button>
+    </dialog>
     <section id="settings-panel" class="dialog" hidden>
       <div class="eyebrow">YOUR PRACTICE SPACE</div>
       <h2>Make it yours.</h2>
+      <label><input id="nonvisual-enabled" type="checkbox" />Hand and alignment guidance</label>
+      <label
+        ><input id="narration-enabled" type="checkbox" />Spoken controls and announcements</label
+      >
+      <label
+        >Hand beacons<select id="hand-beacons">
+          <option value="active">When a target is assigned</option>
+          <option value="always">All tracked hands</option>
+          <option value="off">Off · target tones only</option>
+        </select></label
+      >
+      <p id="hand-guidance-status" aria-live="off"></p>
       <label
         >Your height (metres)<input
           id="player-height"

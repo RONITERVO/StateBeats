@@ -114,6 +114,8 @@ export interface Observation {
     label?: string;
     appearance?: string;
     sound?: MapDefinition['notes'][number]['sound'];
+    policyId?: string;
+    participants?: { slot: number; actorId: string; effectorId: string }[];
     presentation?: TargetPresentation;
     orientation: [number, number, number, number];
     shape: EntitySpec['shape'];
@@ -523,6 +525,8 @@ export class Session {
     const presentation = this.presenter.sample(e, this.tick, resolution);
     return {
       id: e.spec.id,
+      policyId: e.spec.policy,
+      participants: e.hits.map(({ slot, actorId, effectorId }) => ({ slot, actorId, effectorId })),
       kind: e.spec.kind,
       position: resolution
         ? add(

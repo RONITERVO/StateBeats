@@ -13,3 +13,4 @@ export * from './turns.js';
 export * from './presentation-schema.js';
 export * from './presentation.js';
 export * from './spatial-audio.js';
+export * from './hand-guidance.js';

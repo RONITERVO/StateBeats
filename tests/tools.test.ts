@@ -44,6 +44,7 @@ const requests: ServiceRequest[] = [
   { op: 'observe', sessionId: 'parity' },
   { op: 'perception.describe', sessionId: 'parity', args: { maxTargets: 3 } },
   { op: 'perception.audio', sessionId: 'parity', args: { maxSources: 3 } },
+  { op: 'perception.hands', sessionId: 'parity', args: { lookaheadSeconds: 3 } },
   {
     op: 'music.generate',
     requestId: 'music-fixture',

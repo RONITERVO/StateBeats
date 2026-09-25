@@ -10,6 +10,7 @@ export interface HandSample {
 export type ToWorker =
   | {
       type: 'load';
+      loadId: number;
       mapId: string;
       map?: MapDefinition;
       autoplay: boolean;
@@ -31,7 +32,8 @@ export type FromWorker =
       clock: ClockStatus;
       metrics: { pumpMs: number; maxPumpMs: number; inputAgeMs: number };
       generation: number;
+      loadId: number;
     }
-  | { type: 'ready'; view: Observation; generation: number }
+  | { type: 'ready'; view: Observation; generation: number; loadId: number }
   | { type: 'replay'; replay: Replay; requestId: number }
-  | { type: 'error'; message: string };
+  | { type: 'error'; message: string; loadId: number };

@@ -4,6 +4,8 @@ import { sunlitJourney } from './journey.js';
 import { choreographyJourney } from './choreography.js';
 import { eventHorizonMaster } from './event-horizon.js';
 import { inkBattleMap } from '@statebeats/ink-battle';
+import { audioTutorial } from './audio-tutorial.js';
+export { audioTutorial, AUDIO_TUTORIAL_ID } from './audio-tutorial.js';
 const p = (azimuth: number, radius = 0.8, elevation = 0) => ({
   azimuth,
   elevation,
@@ -172,6 +174,7 @@ const raw = [
   choreographyJourney(),
   eventHorizonMaster(),
   inkBattleMap(),
+  audioTutorial(),
 ];
 export const sampleMaps: MapDefinition[] = raw.map((map) => compile(map).map);
 export function sampleMap(id: string): MapDefinition {

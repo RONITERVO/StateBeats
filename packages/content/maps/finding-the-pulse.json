@@ -1,0 +1,509 @@
+{
+  "version": 1,
+  "id": "finding-the-pulse",
+  "title": "Finding the pulse — Audio-led tutorial",
+  "description": "A one-minute introduction to audible hands and alignment with a gentle procedural musical pulse. Sparse left, right, either-hand, two-hand and slow hold targets. Face forward; no turns or obstacles. Use Audio-led setup to learn the sounds. Blind-player and Quest listening validation remain pending.",
+  "seed": 1,
+  "tickRate": 120,
+  "offsetSeconds": 0,
+  "durationBeats": 96,
+  "tempo": [
+    {
+      "beat": 0,
+      "bpm": 96,
+      "meter": [
+        4,
+        4
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "id": "listen-0",
+      "beat": 16,
+      "preset": "left",
+      "position": [
+        -0.28,
+        1.25,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "none",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "left hand — reach the steady sound",
+      "earlyMs": 250,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 250,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "listen-1",
+      "beat": 24,
+      "preset": "left",
+      "position": [
+        -0.28,
+        1.37,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "none",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "left hand — reach the steady sound",
+      "earlyMs": 250,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 250,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "listen-2",
+      "beat": 32,
+      "preset": "right",
+      "position": [
+        0.28,
+        1.25,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "none",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "right hand — reach the steady sound",
+      "earlyMs": 250,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 250,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "listen-3",
+      "beat": 40,
+      "preset": "right",
+      "position": [
+        0.28,
+        1.37,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "none",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "right hand — reach the steady sound",
+      "earlyMs": 250,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 250,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "listen-4",
+      "beat": 48,
+      "preset": "any",
+      "position": [
+        0,
+        1.25,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "none",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "Either hand — reach the steady sound",
+      "earlyMs": 250,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 250,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "listen-5",
+      "beat": 56,
+      "preset": "any",
+      "position": [
+        0,
+        1.37,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "none",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "Either hand — reach the steady sound",
+      "earlyMs": 250,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 250,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "listen-6",
+      "beat": 64,
+      "preset": "combined",
+      "position": [
+        0,
+        1.25,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "none",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "Bring both hands together in front",
+      "earlyMs": 250,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 250,
+      "holdMs": 500,
+      "breakMs": 50,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "listen-hold-left",
+      "beat": 76,
+      "preset": "hold",
+      "position": [
+        -0.28,
+        1.25,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [
+        {
+          "beat": 76,
+          "position": [
+            -0.28,
+            1.25,
+            -0.4
+          ]
+        },
+        {
+          "beat": 80,
+          "position": [
+            -0.5040000000000001,
+            1.55,
+            -0.4
+          ]
+        }
+      ],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "window",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "left hand — follow the sound slowly, keeping the smooth alignment tone",
+      "slots": [
+        {
+          "semantic": "left"
+        }
+      ],
+      "earlyMs": 0,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 100,
+      "durationBeats": 5,
+      "holdMs": 2500,
+      "breakMs": 180,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    },
+    {
+      "id": "listen-hold-right",
+      "beat": 88,
+      "preset": "hold",
+      "position": [
+        0.28,
+        1.25,
+        -0.4
+      ],
+      "shape": {
+        "kind": "sphere",
+        "radius": 0.22
+      },
+      "motion": [
+        {
+          "beat": 88,
+          "position": [
+            0.28,
+            1.25,
+            -0.4
+          ]
+        },
+        {
+          "beat": 92,
+          "position": [
+            0.5040000000000001,
+            1.55,
+            -0.4
+          ]
+        }
+      ],
+      "anchor": "player",
+      "presentation": {
+        "version": 1,
+        "presence": "fade",
+        "appearMs": 160,
+        "releaseMs": 240,
+        "guide": "window",
+        "ahead": {
+          "ms": 350
+        },
+        "behind": {
+          "ms": 180
+        },
+        "readiness": {
+          "preview": {
+            "beats": 5
+          },
+          "prepare": {
+            "beats": 5
+          }
+        }
+      },
+      "label": "right hand — follow the sound slowly, keeping the smooth alignment tone",
+      "slots": [
+        {
+          "semantic": "right"
+        }
+      ],
+      "earlyMs": 0,
+      "lateMs": 350,
+      "leadMs": 3000,
+      "linkMs": 100,
+      "durationBeats": 5,
+      "holdMs": 2500,
+      "breakMs": 180,
+      "minSpeed": 0,
+      "policy": "builtin/contact",
+      "config": null,
+      "value": 100
+    }
+  ],
+  "playerProfile": {
+    "height": 1.65,
+    "roomScale": 1
+  },
+  "groups": [],
+  "profile": {
+    "hazardPenalty": 25,
+    "hazardIntervalMs": 100
+  }
+}

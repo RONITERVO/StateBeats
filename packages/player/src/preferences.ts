@@ -3,6 +3,9 @@ export interface PlayerPreferences {
   music: boolean;
   cues: boolean;
   effects: boolean;
+  nonvisual: boolean;
+  narration: boolean;
+  handBeacons: 'off' | 'active' | 'always';
   musicVolume: number;
   guidanceVolume: number;
   effectsVolume: number;
@@ -23,6 +26,9 @@ export function readPreferences(): PlayerPreferences {
     music: true,
     cues: true,
     effects: true,
+    nonvisual: false,
+    narration: false,
+    handBeacons: 'active',
     musicVolume: 1,
     guidanceVolume: 0.35,
     effectsVolume: 0.75,
@@ -44,6 +50,8 @@ export function readPreferences(): PlayerPreferences {
       'music',
       'cues',
       'effects',
+      'nonvisual',
+      'narration',
       'captions',
       'reducedMotion',
       'highContrast',
@@ -52,6 +60,8 @@ export function readPreferences(): PlayerPreferences {
     ] as const)
       if (typeof stored[name] === 'boolean') defaults[name] = stored[name];
     if ([0.5, 1, 1.5, 2, 4].includes(stored.speed)) defaults.speed = stored.speed;
+    if (['off', 'active', 'always'].includes(stored.handBeacons))
+      defaults.handBeacons = stored.handBeacons;
     if (
       typeof stored.offsetMs === 'number' &&
       Number.isFinite(stored.offsetMs) &&

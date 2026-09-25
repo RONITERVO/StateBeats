@@ -1,5 +1,85 @@
-import { Session } from '@statebeats/sdk';
+import { Session, standardActor } from '@statebeats/sdk';
 import { RhythmAudio } from './audio.js';
+
+/** Real DSP for hand/target pairs, independent muting and cleanup, without mocking Web Audio. */
+export async function handAudioConformance() {
+  const results = [];
+  for (const mode of [
+    'left',
+    'right',
+    'rotated',
+    'muted',
+    'master-muted',
+    'paused',
+    'resume',
+    'lost-tracking',
+    'targets-only',
+    'both',
+  ] as const) {
+    const context = new OfflineAudioContext(2, 24000, 48000);
+    const audio = new RhythmAudio(() => context);
+    audio.nonvisualEnabled = true;
+    audio.musicEnabled = audio.effectsEnabled = false;
+    audio.setMix({ guidance: mode === 'muted' ? 0 : 1 });
+    audio.enabled = mode !== 'master-muted';
+    audio.handBeacons = mode === 'targets-only' ? 'off' : 'active';
+    const x = mode === 'right' ? 2 : -2;
+    const s = await Session.create(
+      {
+        version: 1,
+        id: 'hand-audio',
+        title: 'Hand audio',
+        durationBeats: 12,
+        tempo: [{ beat: 0, bpm: 120 }],
+        notes: [
+          {
+            id: 'target',
+            preset: mode === 'both' ? 'combined' : 'left',
+            beat: 4,
+            position: [x, 1.65, -1],
+            leadMs: 3000,
+          },
+        ],
+      },
+      [standardActor()],
+    );
+    s.submit(
+      { role: 'admin' },
+      'hands',
+      ['left', 'right'].map((hand) => ({
+        id: hand,
+        tick: 1,
+        type: 'pose' as const,
+        actorId: 'player',
+        effectorId: hand,
+        position: [x, 1.65, -1],
+        tracked: mode !== 'lost-tracking',
+        active: true,
+      })),
+    );
+    s.advance(60); // 1.5 seconds before hit: isolates the continuous guidance from timing chimes.
+    await audio.unlock();
+    audio.pose([0, 1.65, 0], mode === 'rotated' ? [0, 0, 1] : [0, 0, -1]);
+    audio.update(s.observe({ role: 'admin' }), [], true);
+    const initial = audio.activeHandVoices;
+    if (mode === 'paused' || mode === 'resume')
+      audio.update(s.observe({ role: 'admin' }), [], false);
+    if (mode === 'resume') {
+      audio.rebase();
+      audio.update(s.observe({ role: 'admin' }), [], true);
+    }
+    const later = audio.activeHandVoices;
+    const buffer = await context.startRendering();
+    const energy = [0, 1].map((channel) =>
+      buffer.getChannelData(channel).reduce((sum, value) => sum + value * value, 0),
+    );
+    audio.stop();
+    results.push({ mode, initial, later, energy, stopped: audio.activeHandVoices });
+    s.close();
+    await audio.dispose();
+  }
+  return results;
+}
 
 /** Actual offline DSP, including movement, independent layers and transport lifecycle. */
 export async function spatialAudioConformance() {

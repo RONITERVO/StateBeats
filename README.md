@@ -54,6 +54,12 @@ audio or real-time input. Read the scene, choose a hand and target, advance expl
 save the same deterministic replay. It supports keyboard and screen-reader navigation and
 clearly identifies its assisted manual timing mode.
 
+**Audio-led play:** open **Audio-led setup** and select **Finding the pulse** for audible hands,
+alignment tones, hand-specific hold vibrations and spoken controller menus. Its one-minute
+tutorial uses the same map and hit rules as visual/text play. See the
+[nonvisual play contract and controls](docs/NONVISUAL_PLAY.md). Physical Quest listening and
+blind-player usability validation are still pending.
+
 Under **Your music & community maps**, select local audio, enter its BPM, and generate a
 map of musical movement phrases. **Shape your movement** controls beat offset, reach, arrival
 style, facing range, rails, paired notes, crossovers and optional ducking. Rebuild from the stored
@@ -130,7 +136,7 @@ host operation; JSON maps cannot load or execute code.
 |---|---|
 | `@statebeats/core` | Pure next-tick transition, relative swept contact, requirements and policy contracts |
 | `@statebeats/sdk` | Validation, compiler/builder, sessions, capabilities, clocks, replay and service operations |
-| `@statebeats/content` | Nine catalog sequences, including Event Horizon and the Ink-Battle collaboration |
+| `@statebeats/content` | Ten catalog sequences, including Event Horizon, Ink-Battle and the audio-led tutorial |
 | `@statebeats/ink-battle` | Apache-2.0 battle recordings, original sketchbook art and rhythm adaptation |
 | `@statebeats/adapters-node` | Atomic filesystem map/replay stores with opaque filenames |
 | `@statebeats/cli` | SDK service over commands or persistent JSON lines |

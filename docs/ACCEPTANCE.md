@@ -4,6 +4,55 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Player ownership and PR #8 review, 2026-09-25
+
+Authoring, accessibility and device input now own their state in separate adapters. A pure
+application playback state machine replaces independent transport flags; load IDs reject
+obsolete worker/GPU completions and errors. Pause intent survives soundtrack, worker and
+scene preparation. Replay exports retain their recording's identity after Home.
+
+The saved-zero guidance-volume finding was reproduced and fixed. Both zero and nonzero saved
+levels are checked through the actual setup UI. The missing-controller finding's premise did
+not match the existing adapter, which already supplies two samples with explicit untracked
+missing hands. Regression tests verify that normalization and an explicit both-hands/head
+tracking guard, including grace-period expiry and recovery.
+
+`npm run check` passed **175 tests in 26 files**, strict types, formatting, boundaries and
+production build. The **42-case browser suite** passed across Chromium, Firefox and WebKit;
+the final **nine-case player/accessibility regression run** also covers pausing during a held
+soundtrack fetch and completing an export after Home (**43 distinct browser cases overall**).
+All **five production Pages cases** passed, including both showcases, the audio-led tutorial
+and authoring under `/StateBeats/`. Seven packed npm artifacts installed and passed SDK/CLI
+smoke checks. See [player architecture](PLAYER_ARCHITECTURE.md) for ownership and lifecycle
+contracts. Physical headset and blind-player validation remain pending as described below.
+
+## Shared hand guidance and audio-led tutorial, 2026-09-25
+
+Added the pure `describeHandGuidance` / `perception.hands` contract, endpoint geometry and
+actual slot participants; a bounded hand/target sound adapter; hand-specific haptics; spoken
+controller/keyboard menus and calibration; and the ordinary nine-target Finding the pulse map.
+Text play follows moving holds by submitting explicit assisted poses, with normal tick evaluation.
+
+`npm run check` passed **165 tests in 25 files**, strict types, formatting, core boundaries
+and the production build. The final browser-speech failure regression also passed in the
+**10-case hand-guidance suite** (166 distinct unit/integration cases total); types, lint and
+build passed again after that change. All **five production Pages tests** passed, including
+tutorial completion with nine hits, zero misses and a verified replay, plus both existing
+showcases and authoring under `/StateBeats/`. Seven packed npm artifacts installed and passed
+their smoke checks, including the new SDK projection and tutorial catalog entry.
+The complete **39-case browser suite** passed across Chromium, Firefox and WebKit (Web Audio
+rendering is exercised in Chromium/Firefox on Windows).
+
+Real offline audio checks cover left/right positions, head rotation, four-voice capacity,
+tracking loss, independent mute and pause/resume. The SDK geometry tests compare alignment
+with actual engine scoring for spheres, capsules and rotated boxes. Keyboard setup and
+manual text completion use the public UI. The setup screen was visually inspected.
+
+See [nonvisual play](NONVISUAL_PLAY.md) for supported mechanics and controls. Physical Quest
+speech, controller/haptic behavior and spatial listening remain untested in this change;
+blind-player usability validation is pending. Automated signal and replay checks do not
+establish that dense visual maps are playable blind.
+
 ## Readiness review fixes, 2026-09-25
 
 All four PR #5 findings were reproduced with failing tests. Text output now announces each

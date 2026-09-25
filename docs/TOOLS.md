@@ -79,6 +79,7 @@ trusted local launch configuration, not network authentication.
 | `clock.advance` | `ticks`; returns from/to tick, event cursor and ended flag (delegated time/admin) |
 | `perception.describe` | Optional listener `position`, `orientation`, `maxTargets`; human-readable semantic cues without advancing time |
 | `perception.audio` | Optional `maxSources` (1–32, default 8); current moving sound sources and theme without advancing time |
+| `perception.hands` | Optional `actorId` (default player), `lookaheadSeconds` (0–10, default 3); hand/target geometry, readiness, alignment and unsupported mechanics without advancing time |
 | `observe` | Current role-filtered observation, does not advance |
 | `events.since` | `since` cursor, optional `limit` 1–4,096; returns events, overflow and next cursor |
 | `snapshot.save` | Complete checkpoint including future input/retries (admin) |
