@@ -2,7 +2,16 @@
 // @ts-expect-error The shared .mjs fixture is intentionally executable without TypeScript.
 import { conformance } from '../../../examples/conformance.mjs';
 import { RhythmAudio } from './audio.js';
-import { spatialAudioConformance } from './audio-conformance.js';
+import { spatialAudioConformance, handAudioConformance } from './audio-conformance.js';
+
+document.querySelector('#run-hands')!.addEventListener('click', async () => {
+  const output = document.querySelector('#hands-result')!;
+  try {
+    output.textContent = JSON.stringify(await handAudioConformance());
+  } catch (error) {
+    output.textContent = String(error);
+  }
+});
 import { Session, standardActor } from '@statebeats/sdk';
 document.querySelector('#run-spatial')!.addEventListener('click', async () => {
   const output = document.querySelector('#spatial-result')!;

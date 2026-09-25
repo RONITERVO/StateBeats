@@ -4,6 +4,33 @@ StateBeats 0.3.0 is a development release candidate built on the verified 0.2.0 
 deferred Quest 3 testing. Device verification remains necessary for hardware performance,
 comfort or accessibility usability claims.
 
+## Shared hand guidance and audio-led tutorial, 2026-09-25
+
+Added the pure `describeHandGuidance` / `perception.hands` contract, endpoint geometry and
+actual slot participants; a bounded hand/target sound adapter; hand-specific haptics; spoken
+controller/keyboard menus and calibration; and the ordinary nine-target Finding the pulse map.
+Text play follows moving holds by submitting explicit assisted poses, with normal tick evaluation.
+
+`npm run check` passed **165 tests in 25 files**, strict types, formatting, core boundaries
+and the production build. The final browser-speech failure regression also passed in the
+**10-case hand-guidance suite** (166 distinct unit/integration cases total); types, lint and
+build passed again after that change. All **five production Pages tests** passed, including
+tutorial completion with nine hits, zero misses and a verified replay, plus both existing
+showcases and authoring under `/StateBeats/`. Seven packed npm artifacts installed and passed
+their smoke checks, including the new SDK projection and tutorial catalog entry.
+The complete **39-case browser suite** passed across Chromium, Firefox and WebKit (Web Audio
+rendering is exercised in Chromium/Firefox on Windows).
+
+Real offline audio checks cover left/right positions, head rotation, four-voice capacity,
+tracking loss, independent mute and pause/resume. The SDK geometry tests compare alignment
+with actual engine scoring for spheres, capsules and rotated boxes. Keyboard setup and
+manual text completion use the public UI. The setup screen was visually inspected.
+
+See [nonvisual play](NONVISUAL_PLAY.md) for supported mechanics and controls. Physical Quest
+speech, controller/haptic behavior and spatial listening remain untested in this change;
+blind-player usability validation is pending. Automated signal and replay checks do not
+establish that dense visual maps are playable blind.
+
 ## Readiness review fixes, 2026-09-25
 
 All four PR #5 findings were reproduced with failing tests. Text output now announces each

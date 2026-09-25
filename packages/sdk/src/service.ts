@@ -13,6 +13,7 @@ import { EngineError, parsed, actorSchema, idSchema } from './schema.js';
 import type { MapDefinition, MapInput } from './schema.js';
 import type { SceneInput, MusicTimeline, AudioThemeInput } from './schema.js';
 import { sampleSpatialAudio } from './spatial-audio.js';
+import { describeHandGuidance } from './hand-guidance.js';
 import { generateMusicMap } from './music.js';
 import { generateChoreography, inspectChoreography } from './choreography.js';
 import { fitMapToPlayer } from './player-profile.js';
@@ -77,6 +78,7 @@ export const operations = [
   'observe',
   'perception.describe',
   'perception.audio',
+  'perception.hands',
   'events.since',
   'snapshot.save',
   'snapshot.restore',
@@ -346,6 +348,11 @@ export class EngineService {
         return sampleSpatialAudio(
           get().observe(cap),
           a as Parameters<typeof sampleSpatialAudio>[1],
+        );
+      case 'perception.hands':
+        return describeHandGuidance(
+          get().observe(cap),
+          a as Parameters<typeof describeHandGuidance>[1],
         );
       case 'perception.describe':
         return describeObservation(

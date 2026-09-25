@@ -30,7 +30,7 @@ await writeFile(
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, generateChoreography, inspectChoreography, planTurns, createFacingSampler, createNotePresenter, PRESENTATION_VERSION } from '@statebeats/sdk';
+import { Session, standardActor, analyzePcm, sampleMusic, describeObservation, describeHandGuidance, generateChoreography, inspectChoreography, planTurns, createFacingSampler, createNotePresenter, PRESENTATION_VERSION } from '@statebeats/sdk';
 import { sampleMap, eventHorizonSoundtrack } from '@statebeats/content';
 import { inkBattleMap, inkSoundtrack, sampleInkBattle } from '@statebeats/ink-battle';
 import { Session as Battle } from '@statebeats/ink-battle/upstream/src/sdk/session.js';
@@ -48,6 +48,8 @@ assert.equal(sampleMap('event-horizon-master').music.source.sha256, eventHorizon
 const session = await Session.create(sampleMap('sunlit-journey'), [standardActor()]);
 session.advance(240);
 const view = session.observe({role:'admin'});
+assert.equal(describeHandGuidance(view).version, 1);
+assert.equal(sampleMap('finding-the-pulse').notes.length, 9);
 assert.equal(view.scene.objects[0].id, 'sun');
 assert.ok(describeObservation(view).targets.length > 0);
 assert.equal(view.presentationVersion, PRESENTATION_VERSION);

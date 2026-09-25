@@ -2,13 +2,14 @@ import './style.css';
 import * as THREE from 'three';
 import { controllerSamples } from './xr-input.js';
 import type { TrackedController } from './xr-input.js';
-import { sampleMaps, sampleMap, EVENT_HORIZON_ID } from '@statebeats/content';
+import { sampleMaps, sampleMap, EVENT_HORIZON_ID, AUDIO_TUTORIAL_ID } from '@statebeats/content';
 import { INK_BATTLE_ID } from '@statebeats/ink-battle';
 import {
   beatToTick,
   beatValue,
   compile,
   describeObservation,
+  describeHandGuidance,
   fitMapToPlayer,
   musicGenerationSchema,
   CHOREOGRAPHY_VERSION,
@@ -29,6 +30,10 @@ import { RhythmAudio } from './audio.js';
 import { readPreferences, storePreferences } from './preferences.js';
 import { assistedTargetPoint } from './desktop-input.js';
 import { bundledSong, bundledSoundtracks } from './soundtracks.js';
+import { handGuidanceText } from './hand-audio.js';
+import type { HandBeaconMode } from './hand-audio.js';
+import { HapticPlanner } from './haptics.js';
+import { Narrator, SpokenMenu, AUDIO_LESSON } from './spoken-controls.js';
 
 const el = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const button = (id: string, fn: () => void) => el(id).addEventListener('click', fn);
@@ -36,6 +41,125 @@ const orbit = new OrbitScene(el('stage')),
   audio = new RhythmAudio(),
   worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' });
 const send = (message: ToWorker) => worker.postMessage(message);
+const narrator = new Narrator(el('spoken-status'));
+const haptics = new HapticPlanner();
+const spoken = new SpokenMenu((text) => {
+  el('spoken-choice').textContent = text;
+  announce(text);
+});
+function announce(text: string) {
+  narrator.muted = !audio.enabled;
+  narrator.speak(text);
+}
+function closeAudioDialogs() {
+  for (const id of ['audio-setup', 'spoken-menu']) el<HTMLDialogElement>(id).close();
+}
+function stopHaptics() {
+  haptics.reset();
+  for (const source of xrSources)
+    void source?.gamepad?.hapticActuators?.[0]?.pulse(0, 0).catch(() => {});
+}
+function measureHeight() {
+  if (!orbit.renderer.xr.isPresenting) {
+    announce(
+      'Enter immersive VR, stand upright, then choose measure height. You can also enter height in Settings.',
+    );
+    return;
+  }
+  const height = headPose().position.y;
+  if (!Number.isFinite(height) || height < 1 || height > 2.3) {
+    announce('Headset floor height is unavailable. Enter your height in Settings.');
+    return;
+  }
+  personalHeight = Math.round(height * 100) / 100;
+  el<HTMLInputElement>('player-height').value = String(personalHeight);
+  savePreferences();
+  announce(
+    `Headset eye height is ${Math.round(height * 100)} centimetres. This sets target height on your next start. Face forward when starting to set the centre.`,
+  );
+}
+function refreshSpokenMenu() {
+  spoken.set([
+    {
+      id: 'play',
+      label:
+        playing && !view?.finished && selected === activeMap
+          ? 'Resume sequence'
+          : `Play ${mapFor(selected).title}`,
+      run: () => {
+        if (playing && !view?.finished && selected === activeMap) resume();
+        else void start(false);
+      },
+    },
+    {
+      id: 'restart',
+      label: 'Face forward, recenter and restart selected sequence',
+      run: () => void start(false),
+    },
+    { id: 'height', label: 'Measure headset eye height for target height', run: measureHeight },
+    {
+      id: 'scale-down',
+      label: `Smaller reach. Room scale ${roomScale.toFixed(1)}`,
+      run: () => adjustReach(-0.1),
+    },
+    {
+      id: 'scale-up',
+      label: `Larger reach. Room scale ${roomScale.toFixed(1)}`,
+      run: () => adjustReach(0.1),
+    },
+    { id: 'learn', label: 'Explain sounds and controls', run: () => announce(AUDIO_LESSON) },
+    ...maps().map((map) => ({
+      id: map.id,
+      label: `Select ${map.title}`,
+      run: () => {
+        selectMap(map.id);
+        refreshSpokenMenu();
+        announce(
+          `${map.title} selected. ${map.id === AUDIO_TUTORIAL_ID ? 'Sparse targets, no turns or hazards.' : 'This map was not designed or tested for nonvisual play.'} Choose Play to start.`,
+        );
+      },
+    })),
+    { id: 'home', label: 'Return to library', run: home },
+    {
+      id: 'exit',
+      label: 'Exit immersive VR',
+      run: () => {
+        void orbit.renderer.xr.getSession()?.end();
+      },
+    },
+  ]);
+}
+function adjustReach(delta: number) {
+  roomScale = Math.round(Math.max(0.5, Math.min(1.75, roomScale + delta)) * 100) / 100;
+  el<HTMLInputElement>('room-scale').value = String(roomScale);
+  savePreferences();
+  refreshSpokenMenu();
+  drawMenu();
+  announce(`Room scale ${roomScale.toFixed(1)}. Applies on your next start.`);
+}
+function showSpokenMenu() {
+  closeAudioDialogs();
+  refreshSpokenMenu();
+  if (orbit.renderer.xr.isPresenting) {
+    menu.visible = true;
+    placeMenu();
+  } else {
+    el<HTMLDialogElement>('spoken-menu').showModal();
+    el('spoken-choice').focus();
+  }
+  spoken.read();
+}
+function openSpokenMenu() {
+  if (running) {
+    pause();
+    if (audio.nonvisualEnabled) return;
+  }
+  showSpokenMenu();
+}
+function moveSpoken(direction: number) {
+  spoken.move(direction);
+  drawMenu();
+}
 let importedMap: MapDefinition | undefined;
 let generationReport: ChoreographyReport | undefined;
 let generationBaseline: MusicGenerationOptions = {};
@@ -112,7 +236,7 @@ function addMapCard(map: MapDefinition, index: number) {
   card.querySelector('.map-art')!.textContent = symbols[index] ?? '♫';
   card.querySelector('.map-title')!.textContent = map.title;
   card.querySelector('.map-meta')!.textContent =
-    `${map.id === INK_BATTLE_ID ? 'INK-BATTLE · SIX AGES · ORIGINAL SOUNDTRACK' : map.id === EVENT_HORIZON_ID ? 'MASTER · ORIGINAL SOUNDTRACK' : index === 0 ? 'TUTORIAL' : index === 2 ? 'COOPERATIVE' : index >= 4 ? 'LIVING SCENE' : '360° SEQUENCE'} · ${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}`;
+    `${map.id === AUDIO_TUTORIAL_ID ? 'AUDIO-LED TUTORIAL · GENTLE PULSE' : map.id === INK_BATTLE_ID ? 'INK-BATTLE · SIX AGES · ORIGINAL SOUNDTRACK' : map.id === EVENT_HORIZON_ID ? 'MASTER · ORIGINAL SOUNDTRACK' : index === 0 ? 'TUTORIAL' : index === 2 ? 'COOPERATIVE' : index >= 4 ? 'LIVING SCENE' : '360° SEQUENCE'} · ${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')}`;
   card.onclick = () => selectMap(map.id);
   el('maps').append(card);
 }
@@ -197,6 +321,18 @@ function drawMenu() {
     c.fillText(text, x + 24, y + h / 2 + 10);
     menuRects.push({ x, y, w, h, action });
   }
+  if (audio.nonvisualEnabled) {
+    row(spoken.focused?.label ?? 'Open spoken choices', 230, () => spoken.activate(), true);
+    row('Previous choice · left trigger', 360, () => moveSpoken(-1));
+    row('Next choice · right trigger', 470, () => moveSpoken(1));
+    row('Choose · either grip', 580, () => spoken.activate());
+    row('Repeat spoken choice', 690, () => spoken.read());
+    c.fillStyle = '#9cafc5';
+    c.font = '23px Segoe UI';
+    c.fillText('No pointing required. Grip pauses during play.', 56, 920);
+    menuTexture.needsUpdate = true;
+    return;
+  }
   const rows = maps(),
     rowHeight = Math.min(74, 364 / rows.length);
   rows.forEach((m, i) =>
@@ -227,6 +363,8 @@ function drawMenu() {
     728,
     () => {
       audio.enabled = !audio.enabled;
+      narrator.muted = !audio.enabled;
+      if (!audio.enabled) narrator.stop();
       audio.rebase();
       void prepareAudio();
       el('sound').textContent = audio.enabled ? 'Sound on' : 'Sound off';
@@ -299,6 +437,9 @@ async function start(bot: boolean) {
   const request = ++startSequence;
   const mapId = selected;
   if (running) pause();
+  closeAudioDialogs();
+  narrator.stop();
+  stopHaptics();
   audio.reset();
   let map: MapDefinition;
   try {
@@ -367,17 +508,27 @@ function pause(stalled = false) {
   running = false;
   send({ type: 'pause' });
   audio.stop();
+  stopHaptics();
   el('pause-title').textContent = stalled ? 'Let’s resync.' : 'Paused.';
   el('pause-description').textContent = stalled
     ? 'Tracking or timing was interrupted. Resume when you are ready; the soundtrack will restart from this simulation tick.'
     : 'The sequence and its soundtrack are paused together.';
-  if (orbit.renderer.xr.isPresenting) {
+  if (audio.nonvisualEnabled) {
+    if (!orbit.renderer.xr.isPresenting) el('pause-panel').hidden = false;
+    showSpokenMenu();
+    announce(
+      `${stalled ? 'Tracking or timing interrupted.' : 'Paused.'} ${spoken.focused?.label}. Left trigger previous, right trigger next, either grip chooses.`,
+    );
+  } else if (orbit.renderer.xr.isPresenting) {
     menu.visible = true;
     placeMenu();
   } else el('pause-panel').hidden = false;
 }
 function resume() {
   if (!playing) return;
+  closeAudioDialogs();
+  narrator.stop();
+  stopHaptics();
   startOnReady = true;
   void prepareAudio();
   audio.rebase();
@@ -387,6 +538,9 @@ function resume() {
   if (running) send({ type: 'start' });
 }
 function home() {
+  closeAudioDialogs();
+  narrator.stop();
+  stopHaptics();
   startSequence++;
   startOnReady = false;
   loadStarting = false;
@@ -411,6 +565,10 @@ function home() {
   cueMesh.visible = false;
   if (orbit.renderer.xr.isPresenting) {
     menu.visible = true;
+    if (audio.nonvisualEnabled) {
+      refreshSpokenMenu();
+      spoken.read();
+    }
     placeMenu();
   } else {
     orbit.camera.position.set(0, 1.6, 3.4);
@@ -420,13 +578,20 @@ function home() {
 function showResults() {
   running = false;
   audio.stop();
+  stopHaptics();
   const s = view?.scores.find((s) => s.actorId === 'player');
   if (!s) return;
   el('result-stats').innerHTML =
     `<div><strong>${s.points.toLocaleString()}</strong><small>POINTS</small></div><div><strong>${s.bestCombo}</strong><small>BEST COMBO</small></div><div><strong>${s.hits}</strong><small>HITS</small></div>`;
   el('result-detail').textContent =
     `${s.misses} missed · ${s.hazards} hazard contacts. ${autoplay ? 'Played by the scripted actor through the same SDK.' : 'Every result came from the simulation engine.'}`;
-  if (orbit.renderer.xr.isPresenting) {
+  if (!orbit.renderer.xr.isPresenting) el('results').hidden = false;
+  if (audio.nonvisualEnabled) {
+    showSpokenMenu();
+    announce(
+      `Sequence complete. ${s.points} points, ${s.hits} hits, ${s.misses} missed. ${spoken.focused?.label}.`,
+    );
+  } else if (orbit.renderer.xr.isPresenting) {
     menu.visible = true;
     placeMenu();
   } else el('results').hidden = false;
@@ -437,6 +602,8 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
     notify(message.message);
     running = false;
     audio.stop();
+    stopHaptics();
+    announce(message.message);
     return;
   }
   if (message.type === 'replay') {
@@ -509,14 +676,24 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
     el('score').textContent = (s?.points ?? 0).toLocaleString();
     el('combo').textContent = String(s?.combo ?? 0);
     el('progress').style.width = `${Math.min(100, (view.tick / view.durationTicks) * 100)}%`;
-    audio.update(view, message.events, running && message.clock.phase === 'running');
+    const live = running && message.clock.phase === 'running';
+    const hands = audio.nonvisualEnabled ? describeHandGuidance(view) : undefined;
+    audio.update(view, message.events, live, hands);
+    el('hand-guidance-status').textContent = hands
+      ? hands.hands.map(handGuidanceText).join('. ') +
+        (hands.unsupported.length ? '. Some mechanics need a custom guidance adapter.' : '')
+      : '';
+    for (const cue of haptics.update(hands, message.events, view.tickRate, live && !autoplay)) {
+      const actuator = xrSources.find((source) => source?.handedness === cue.hand)?.gamepad
+        ?.hapticActuators?.[0];
+      void actuator?.pulse(cue.intensity, cue.milliseconds).catch(() => {});
+    }
     for (const e of message.events) {
       if (e.type === 'interaction.hit') {
         const data = e.data as Record<string, unknown>;
         el('judgement').textContent = String(data.grade).toUpperCase();
         el('judgement').style.color = '#72f4df';
         lastFeedback = performance.now();
-        haptic(e.actorId);
       } else if (e.type === 'interaction.missed') {
         el('judgement').textContent = 'MISSED';
         el('judgement').style.color = '#9caabe';
@@ -560,14 +737,6 @@ worker.onmessage = (event: MessageEvent<FromWorker>) => {
       `render ${(1000 / frameMs).toFixed(0)} fps · ${frameMs.toFixed(1)} ms\npump ${message.metrics.pumpMs.toFixed(2)} ms · max ${message.metrics.maxPumpMs.toFixed(2)} ms\ninput age ${message.metrics.inputAgeMs.toFixed(1)} ms · tick ${view.tick}\n${view.entities.length} live entities · ${orbit.renderer.info.render.calls} draw calls`;
   }
 };
-function haptic(actorId?: string) {
-  if (actorId !== 'player') return;
-  for (const source of xrSources) {
-    const h = source?.gamepad?.hapticActuators?.[0];
-    if (h) void h.pulse(0.2, 35).catch(() => {});
-  }
-}
-
 button('play', () => void start(false));
 button('watch', () => void start(true));
 button('pause', () => pause());
@@ -578,19 +747,96 @@ button('home', home);
 button('results-home', home);
 button('sound', () => {
   audio.enabled = !audio.enabled;
+  narrator.muted = !audio.enabled;
+  if (!audio.enabled) narrator.stop();
   audio.rebase();
   void prepareAudio();
   savePreferences();
   el('sound').textContent = audio.enabled ? 'Sound on' : 'Sound off';
   drawMenu();
 });
+button('audio-setup-open', () => {
+  if (running) pause();
+  closeAudioDialogs();
+  el<HTMLDialogElement>('audio-setup').showModal();
+  el('audio-enable').focus();
+  el('speech-support').textContent = narrator.available
+    ? 'Browser speech is available. Voice support in immersive VR varies. Blind-player and headset listening tests are still needed.'
+    : 'This browser has no speech synthesis. Use a screen reader for the HTML controls; spoken controls inside VR require browser speech.';
+});
+button('audio-enable', () => {
+  audio.enabled = audio.cuesEnabled = audio.nonvisualEnabled = narrator.enabled = true;
+  for (const id of ['nonvisual-enabled', 'narration-enabled', 'cues-enabled'])
+    el<HTMLInputElement>(id).checked = true;
+  el('sound').textContent = 'Sound on';
+  void prepareAudio();
+  savePreferences();
+  announce(
+    'Audio-led guidance enabled. Choose Explain sounds and controls before playing. Press Alt M for the spoken menu. In VR, grip opens the menu.',
+  );
+});
+button('audio-learn', () => announce(AUDIO_LESSON));
+button('audio-tutorial', () => {
+  selectMap(AUDIO_TUTORIAL_ID);
+  announce(
+    'Finding the pulse selected. Choose Done, then Play; or enter immersive VR. Face forward when starting.',
+  );
+});
+button('audio-measure', measureHeight);
+button('audio-enter-vr', () => {
+  if (el<HTMLButtonElement>('enter-vr').disabled)
+    announce('Immersive VR is unavailable. Open this page in your headset browser.');
+  else el('enter-vr').click();
+});
+button('audio-setup-close', () => {
+  closeAudioDialogs();
+  narrator.stop();
+});
+button('spoken-previous', () => moveSpoken(-1));
+button('spoken-next', () => moveSpoken(1));
+button('spoken-activate', () => spoken.activate());
+button('spoken-repeat', () => spoken.read());
+button('spoken-close', () => {
+  closeAudioDialogs();
+  narrator.stop();
+});
+el('spoken-menu').addEventListener('keydown', (event) => {
+  const e = event as KeyboardEvent;
+  if (['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'].includes(e.code)) {
+    e.preventDefault();
+    moveSpoken(['ArrowLeft', 'ArrowUp'].includes(e.code) ? -1 : 1);
+  } else if (e.code === 'Enter' && e.target === el('spoken-choice')) {
+    e.preventDefault();
+    spoken.activate();
+  } else if (e.code === 'KeyR') {
+    e.preventDefault();
+    spoken.read();
+  }
+});
+for (const id of ['audio-setup', 'spoken-menu'])
+  el(id).addEventListener('cancel', () => narrator.stop());
+el<HTMLInputElement>('nonvisual-enabled').onchange = () => {
+  audio.nonvisualEnabled = el<HTMLInputElement>('nonvisual-enabled').checked;
+  audio.rebase();
+};
+el<HTMLInputElement>('narration-enabled').onchange = () => {
+  narrator.enabled = el<HTMLInputElement>('narration-enabled').checked;
+  if (!narrator.enabled) narrator.stop();
+  else announce('Spoken controls enabled. Alt M opens the menu.');
+};
+el<HTMLSelectElement>('hand-beacons').onchange = () => {
+  audio.handBeacons = el<HTMLSelectElement>('hand-beacons').value as HandBeaconMode;
+  audio.rebase();
+};
 button('help', () => {
   if (running) pause();
+  closeAudioDialogs();
   el('help-panel').hidden = false;
 });
 button('close-help', () => (el('help-panel').hidden = true));
 button('settings', () => {
   if (running) pause();
+  closeAudioDialogs();
   el('settings-panel').hidden = false;
 });
 button('close-settings', () => (el('settings-panel').hidden = true));
@@ -969,6 +1215,12 @@ window.addEventListener('pointerup', (e) => {
 });
 const keys = new Set<string>();
 window.addEventListener('keydown', (e) => {
+  if (e.altKey && e.code === 'KeyM') {
+    e.preventDefault();
+    openSpokenMenu();
+    return;
+  }
+  if ((e.target as HTMLElement).closest('dialog[open]')) return;
   if ((e.target as HTMLElement).matches('input,select')) return;
   keys.add(e.code);
   if (playing && (e.code === 'ArrowUp' || e.code === 'ArrowDown')) e.preventDefault();
@@ -1040,6 +1292,11 @@ for (let i = 0; i < 2; i++) {
   });
   controller.addEventListener('disconnected', () => (xrSources[i] = undefined));
   controller.addEventListener('squeezestart', () => {
+    if (audio.nonvisualEnabled) {
+      if (menu.visible) spoken.activate();
+      else openSpokenMenu();
+      return;
+    }
     if (menu.visible && playing && !view?.finished) resume();
     else if (playing) pause();
     else {
@@ -1049,6 +1306,11 @@ for (let i = 0; i < 2; i++) {
   });
   controller.addEventListener('selectstart', () => {
     if (!menu.visible) return;
+    if (audio.nonvisualEnabled) {
+      const hand = xrSources[i]?.handedness;
+      if (hand === 'left' || hand === 'right') moveSpoken(hand === 'left' ? -1 : 1);
+      return;
+    }
     const matrix = new THREE.Matrix4().extractRotation(controller.matrixWorld);
     raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
     raycaster.ray.direction.set(0, 0, -1).applyMatrix4(matrix);
@@ -1087,10 +1349,18 @@ button('enter-vr', () => {
       orbit.camera.position.set(0, 0, 0);
       orbit.camera.rotation.set(0, 0, 0);
       await orbit.renderer.xr.setSession(session);
+      closeAudioDialogs();
       document.body.classList.add('xr');
       if (playing) pause();
       menu.visible = true;
+      if (audio.nonvisualEnabled) {
+        refreshSpokenMenu();
+        spoken.read();
+      }
       setTimeout(placeMenu, 300);
+      session.addEventListener('visibilitychange', () => {
+        if (session.visibilityState !== 'visible' && running) pause(true);
+      });
       session.addEventListener('end', () => {
         document.body.classList.remove('xr');
         menu.visible = false;
@@ -1105,7 +1375,8 @@ button('enter-vr', () => {
 });
 
 let lastCue = '';
-orbit.renderer.setAnimationLoop((time) => {
+let trackingLostAt: number | undefined;
+orbit.renderer.setAnimationLoop((time, frame) => {
   const dt = lastFrame ? Math.min(0.05, (time - lastFrame) / 1000) : 0.016;
   if (lastFrame) {
     frameTimes.push(time - lastFrame);
@@ -1190,6 +1461,18 @@ orbit.renderer.setAnimationLoop((time) => {
         orbit.hands[index].position.copy(position);
       }
       samples.push(...controllerSamples(tracked));
+      if (audio.nonvisualEnabled) {
+        const space = orbit.renderer.xr.getReferenceSpace();
+        const trackedHead = !!(frame && space && frame.getViewerPose(space));
+        if (trackedHead && samples.every((sample) => sample.tracked)) trackingLostAt = undefined;
+        else {
+          trackingLostAt ??= time;
+          if (time - trackingLostAt > 250) {
+            pause(true);
+            trackingLostAt = undefined;
+          }
+        }
+      }
     } else {
       for (let i = 0; i < 2; i++) {
         if (!desktopHeld[i]) {
@@ -1215,8 +1498,9 @@ orbit.renderer.setAnimationLoop((time) => {
       tracked: true,
       active: true,
     });
-    send({ type: 'poses', samples, sentAt: performance.timeOrigin + performance.now() });
-  }
+    if (running)
+      send({ type: 'poses', samples, sentAt: performance.timeOrigin + performance.now() });
+  } else trackingLostAt = undefined;
   if (view && playing) {
     const next = view.entities
       .filter((e) => e.endTick >= view!.tick && e.presentation?.readiness?.phase !== 'hidden')
@@ -1281,6 +1565,9 @@ function savePreferences() {
     music: audio.musicEnabled,
     cues: audio.cuesEnabled,
     effects: audio.effectsEnabled,
+    nonvisual: audio.nonvisualEnabled,
+    narration: narrator.enabled,
+    handBeacons: audio.handBeacons,
     musicVolume: audio.mix.music,
     guidanceVolume: audio.mix.guidance,
     effectsVolume: audio.mix.effects,
@@ -1304,6 +1591,10 @@ audio.enabled = preferences.sound;
 audio.musicEnabled = preferences.music;
 audio.cuesEnabled = preferences.cues;
 audio.effectsEnabled = preferences.effects;
+audio.nonvisualEnabled = preferences.nonvisual;
+narrator.enabled = preferences.narration;
+audio.handBeacons = preferences.handBeacons;
+el<HTMLSelectElement>('hand-beacons').value = preferences.handBeacons;
 audio.setMix({
   music: preferences.musicVolume,
   guidance: preferences.guidanceVolume,
@@ -1327,6 +1618,8 @@ for (const [id, checked] of Object.entries({
   'music-enabled': preferences.music,
   'cues-enabled': preferences.cues,
   'effects-enabled': preferences.effects,
+  'nonvisual-enabled': preferences.nonvisual,
+  'narration-enabled': preferences.narration,
   'captions-enabled': captions,
   'reduced-motion': preferences.reducedMotion,
   'high-contrast': preferences.highContrast,
@@ -1349,6 +1642,8 @@ el<HTMLButtonElement>('play').disabled = true;
 el<HTMLButtonElement>('watch').disabled = true;
 send({ type: 'load', mapId: 'tutorial', autoplay: false });
 addEventListener('pagehide', () => {
+  narrator.stop();
+  stopHaptics();
   analysisWorker?.terminate();
   worker.terminate();
   void audio.dispose();

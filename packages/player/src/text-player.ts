@@ -3,12 +3,14 @@ import {
   compile,
   describeEvent,
   describeObservation,
+  describeHandGuidance,
   Session,
   standardActor,
   scriptedCommands,
 } from '@statebeats/sdk';
 import type { MapDefinition, Observation } from '@statebeats/sdk';
 import type { Command, Vec3 } from '@statebeats/core';
+import { add, rotate, positionAt } from '@statebeats/core';
 
 const el = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 let session: Session | undefined,
@@ -22,7 +24,8 @@ for (const map of sampleMaps) {
   option.textContent = map.title;
   catalog.add(option);
 }
-catalog.value = 'agent-arena';
+const requested = new URLSearchParams(location.search).get('map');
+catalog.value = sampleMaps.some((map) => map.id === requested) ? requested! : 'agent-arena';
 const selectedMap = () => (custom?.id === catalog.value ? custom : sampleMap(catalog.value));
 const run = (action: () => void | Promise<void>) => {
   el('error').textContent = '';
@@ -58,7 +61,11 @@ function update(message?: string) {
   el('scene').textContent = view.scene
     ? `${view.scene.label} ${view.scene.objects.map((object) => `${object.label}: ${object.position.map((value) => value.toFixed(1)).join(', ')} metres.`).join(' ')}`
     : '';
-  el('json').textContent = JSON.stringify(view, null, 2);
+  el('json').textContent = JSON.stringify(
+    { ...view, handGuidance: describeHandGuidance(view) },
+    null,
+    2,
+  );
   el('empty').hidden = description.targets.length > 0;
   el('empty').textContent = view.finished
     ? 'Sequence complete. Save your replay or choose another map.'
@@ -83,10 +90,7 @@ function update(message?: string) {
       action('Reach with left at beat', 'left', () => reach(cue.id, ['left']));
       action('Reach with right at beat', 'right', () => reach(cue.id, ['right']));
       action('Reach with both at beat', 'both', () => reach(cue.id, ['left', 'right']));
-      if (cue.holdSeconds)
-        action('Maintain this hold', 'hold', () =>
-          advance(Math.ceil(cue.holdSeconds * view.tickRate)),
-        );
+      if (cue.holdSeconds) action('Follow this hold (assisted)', 'hold', () => followHold(cue.id));
     }
     fragment.append(article);
   }
@@ -206,6 +210,49 @@ function avoid(id: string) {
   const target = find(id);
   pose('head', [0, 1, 0]);
   advance(Math.max(0, Math.min(10000, target.endTick + 1 - session!.tick)));
+}
+function followHold(id: string) {
+  const entity = session!.snapshot().entities.find((e) => e.spec.id === id);
+  if (!entity || entity.spec.kind !== 'hold' || entity.spec.policy !== 'builtin/contact')
+    throw new Error(
+      'This action supports ordinary contact holds. Custom mechanics need their own actor.',
+    );
+  if (
+    entity.hits.length !== entity.spec.slots.length ||
+    entity.hits.some((hit) => hit.actorId !== 'player')
+  )
+    throw new Error('Reach this hold with its required hands first, then follow it.');
+  const end = Math.min(
+    entity.spec.endTick,
+    session!.tick + entity.spec.holdTicks - entity.hold,
+    session!.tick + 10000,
+  );
+  const commands: Command[] = [],
+    request = `follow:${sequence++}`;
+  for (let tick = session!.tick + 1; tick <= end; tick++) {
+    const position = add(
+      rotate(positionAt(entity.spec, tick), entity.transform.orientation),
+      entity.transform.position,
+    );
+    for (const hit of entity.hits)
+      commands.push({
+        id: `${request}:${tick}:${hit.effectorId}`,
+        type: 'pose',
+        tick,
+        actorId: 'player',
+        effectorId: hit.effectorId,
+        position,
+        tracked: true,
+        active: true,
+      });
+  }
+  const player = session!.client({ role: 'player', actorId: 'player' });
+  for (let i = 0; i < commands.length; i += 1024)
+    player.submit(`${request}:${i}`, commands.slice(i, i + 1024));
+  admin().advance(end - session!.tick);
+  update(
+    'Assisted hand poses followed the authored path. Every intervening tick, including other targets and hazards, was evaluated normally.',
+  );
 }
 button('start', start);
 button('next', () => {

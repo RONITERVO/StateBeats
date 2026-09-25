@@ -2,6 +2,12 @@
 
 ## 0.3.0 — musical choreography (development release candidate)
 
+Adds shared geometry-aware hand guidance (`describeHandGuidance` / `perception.hands`),
+audible hand/target pairs, hand-specific hit and hold feedback, spoken menus and calibration,
+and the asset-free Finding the pulse tutorial. Text play can follow moving holds using explicit
+assisted poses through the normal engine. See [nonvisual play](docs/NONVISUAL_PLAY.md) for
+contracts, controls and the pending Quest/blind-player validation.
+
 Adds opt-in spatial sound themes and per-note effects, a pure SDK audio-frame projection
 and CLI/MCP `perception.audio`, independent saved mix controls, and a bounded Web Audio
 backend with head-relative moving sources. Ink-Battle and Event Horizon ship procedural

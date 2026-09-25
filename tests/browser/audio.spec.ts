@@ -1,4 +1,27 @@
 import { test, expect } from '@playwright/test';
+test('hand beacons and targets pan with the head, stay bounded, and obey mute, tracking and pause', async ({
+  page,
+}) => {
+  await page.goto('/conformance.html');
+  await page.locator('#run-hands').click();
+  await expect(page.locator('#hands-result')).toContainText('stopped');
+  const results = JSON.parse((await page.locator('#hands-result').textContent())!);
+  const get = (mode: string) => results.find((r: { mode: string }) => r.mode === mode);
+  expect(get('left').energy[0]).toBeGreaterThan(get('left').energy[1] * 1.2);
+  expect(get('right').energy[1]).toBeGreaterThan(get('right').energy[0] * 1.2);
+  // Low-frequency HRTF level differences vary by browser; rotation must reverse the louder ear.
+  expect(get('rotated').energy[1]).toBeGreaterThan(get('rotated').energy[0] * 1.05);
+  expect(get('left').initial).toBe(2);
+  expect(get('targets-only').initial).toBe(1);
+  expect(get('both').initial).toBe(4);
+  for (const mode of ['muted', 'master-muted', 'lost-tracking', 'paused']) {
+    expect(get(mode).energy).toEqual([0, 0]);
+    expect(get(mode).later).toBe(0);
+  }
+  expect(get('resume').later).toBe(2);
+  expect(get('resume').energy[0]).toBeGreaterThan(0.001);
+  expect(results.every((r: { stopped: number }) => r.stopped === 0)).toBe(true);
+});
 test('moving effects pan with targets and head direction; mix, pause and resume stay independent', async ({
   page,
 }) => {
